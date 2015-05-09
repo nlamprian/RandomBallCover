@@ -1,0 +1,9 @@
+<map id="common.hpp" name="common.hpp">
+<area shape="rect" id="node2" href="$algorithms_8hpp.html" title="Declares classes that organize the execution of OpenCL kernels. " alt="" coords="343,80,449,107"/>
+<area shape="rect" id="node3" href="$algorithms_8cpp.html" title="Defines classes that organize the execution of OpenCL kernels. " alt="" coords="5,155,112,181"/>
+<area shape="rect" id="node4" href="$testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="137,155,241,181"/>
+<area shape="rect" id="node5" href="$testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="266,155,387,181"/>
+<area shape="rect" id="node6" href="$testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="412,155,519,181"/>
+<area shape="rect" id="node7" href="$2d__plot_8cpp.html" title="An application examining the resulting arrangement of the Random Ball Cover data structure on 2&#45;D dat..." alt="" coords="543,155,632,181"/>
+<area shape="rect" id="node8" href="$img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="657,155,809,181"/>
+</map>

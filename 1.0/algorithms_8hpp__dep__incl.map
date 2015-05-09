@@ -1,0 +1,8 @@
+<map id="algorithms.hpp" name="algorithms.hpp">
+<area shape="rect" id="node2" href="$algorithms_8cpp.html" title="Defines classes that organize the execution of OpenCL kernels. " alt="" coords="5,80,112,107"/>
+<area shape="rect" id="node3" href="$testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="137,80,241,107"/>
+<area shape="rect" id="node4" href="$testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="266,80,387,107"/>
+<area shape="rect" id="node5" href="$testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="412,80,519,107"/>
+<area shape="rect" id="node6" href="$2d__plot_8cpp.html" title="An application examining the resulting arrangement of the Random Ball Cover data structure on 2&#45;D dat..." alt="" coords="543,80,632,107"/>
+<area shape="rect" id="node7" href="$img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="657,80,809,107"/>
+</map>

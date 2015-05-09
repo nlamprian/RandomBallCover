@@ -1,0 +1,11 @@
+<map id="data_types.hpp" name="data_types.hpp">
+<area shape="rect" id="node2" href="$algorithms_8hpp.html" title="Declares classes that organize the execution of OpenCL kernels. " alt="" coords="425,80,532,107"/>
+<area shape="rect" id="node9" href="$helper__funcs_8hpp.html" title="Declarations of helper functions for testing. " alt="" coords="557,80,677,107"/>
+<area shape="rect" id="node3" href="$algorithms_8cpp.html" title="Defines classes that organize the execution of OpenCL kernels. " alt="" coords="119,155,225,181"/>
+<area shape="rect" id="node4" href="$testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="427,155,532,181"/>
+<area shape="rect" id="node5" href="$testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="557,155,677,181"/>
+<area shape="rect" id="node6" href="$testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="703,155,809,181"/>
+<area shape="rect" id="node7" href="$2d__plot_8cpp.html" title="An application examining the resulting arrangement of the Random Ball Cover data structure on 2&#45;D dat..." alt="" coords="5,155,93,181"/>
+<area shape="rect" id="node8" href="$img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="250,155,403,181"/>
+<area shape="rect" id="node10" href="$helper__funcs_8cpp.html" title="Helper functions for testing. " alt="" coords="834,155,955,181"/>
+</map>
