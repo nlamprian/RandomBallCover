@@ -116,6 +116,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Declarations of helper functions for testing.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cassert&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;<a class="el" href="data__types_8hpp_source.html">RBC/data_types.hpp</a>&gt;</code><br />
 <code>#include &lt;CL/cl.hpp&gt;</code><br />
@@ -124,7 +125,7 @@ Include dependency graph for helper_funcs.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="helper__funcs_8hpp__incl.png" border="0" usemap="#helper__funcs_8hpp" alt=""/></div>
 <map name="helper__funcs_8hpp" id="helper__funcs_8hpp">
-<area shape="rect" id="node4" href="data__types_8hpp.html" title="Declarations of data types used by the Random Ball Cover data structure. " alt="" coords="197,80,341,107"/>
+<area shape="rect" id="node5" href="data__types_8hpp.html" title="Declarations of data types used by the Random Ball Cover data structure. " alt="" coords="297,80,441,107"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -134,9 +135,10 @@ This graph shows which files directly or indirectly include this file:</div>
 <map name="helper__funcs_8hppdep" id="helper__funcs_8hppdep">
 <area shape="rect" id="node2" href="helper__funcs_8cpp.html" title="Helper functions for testing. " alt="" coords="5,80,125,107"/>
 <area shape="rect" id="node3" href="testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="150,80,255,107"/>
-<area shape="rect" id="node4" href="testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="279,80,400,107"/>
-<area shape="rect" id="node5" href="testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="425,80,532,107"/>
-<area shape="rect" id="node6" href="img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="557,80,709,107"/>
+<area shape="rect" id="node4" href="testsRBC__RGBD_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="279,80,429,107"/>
+<area shape="rect" id="node5" href="testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="454,80,575,107"/>
+<area shape="rect" id="node6" href="testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="600,80,707,107"/>
+<area shape="rect" id="node7" href="img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="731,80,884,107"/>
 </map>
 </div>
 </div>
@@ -159,18 +161,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a081bae8d077d9f00d99cdc753f593b70"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::printBufferF</b> (const char *title, T *ptr, uint32_t width, uint32_t height, uint32_t prec)</td></tr>
 <tr class="memdesc:a081bae8d077d9f00d99cdc753f593b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an array of floating-point type to standard output.  <a href="#a081bae8d077d9f00d99cdc753f593b70">More...</a><br /></td></tr>
 <tr class="separator:a081bae8d077d9f00d99cdc753f593b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4863fcb58ae85bd7d893e878cc107259"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4863fcb58ae85bd7d893e878cc107259"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCComputeDists</b> (T *X, T *R, T *D, uint32_t nx, uint32_t nr, uint32_t d)</td></tr>
-<tr class="memdesc:a4863fcb58ae85bd7d893e878cc107259"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a4863fcb58ae85bd7d893e878cc107259">More...</a><br /></td></tr>
-<tr class="separator:a4863fcb58ae85bd7d893e878cc107259"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0977f5de1177fa04ccae7695e4434fb2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0977f5de1177fa04ccae7695e4434fb2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuReduce</b> (T *in, T *out, uint32_t cols, uint32_t rows, std::function&lt; bool(T, T)&gt; func)</td></tr>
 <tr class="memdesc:a0977f5de1177fa04ccae7695e4434fb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces each row of an array to a single element.  <a href="#a0977f5de1177fa04ccae7695e4434fb2">More...</a><br /></td></tr>
 <tr class="separator:a0977f5de1177fa04ccae7695e4434fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCMinDists</b> (T *in, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *out, uint32_t *N, uint32_t *Rnk, uint32_t cols, uint32_t rows, bool accCounters)</td></tr>
-<tr class="memdesc:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the minimum element, and its corresponding column id, for each row in an array. It also builds a histogram of the id values. And lastly, it stores the rank (order of insert) of each minimum element within its corresponding histogram bin.  <a href="#ae85243bc80bd9af9e3e1f61e0e7f8b7a">More...</a><br /></td></tr>
-<tr class="separator:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7fa646d7d89bff6ae5b227d101895db"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa7fa646d7d89bff6ae5b227d101895db"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuInScan</b> (T *in, T *out, uint32_t width, uint32_t height)</td></tr>
 <tr class="memdesc:aa7fa646d7d89bff6ae5b227d101895db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs an inclusive scan operation on the columns of an array.  <a href="#aa7fa646d7d89bff6ae5b227d101895db">More...</a><br /></td></tr>
@@ -179,14 +173,34 @@ Functions</h2></td></tr>
 <tr class="memitem:acb4f218ff51a8ce4d038eebd69220df3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuExScan</b> (T *in, T *out, uint32_t width, uint32_t height)</td></tr>
 <tr class="memdesc:acb4f218ff51a8ce4d038eebd69220df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs an exclusive scan operation on the columns of an array.  <a href="#acb4f218ff51a8ce4d038eebd69220df3">More...</a><br /></td></tr>
 <tr class="separator:acb4f218ff51a8ce4d038eebd69220df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9298a08b82dc409df4635ee2283e0eb4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9298a08b82dc409df4635ee2283e0eb4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCPermute</b> (T *X, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *ID, uint32_t *O, uint32_t *Rnk, T *Xp, uint32_t nx, uint32_t nr, uint32_t d)</td></tr>
-<tr class="memdesc:a9298a08b82dc409df4635ee2283e0eb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database to form the representative lists.  <a href="#a9298a08b82dc409df4635ee2283e0eb4">More...</a><br /></td></tr>
-<tr class="separator:a9298a08b82dc409df4635ee2283e0eb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67b6e7900dbe3e824a13d3ba7e738551"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a67b6e7900dbe3e824a13d3ba7e738551"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCSearch</b> (T *Q, T *R, T *Xp, cl_uint *O, cl_uint *N, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *RID, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *NNID, T *NN, uint32_t nq, uint32_t nr, uint32_t nx, uint32_t d)</td></tr>
-<tr class="memdesc:a67b6e7900dbe3e824a13d3ba7e738551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database to form the representative lists.  <a href="#a67b6e7900dbe3e824a13d3ba7e738551">More...</a><br /></td></tr>
-<tr class="separator:a67b6e7900dbe3e824a13d3ba7e738551"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4863fcb58ae85bd7d893e878cc107259"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4863fcb58ae85bd7d893e878cc107259"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCComputeDists</b> (T *X, T *R, T *D, uint32_t nx, uint32_t nr, uint32_t d)</td></tr>
+<tr class="memdesc:a4863fcb58ae85bd7d893e878cc107259"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a4863fcb58ae85bd7d893e878cc107259">More...</a><br /></td></tr>
+<tr class="separator:a4863fcb58ae85bd7d893e878cc107259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCMinDists</b> (T *in, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *out, uint32_t *N, uint32_t *Rnk, uint32_t cols, uint32_t rows, bool accCounters)</td></tr>
+<tr class="memdesc:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the minimum element, and its corresponding column id, for each row in an array. It also builds a histogram of the id values. And lastly, it stores the rank (order of insert) of each minimum element within its corresponding histogram bin.  <a href="#ae85243bc80bd9af9e3e1f61e0e7f8b7a">More...</a><br /></td></tr>
+<tr class="separator:ae85243bc80bd9af9e3e1f61e0e7f8b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95adf2c47978df5410055c5db2f63d77"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a95adf2c47978df5410055c5db2f63d77"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCPermute</b> (T *X, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *ID, T *Xp, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *IDp, uint32_t *O, uint32_t *Rnk, uint32_t nx, uint32_t nr, uint32_t d, bool permID)</td></tr>
+<tr class="memdesc:a95adf2c47978df5410055c5db2f63d77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database to form the representative lists.  <a href="#a95adf2c47978df5410055c5db2f63d77">More...</a><br /></td></tr>
+<tr class="separator:a95adf2c47978df5410055c5db2f63d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d97908f40a777e2bfd6b5b05e473c89"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9d97908f40a777e2bfd6b5b05e473c89"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuRBCSearch</b> (T *Qp, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *RID, T *Xp, cl_uint *O, cl_uint *N, <a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *NNID, T *NN, uint32_t nq, uint32_t nr, uint32_t nx, uint32_t d)</td></tr>
+<tr class="memdesc:a9d97908f40a777e2bfd6b5b05e473c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses the RBC data structure to search for the nearest neighbors.  <a href="#a9d97908f40a777e2bfd6b5b05e473c89">More...</a><br /></td></tr>
+<tr class="separator:a9d97908f40a777e2bfd6b5b05e473c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dddc7c7f12a6443782be716b95e2a17"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7dddc7c7f12a6443782be716b95e2a17"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::euclideanMetric</b> (T *p1, T *p2, uint32_t d)</td></tr>
+<tr class="memdesc:a7dddc7c7f12a6443782be716b95e2a17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the euclidean distance betweeen two points.  <a href="#a7dddc7c7f12a6443782be716b95e2a17">More...</a><br /></td></tr>
+<tr class="separator:a7dddc7c7f12a6443782be716b95e2a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d87d6f236a4a181ea03ed650222e5b0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6d87d6f236a4a181ea03ed650222e5b0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::cpuNNSearch</b> (T *Q, T *X, T *NN, uint32_t nq, uint32_t nx, uint32_t d)</td></tr>
+<tr class="memdesc:a6d87d6f236a4a181ea03ed650222e5b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes (brute force) the nearest neighbors of a set of queries.  <a href="#a6d87d6f236a4a181ea03ed650222e5b0">More...</a><br /></td></tr>
+<tr class="separator:a6d87d6f236a4a181ea03ed650222e5b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86e0fe24e8e89b9458be98ebde9f5014"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a86e0fe24e8e89b9458be98ebde9f5014"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>RBC::meanError</b> (T *Q, T *NN, uint32_t n, uint32_t d)</td></tr>
+<tr class="memdesc:a86e0fe24e8e89b9458be98ebde9f5014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the mean euclidean distance from the queries to their NNs.  <a href="#a86e0fe24e8e89b9458be98ebde9f5014">More...</a><br /></td></tr>
+<tr class="separator:a86e0fe24e8e89b9458be98ebde9f5014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Declarations of helper functions for testing. </p>
@@ -201,7 +215,7 @@ Functions</h2></td></tr>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 9 2015 19:48:34 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 14 2015 15:01:19 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['plot',['plot',['../classplot.html',1,'']]]
+  ['mutex',['Mutex',['../classMutex.html',1,'']]],
+  ['myfreenectdevice',['MyFreenectDevice',['../classMyFreenectDevice.html',1,'']]]
 ];

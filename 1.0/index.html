@@ -105,13 +105,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="image">
 <img src="http://i76.photobucket.com/albums/j16/paign10/rbc_cover_zpscejuigei.png"  border="0" width="800" alt=" photo rbc_cover_zpscejuigei.png"/>
 </div>
-<p>Currently, a variation of the proposed algorithms is implemented that does <b>approximate NN search</b>. For the <code>RBC construction</code>, the data structure in the <b>exact search algorithm</b> is built where each database point is assigned to its nearest representative. The <code>RBC search</code> is done according to the <b>one-shot search algorithm</b>. The main application of the project is the handling of 6-D (3-D geometric and 3-D photometric information) <b>point clouds</b>. For that purpose, the algorithm is able to perform on an input of <code>|X|=|Q|=16384</code> and <code>|R|=128</code> with the following results:</p><ol type="1">
-<li>RBC construction in x microseconds.</li>
-<li>RBC search in y microseconds.</li>
-<li>Mean error z. <br />
-<br />
-</li>
+<p>Currently, a variation of the proposed algorithms is implemented that does <b>approximate NN search</b>. For the <code>RBC construction</code>, the data structure in the <b>exact search algorithm</b> is built where each database point is assigned to its nearest representative. The <code>RBC search</code> is done according to the <b>one-shot search algorithm</b>. The main application of the project is the handling of 6-D (3-D geometric and 3-D photometric information) <b>point clouds</b>. For that purpose, the algorithm is able to perform on an input of <code>|X|=|Q|=16384</code> and <code>|R|=256</code> with the following results:</p><ol type="1">
+<li>RBC construction in 330 microseconds.</li>
+<li>RBC search in 710 microseconds.</li>
+<li>Mean error 1.05**.</li>
 </ol>
+<p>** Mean distance between the queries and the computed NNs, relative to the mean distance between the queries and the true NNs. <br />
+<br />
+</p>
 <h1>Note</h1>
 <hr/>
 <p> The code was developed and tested on <code>Ubuntu 14.04.2</code>, on a system with an <code>AMD R9 270X</code> GPU.</p>
@@ -121,7 +122,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>Dependencies</h1>
 <hr/>
 <p> The project has a dependency on <a href="https://github.com/pAIgn10/CLUtils">CLUtils</a> (which is automatically downloaded by cmake). If you'd like to remove this dependency, you should be able to modify the kernel interface classes with minimal effort.</p>
-<p>Currently, there are 2 example applications. For <code>rbc_2d_plot</code>, you'll need <a href="http://plplot.sourceforge.net/">PLplot</a>. For <code>rbc_img_segmentation</code>, you'll need <a href="https://github.com/jayrambhia/Install-OpenCV">OpenCV</a>. <br />
+<p>Currently, there are 3 example applications. For <code>rbc_2d_plot</code> and <code>rbc_2d_plot_nn</code>, you'll need <a href="http://plplot.sourceforge.net/">PLplot</a>. For <code>rbc_img_segmentation</code>, you'll need <a href="https://github.com/jayrambhia/Install-OpenCV">OpenCV</a>. <br />
 <br />
 </p>
 <h1>Compilation</h1>
@@ -138,6 +139,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>make</p>
 <p># to run the examples (from the build directory!) <br />
  ./bin/rbc_2d_plot <br />
+ ./bin/rbc_2d_plot_nn <br />
  ./bin/rbc_img_segmentation</p>
 <p># to run the tests (e.g.) <br />
  ./bin/rbc_tests_rbc <br />
@@ -154,7 +156,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 9 2015 19:48:34 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 14 2015 15:01:19 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

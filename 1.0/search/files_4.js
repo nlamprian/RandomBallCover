@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['helper_5ffuncs_2ecpp',['helper_funcs.cpp',['../helper__funcs_8cpp.html',1,'']]],
-  ['helper_5ffuncs_2ehpp',['helper_funcs.hpp',['../helper__funcs_8hpp.html',1,'']]]
+  ['grub_5fkinect_5fframes_2ecpp',['grub_kinect_frames.cpp',['../grub__kinect__frames_8cpp.html',1,'']]]
 ];

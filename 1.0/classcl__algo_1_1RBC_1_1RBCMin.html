@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>RandomBallCover: cl_algo::RBC::RBCMin&lt; C &gt; Class Template Reference</title>
+<title>RandomBallCover: cl_algo::RBC::RBCMin Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <script>
@@ -84,6 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -113,7 +114,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classcl__algo_1_1RBC_1_1RBCMin-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cl_algo::RBC::RBCMin&lt; C &gt; Class Template Reference</div>  </div>
+<div class="title">cl_algo::RBC::RBCMin Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -122,11 +123,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for cl_algo::RBC::RBCMin&lt; C &gt;:</div>
+Collaboration diagram for cl_algo::RBC::RBCMin:</div>
 <div class="dyncontent">
-<div class="center"><img src="classcl__algo_1_1RBC_1_1RBCMin__coll__graph.png" border="0" usemap="#cl__algo_1_1RBC_1_1RBCMin_3_01C_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="cl__algo_1_1RBC_1_1RBCMin_3_01C_01_4_coll__map" id="cl__algo_1_1RBC_1_1RBCMin_3_01C_01_4_coll__map">
-<area shape="rect" id="node2" href="structrbc__dist__id.html" title="Struct holding a value and a key. " alt="" coords="59,5,144,32"/>
+<div class="center"><img src="classcl__algo_1_1RBC_1_1RBCMin__coll__graph.png" border="0" usemap="#cl__algo_1_1RBC_1_1RBCMin_coll__map" alt="Collaboration graph"/></div>
+<map name="cl__algo_1_1RBC_1_1RBCMin_coll__map" id="cl__algo_1_1RBC_1_1RBCMin_coll__map">
+<area shape="rect" id="node2" href="structrbc__dist__id.html" title="Struct holding a value and a key. " alt="" coords="41,5,127,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -151,45 +152,42 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a947c82a6fbb294a861a1ef2856949b06"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a947c82a6fbb294a861a1ef2856949b06">RBCMin</a> (clutils::CLEnv &amp;_env, clutils::CLEnvInfo&lt; 1 &gt; _info)</td></tr>
-<tr class="memdesc:a947c82a6fbb294a861a1ef2856949b06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures an OpenCL environment as specified by <code>_info</code>.  <a href="#a947c82a6fbb294a861a1ef2856949b06">More...</a><br /></td></tr>
-<tr class="separator:a947c82a6fbb294a861a1ef2856949b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93b43ef00b71e80024ca2cd9df195795"><td class="memItemLeft" align="right" valign="top">cl::Memory &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a93b43ef00b71e80024ca2cd9df195795">get</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem)</td></tr>
-<tr class="memdesc:a93b43ef00b71e80024ca2cd9df195795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to an internal memory object.  <a href="#a93b43ef00b71e80024ca2cd9df195795">More...</a><br /></td></tr>
-<tr class="separator:a93b43ef00b71e80024ca2cd9df195795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52e5230f18b47d1fa97e25f5b71a4499"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a52e5230f18b47d1fa97e25f5b71a4499">init</a> (unsigned int _cols, unsigned int _rows, Staging _staging=Staging::IO)</td></tr>
-<tr class="memdesc:a52e5230f18b47d1fa97e25f5b71a4499"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures kernel execution parameters.  <a href="#a52e5230f18b47d1fa97e25f5b71a4499">More...</a><br /></td></tr>
-<tr class="separator:a52e5230f18b47d1fa97e25f5b71a4499"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0b0bf7a9d213a5f449318e24c775c15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#ab0b0bf7a9d213a5f449318e24c775c15">write</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem=RBCMin::Memory::D_IN_D, void *ptr=nullptr, bool block=CL_FALSE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:ab0b0bf7a9d213a5f449318e24c775c15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a device buffer.  <a href="#ab0b0bf7a9d213a5f449318e24c775c15">More...</a><br /></td></tr>
-<tr class="separator:ab0b0bf7a9d213a5f449318e24c775c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adde5034c943cc90f6193e0843fb84174"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#adde5034c943cc90f6193e0843fb84174">read</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem=RBCMin::Memory::H_OUT_ID, bool block=CL_TRUE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:adde5034c943cc90f6193e0843fb84174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a staging buffer.  <a href="#adde5034c943cc90f6193e0843fb84174">More...</a><br /></td></tr>
-<tr class="separator:adde5034c943cc90f6193e0843fb84174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd4f4482488fae151a3a9a44769074a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#abd4f4482488fae151a3a9a44769074a8">run</a> (const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:abd4f4482488fae151a3a9a44769074a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#abd4f4482488fae151a3a9a44769074a8">More...</a><br /></td></tr>
-<tr class="separator:abd4f4482488fae151a3a9a44769074a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a174b233998f88314ec7302281948a7bc"><td class="memTemplParams" colspan="2">template&lt;typename period &gt; </td></tr>
-<tr class="memitem:a174b233998f88314ec7302281948a7bc"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a174b233998f88314ec7302281948a7bc">run</a> (clutils::GPUTimer&lt; period &gt; &amp;timer, const std::vector&lt; cl::Event &gt; *events=nullptr)</td></tr>
-<tr class="memdesc:a174b233998f88314ec7302281948a7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#a174b233998f88314ec7302281948a7bc">More...</a><br /></td></tr>
-<tr class="separator:a174b233998f88314ec7302281948a7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3b80b9b1c62ae2df6e1a0de85b086c9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#ab3b80b9b1c62ae2df6e1a0de85b086c9">RBCMin</a> (clutils::CLEnv &amp;_env, clutils::CLEnvInfo&lt; 1 &gt; _info)</td></tr>
+<tr class="memdesc:ab3b80b9b1c62ae2df6e1a0de85b086c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures an OpenCL environment as specified by <code>_info</code>.  <a href="#ab3b80b9b1c62ae2df6e1a0de85b086c9">More...</a><br /></td></tr>
+<tr class="separator:ab3b80b9b1c62ae2df6e1a0de85b086c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf808ddb619dc3d6ccefb7ed61930df4"><td class="memItemLeft" align="right" valign="top">cl::Memory &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#abf808ddb619dc3d6ccefb7ed61930df4">get</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem)</td></tr>
+<tr class="memdesc:abf808ddb619dc3d6ccefb7ed61930df4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to an internal memory object.  <a href="#abf808ddb619dc3d6ccefb7ed61930df4">More...</a><br /></td></tr>
+<tr class="separator:abf808ddb619dc3d6ccefb7ed61930df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7232cb1e0d2209bb6780fa7463d30c49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a7232cb1e0d2209bb6780fa7463d30c49">init</a> (unsigned int _cols, unsigned int _rows, int _accCounters=1, Staging _staging=Staging::IO)</td></tr>
+<tr class="memdesc:a7232cb1e0d2209bb6780fa7463d30c49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures kernel execution parameters.  <a href="#a7232cb1e0d2209bb6780fa7463d30c49">More...</a><br /></td></tr>
+<tr class="separator:a7232cb1e0d2209bb6780fa7463d30c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9adb84037ae972eea642f60ef5a38636"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a9adb84037ae972eea642f60ef5a38636">write</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem=RBCMin::Memory::D_IN_D, void *ptr=nullptr, bool block=CL_FALSE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:a9adb84037ae972eea642f60ef5a38636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a device buffer.  <a href="#a9adb84037ae972eea642f60ef5a38636">More...</a><br /></td></tr>
+<tr class="separator:a9adb84037ae972eea642f60ef5a38636"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a3192ee0eabfeaea1cd9725f74cd40b"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a4a3192ee0eabfeaea1cd9725f74cd40b">read</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a> mem=RBCMin::Memory::H_OUT_ID, bool block=CL_TRUE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:a4a3192ee0eabfeaea1cd9725f74cd40b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a staging buffer.  <a href="#a4a3192ee0eabfeaea1cd9725f74cd40b">More...</a><br /></td></tr>
+<tr class="separator:a4a3192ee0eabfeaea1cd9725f74cd40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67d817a48475d5c1bb6360c16a860c80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a67d817a48475d5c1bb6360c16a860c80">run</a> (const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:a67d817a48475d5c1bb6360c16a860c80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#a67d817a48475d5c1bb6360c16a860c80">More...</a><br /></td></tr>
+<tr class="separator:a67d817a48475d5c1bb6360c16a860c80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29469162363177acee606285e937cb47"><td class="memTemplParams" colspan="2">template&lt;typename period &gt; </td></tr>
+<tr class="memitem:a29469162363177acee606285e937cb47"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a29469162363177acee606285e937cb47">run</a> (clutils::GPUTimer&lt; period &gt; &amp;timer, const std::vector&lt; cl::Event &gt; *events=nullptr)</td></tr>
+<tr class="memdesc:a29469162363177acee606285e937cb47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#a29469162363177acee606285e937cb47">More...</a><br /></td></tr>
+<tr class="separator:a29469162363177acee606285e937cb47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aed635b5fe6cb45b751f0e8e61d1d2fed"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#aed635b5fe6cb45b751f0e8e61d1d2fed">hPtrInD</a></td></tr>
-<tr class="separator:aed635b5fe6cb45b751f0e8e61d1d2fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90c447b96e95d8032d340af2496c60c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a90c447b96e95d8032d340af2496c60c6">hPtrOutID</a></td></tr>
-<tr class="separator:a90c447b96e95d8032d340af2496c60c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ad4f4fe3c97d41983e259fd8e181a44"><td class="memItemLeft" align="right" valign="top">cl_uint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a0ad4f4fe3c97d41983e259fd8e181a44">hPtrOutRnk</a></td></tr>
-<tr class="separator:a0ad4f4fe3c97d41983e259fd8e181a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab711b9aa9e803cc194f537a98bfa69d"><td class="memItemLeft" align="right" valign="top">cl_uint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#aab711b9aa9e803cc194f537a98bfa69d">hPtrOutN</a></td></tr>
-<tr class="separator:aab711b9aa9e803cc194f537a98bfa69d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf98b2a6f1ad868976bffdac97c0413d"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#acf98b2a6f1ad868976bffdac97c0413d">hPtrInD</a></td></tr>
+<tr class="separator:acf98b2a6f1ad868976bffdac97c0413d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea3cd1798c1bf25fb42c62c83645908"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrbc__dist__id.html">rbc_dist_id</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a2ea3cd1798c1bf25fb42c62c83645908">hPtrOutID</a></td></tr>
+<tr class="separator:a2ea3cd1798c1bf25fb42c62c83645908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a2dafd773738b6810db80c69de46d3"><td class="memItemLeft" align="right" valign="top">cl_uint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a64a2dafd773738b6810db80c69de46d3">hPtrOutRnk</a></td></tr>
+<tr class="separator:a64a2dafd773738b6810db80c69de46d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71d63671dba7f86bf2d6c5bb63305b09"><td class="memItemLeft" align="right" valign="top">cl_uint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a71d63671dba7f86bf2d6c5bb63305b09">hPtrOutN</a></td></tr>
+<tr class="separator:a71d63671dba7f86bf2d6c5bb63305b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;RBCMinConfig C&gt;<br />
-class cl_algo::RBC::RBCMin&lt; C &gt;</h3>
-
-<p>Interface class for the <code>rbcMinDists</code> kernel. </p>
+<div class="textblock"><p>Interface class for the <code>rbcMinDists</code> kernel. </p>
 <p><code>rbcMinDists</code> computes the minimum element, and its corresponding column id, of each row in an array. It also builds a histogram of the id values. And lastly, it stores the rank (order of insert) of each minimum element within its corresponding histogram bin. For more details, look at the kernel's documentation. </p><dl class="section note"><dt>Note</dt><dd>The <code>rbcMinDists</code> kernel is available in <code><a class="el" href="rbc__kernels_8cl.html" title="Kernels for building and accessing the Random Ball Cover data structure. ">kernels/rbc_kernels.cl</a></code>. </dd>
 <dd>
 The class creates its own buffers. If you would like to provide your own buffers, call <code>get</code> to get references to the placeholders within the class and assign them to your buffers. You will have to do this strictly before the call to <code>init</code>. You can also call <code>get</code> (after the call to <code>init</code>) to get a reference to a buffer within the class and assign it to another kernel class instance further down in your task pipeline.</dd></dl>
@@ -214,19 +212,11 @@ The class creates its own buffers. If you would like to provide your own buffers
 <tr>
 <td>D_OUT_N </td><td align="center">Buffer </td><td align="center">Device </td><td align="center">O </td><td align="center">Processing </td><td align="center">CL_MEM_READ_WRITE </td><td align="center">\(columns *sizeof\ (cl\_uint)\) </td></tr>
 </table>
-<p><code><a class="el" href="structrbc__dist__id.html" title="Struct holding a value and a key. ">rbc_dist_id</a></code> is documented in <code>rbcDataTypes.hpp</code>.</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">C</td><td>configures the class for either <code>RBC</code> <code>construction</code> or <code>search</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p><code><a class="el" href="structrbc__dist__id.html" title="Struct holding a value and a key. ">rbc_dist_id</a></code> is documented in <code>rbcDataTypes.hpp</code>. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a6b2209d254b04eb62ec3f5854daacc76"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -264,14 +254,12 @@ template&lt;RBCMinConfig C&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a947c82a6fbb294a861a1ef2856949b06"></a>
+<a class="anchor" id="ab3b80b9b1c62ae2df6e1a0de85b086c9"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a> </td>
+          <td class="memname">cl_algo::RBC::RBCMin::RBCMin </td>
           <td>(</td>
           <td class="paramtype">clutils::CLEnv &amp;&#160;</td>
           <td class="paramname"><em>_env</em>, </td>
@@ -302,16 +290,14 @@ template&lt;RBCMinConfig C&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a93b43ef00b71e80024ca2cd9df195795"></a>
+<a class="anchor" id="abf808ddb619dc3d6ccefb7ed61930df4"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl::Memory &amp; <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::get </td>
+          <td class="memname">cl::Memory &amp; cl_algo::RBC::RBCMin::get </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a>&lt; C &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">Memory</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a>&#160;</td>
           <td class="paramname"><em>mem</em></td><td>)</td>
           <td></td>
         </tr>
@@ -330,14 +316,12 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a52e5230f18b47d1fa97e25f5b71a4499"></a>
+<a class="anchor" id="a7232cb1e0d2209bb6780fa7463d30c49"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::init </td>
+          <td class="memname">void cl_algo::RBC::RBCMin::init </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>_cols</em>, </td>
@@ -347,6 +331,12 @@ template&lt;RBCMinConfig C&gt; </div>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>_rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_accCounters</em> = <code>1</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -368,6 +358,7 @@ template&lt;RBCMinConfig C&gt; </div>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_cols</td><td>number of columns in the input array. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_rows</td><td>number of rows in the input array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_accCounters</td><td>flag to indicate whether or not to involve in the computation the list element counters, <code>N</code>, and element ranks, <code>Rnk</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_staging</td><td>flag to indicate whether or not to instantiate the staging buffers. </td></tr>
   </table>
   </dd>
@@ -375,17 +366,15 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="adde5034c943cc90f6193e0843fb84174"></a>
+<a class="anchor" id="a4a3192ee0eabfeaea1cd9725f74cd40b"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void * <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::read </td>
+          <td class="memname">void * cl_algo::RBC::RBCMin::read </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a>&lt; C &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">Memory</a>&#160;</td>
-          <td class="paramname"><em>mem</em> = <code><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a>&lt;&#160;C&#160;&gt;::Memory::H_OUT_ID</code>, </td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a>&#160;</td>
+          <td class="paramname"><em>mem</em> = <code>RBCMin::Memory::H_OUT_ID</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -427,14 +416,12 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="abd4f4482488fae151a3a9a44769074a8"></a>
+<a class="anchor" id="a67d817a48475d5c1bb6360c16a860c80"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::run </td>
+          <td class="memname">void cl_algo::RBC::RBCMin::run </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; cl::Event &gt; *&#160;</td>
           <td class="paramname"><em>events</em> = <code>nullptr</code>, </td>
@@ -465,11 +452,9 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a174b233998f88314ec7302281948a7bc"></a>
+<a class="anchor" id="a29469162363177acee606285e937cb47"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
 <div class="memtemplate">
 template&lt;typename period &gt; </div>
 <table class="mlabels">
@@ -477,7 +462,7 @@ template&lt;typename period &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::run </td>
+          <td class="memname">double cl_algo::RBC::RBCMin::run </td>
           <td>(</td>
           <td class="paramtype">clutils::GPUTimer&lt; period &gt; &amp;&#160;</td>
           <td class="paramname"><em>timer</em>, </td>
@@ -514,17 +499,15 @@ template&lt;typename period &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab0b0bf7a9d213a5f449318e24c775c15"></a>
+<a class="anchor" id="a9adb84037ae972eea642f60ef5a38636"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::write </td>
+          <td class="memname">void cl_algo::RBC::RBCMin::write </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a>&lt; C &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">Memory</a>&#160;</td>
-          <td class="paramname"><em>mem</em> = <code><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">RBCMin</a>&lt;&#160;C&#160;&gt;::Memory::D_IN_D</code>, </td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html#a6b2209d254b04eb62ec3f5854daacc76">RBCMin::Memory</a>&#160;</td>
+          <td class="paramname"><em>mem</em> = <code>RBCMin::Memory::D_IN_D</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -574,14 +557,12 @@ template&lt;RBCMinConfig C&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="aed635b5fe6cb45b751f0e8e61d1d2fed"></a>
+<a class="anchor" id="acf98b2a6f1ad868976bffdac97c0413d"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_float* <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::hPtrInD</td>
+          <td class="memname">cl_float* cl_algo::RBC::RBCMin::hPtrInD</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -589,14 +570,12 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a90c447b96e95d8032d340af2496c60c6"></a>
+<a class="anchor" id="a2ea3cd1798c1bf25fb42c62c83645908"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structrbc__dist__id.html">rbc_dist_id</a>* <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::hPtrOutID</td>
+          <td class="memname"><a class="el" href="structrbc__dist__id.html">rbc_dist_id</a>* cl_algo::RBC::RBCMin::hPtrOutID</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -604,14 +583,12 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aab711b9aa9e803cc194f537a98bfa69d"></a>
+<a class="anchor" id="a71d63671dba7f86bf2d6c5bb63305b09"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_uint* <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::hPtrOutN</td>
+          <td class="memname">cl_uint* cl_algo::RBC::RBCMin::hPtrOutN</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -619,14 +596,12 @@ template&lt;RBCMinConfig C&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0ad4f4fe3c97d41983e259fd8e181a44"></a>
+<a class="anchor" id="a64a2dafd773738b6810db80c69de46d3"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;RBCMinConfig C&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_uint* <a class="el" href="classcl__algo_1_1RBC_1_1RBCMin.html">cl_algo::RBC::RBCMin</a>&lt; C &gt;::hPtrOutRnk</td>
+          <td class="memname">cl_uint* cl_algo::RBC::RBCMin::hPtrOutRnk</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -641,7 +616,7 @@ template&lt;RBCMinConfig C&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 9 2015 19:48:34 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 14 2015 15:01:19 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

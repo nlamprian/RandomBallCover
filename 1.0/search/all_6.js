@@ -1,25 +1,5 @@
 var searchData=
 [
-  ['helper_5ffuncs_2ecpp',['helper_funcs.cpp',['../helper__funcs_8cpp.html',1,'']]],
-  ['helper_5ffuncs_2ehpp',['helper_funcs.hpp',['../helper__funcs_8hpp.html',1,'']]],
-  ['hptrin',['hPtrIn',['../classcl__algo_1_1RBC_1_1Reduce.html#a08a5d9c9bc374301b039fe7c0907e38a',1,'cl_algo::RBC::Reduce::hPtrIn()'],['../classcl__algo_1_1RBC_1_1Scan.html#aab0f58de376e93c87bc8566fc8ebd082',1,'cl_algo::RBC::Scan::hPtrIn()']]],
-  ['hptrind',['hPtrInD',['../classcl__algo_1_1RBC_1_1RBCMin.html#aed635b5fe6cb45b751f0e8e61d1d2fed',1,'cl_algo::RBC::RBCMin']]],
-  ['hptrinid',['hPtrInID',['../classcl__algo_1_1RBC_1_1RBCPermute.html#a3ce54affd250ea29ae42d5e6a156456d',1,'cl_algo::RBC::RBCPermute']]],
-  ['hptrinn',['hPtrInN',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a0f790452e7f1a28d37b046fca3042543',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptrino',['hPtrInO',['../classcl__algo_1_1RBC_1_1RBCPermute.html#a618873494c78caf939ba1988859817bc',1,'cl_algo::RBC::RBCPermute::hPtrInO()'],['../classcl__algo_1_1RBC_1_1RBCSearch.html#a130f2e188f8285ab7907c8c47e5726d1',1,'cl_algo::RBC::RBCSearch::hPtrInO()']]],
-  ['hptrinq',['hPtrInQ',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a87e6317249cbcab3585014f7a0876011',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptrinr',['hPtrInR',['../classcl__algo_1_1RBC_1_1RBCComputeDists.html#a897e2e778e26b886fb6389b7e887abfb',1,'cl_algo::RBC::RBCComputeDists::hPtrInR()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a53a40df43ffabefc2b0f59eedde103ea',1,'cl_algo::RBC::RBCConstruct::hPtrInR()'],['../classcl__algo_1_1RBC_1_1RBCSearch.html#ad6b1252a1279b5c889f52d6ac5e67714',1,'cl_algo::RBC::RBCSearch::hPtrInR()']]],
-  ['hptrinrnk',['hPtrInRnk',['../classcl__algo_1_1RBC_1_1RBCPermute.html#afaae72c31e99b9a23497a7f90d1b76d4',1,'cl_algo::RBC::RBCPermute']]],
-  ['hptrinx',['hPtrInX',['../classcl__algo_1_1RBC_1_1RBCComputeDists.html#a068c4262d42a72f3074c178e1504d8a3',1,'cl_algo::RBC::RBCComputeDists::hPtrInX()'],['../classcl__algo_1_1RBC_1_1RBCPermute.html#a52b99b64916f48a2f5a25ec70f38a569',1,'cl_algo::RBC::RBCPermute::hPtrInX()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a4105df36086b18a4fbcf472b0222faf3',1,'cl_algo::RBC::RBCConstruct::hPtrInX()']]],
-  ['hptrinxp',['hPtrInXp',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a15604c7e493c6128a138a297e3a2f2c0',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptrout',['hPtrOut',['../classcl__algo_1_1RBC_1_1Reduce.html#a41c633dc41758eaf7429cc133df5ec7e',1,'cl_algo::RBC::Reduce::hPtrOut()'],['../classcl__algo_1_1RBC_1_1Scan.html#acf722e6269cbb12f1267855435455990',1,'cl_algo::RBC::Scan::hPtrOut()']]],
-  ['hptroutd',['hPtrOutD',['../classcl__algo_1_1RBC_1_1RBCComputeDists.html#a62618b4ad76b631122ade7d289d0d36e',1,'cl_algo::RBC::RBCComputeDists']]],
-  ['hptroutid',['hPtrOutID',['../classcl__algo_1_1RBC_1_1RBCMin.html#a90c447b96e95d8032d340af2496c60c6',1,'cl_algo::RBC::RBCMin::hPtrOutID()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a97e6b35bd4867e442a489b8a671c47a5',1,'cl_algo::RBC::RBCConstruct::hPtrOutID()']]],
-  ['hptroutn',['hPtrOutN',['../classcl__algo_1_1RBC_1_1RBCMin.html#aab711b9aa9e803cc194f537a98bfa69d',1,'cl_algo::RBC::RBCMin::hPtrOutN()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a5ef801323bd6f5bfbfbbaff53e996926',1,'cl_algo::RBC::RBCConstruct::hPtrOutN()']]],
-  ['hptroutnn',['hPtrOutNN',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a6a83ed85cd82912aa730da27cf5d6a2f',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptroutnnid',['hPtrOutNNID',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a01fe6fefddd316e68db654956a029e44',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptrouto',['hPtrOutO',['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a828f9634d5a45357c9173774c2d9bb56',1,'cl_algo::RBC::RBCConstruct']]],
-  ['hptroutrid',['hPtrOutRID',['../classcl__algo_1_1RBC_1_1RBCSearch.html#a76819810c3426f5dbd54a964ed0f8c89',1,'cl_algo::RBC::RBCSearch']]],
-  ['hptroutrnk',['hPtrOutRnk',['../classcl__algo_1_1RBC_1_1RBCMin.html#a0ad4f4fe3c97d41983e259fd8e181a44',1,'cl_algo::RBC::RBCMin::hPtrOutRnk()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a1f5f33e55c96821a49355568f2407bd9',1,'cl_algo::RBC::RBCConstruct::hPtrOutRnk()']]],
-  ['hptroutxp',['hPtrOutXp',['../classcl__algo_1_1RBC_1_1RBCPermute.html#a3d6412cec95ef0cf1d7c5169818043fe',1,'cl_algo::RBC::RBCPermute::hPtrOutXp()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#ac1d2baad15b4ad544622077ed740aaa9',1,'cl_algo::RBC::RBCConstruct::hPtrOutXp()']]]
+  ['get',['get',['../classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab8c1c04130efbd811da0399e0e6d1d50',1,'cl_algo::RBC::RBCComputeDists::get()'],['../classcl__algo_1_1RBC_1_1Reduce.html#abdca391be12c9d319035bcfc4d70aa7d',1,'cl_algo::RBC::Reduce::get()'],['../classcl__algo_1_1RBC_1_1RBCMin.html#abf808ddb619dc3d6ccefb7ed61930df4',1,'cl_algo::RBC::RBCMin::get()'],['../classcl__algo_1_1RBC_1_1Scan.html#a91cd4e0c58a4ecc0d0c9f1bd0c81f657',1,'cl_algo::RBC::Scan::get()'],['../classcl__algo_1_1RBC_1_1RBCPermute.html#ae6d3e0f521c14dc7c5ce5aae9c8bd9ee',1,'cl_algo::RBC::RBCPermute::get()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#a43355bcbcb461d9beb34083fd041eee6',1,'cl_algo::RBC::RBCConstruct::get()'],['../classcl__algo_1_1RBC_1_1RBCSearch.html#ac6af8664adac4136750c561e8eb452ca',1,'cl_algo::RBC::RBCSearch::get()']]],
+  ['grub_5fkinect_5fframes_2ecpp',['grub_kinect_frames.cpp',['../grub__kinect__frames_8cpp.html',1,'']]]
 ];

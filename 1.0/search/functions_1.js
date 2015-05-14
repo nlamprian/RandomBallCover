@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['euclideansquaredmetric',['euclideanSquaredMetric',['../rbc__kernels_8cl.html#aec3a66877d6580a30eff6ddea6cc42c8',1,'rbc_kernels.cl']]],
-  ['exclusivescan',['exclusiveScan',['../scan__kernels_8cl.html#a6c7bd5cc4d4a45231e70ecf413b32393',1,'scan_kernels.cl']]]
+  ['clean_5fdata',['clean_data',['../testsRBC__RGBD_8cpp.html#abd0601360e8caf80a76adf6d4b83d30d',1,'testsRBC_RGBD.cpp']]]
 ];

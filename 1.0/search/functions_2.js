@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['get',['get',['../classcl__algo_1_1RBC_1_1RBCComputeDists.html#a330fbee66ebced5f4b186fd66d1e8e36',1,'cl_algo::RBC::RBCComputeDists::get()'],['../classcl__algo_1_1RBC_1_1Reduce.html#abdca391be12c9d319035bcfc4d70aa7d',1,'cl_algo::RBC::Reduce::get()'],['../classcl__algo_1_1RBC_1_1RBCMin.html#a93b43ef00b71e80024ca2cd9df195795',1,'cl_algo::RBC::RBCMin::get()'],['../classcl__algo_1_1RBC_1_1Scan.html#a91cd4e0c58a4ecc0d0c9f1bd0c81f657',1,'cl_algo::RBC::Scan::get()'],['../classcl__algo_1_1RBC_1_1RBCPermute.html#a91719a9e48b8b81954e4fc305f2bc7a1',1,'cl_algo::RBC::RBCPermute::get()'],['../classcl__algo_1_1RBC_1_1RBCConstruct.html#afb55272202a09a860da47e9ac6f6149b',1,'cl_algo::RBC::RBCConstruct::get()'],['../classcl__algo_1_1RBC_1_1RBCSearch.html#ac8b85ce9b2e580ea56f7639b21ebbe93',1,'cl_algo::RBC::RBCSearch::get()']]]
+  ['depthcallback',['DepthCallback',['../classMyFreenectDevice.html#ae9d3a12a1d4a5991dcf83110ce2c162c',1,'MyFreenectDevice']]],
+  ['drawglscene',['drawGLScene',['../grub__kinect__frames_8cpp.html#a90bd022dfeda5d1e749650262232f328',1,'grub_kinect_frames.cpp']]]
 ];

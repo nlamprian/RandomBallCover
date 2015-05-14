@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>RandomBallCover: cl_algo::RBC::RBCComputeDists Class Reference</title>
+<title>RandomBallCover: cl_algo::RBC::RBCComputeDists&lt; K &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <script>
@@ -84,6 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -113,7 +114,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classcl__algo_1_1RBC_1_1RBCComputeDists-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cl_algo::RBC::RBCComputeDists Class Reference</div>  </div>
+<div class="title">cl_algo::RBC::RBCComputeDists&lt; K &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -124,13 +125,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab25a790e4fdecfffedfcc273d7a0c2f6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab25a790e4fdecfffedfcc273d7a0c2f6">KernelType</a> : uint8_t { <b>SHARED_NONE</b>, 
-<b>SHARED_R</b>, 
-<b>SHARED_X_R</b>, 
-<b>KINECT</b>
- }</td></tr>
-<tr class="memdesc:ab25a790e4fdecfffedfcc273d7a0c2f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerates the kernels available for computing the array of distances.  <a href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab25a790e4fdecfffedfcc273d7a0c2f6">More...</a><br /></td></tr>
-<tr class="separator:ab25a790e4fdecfffedfcc273d7a0c2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f6f3f61480644e9d0f9d5094a58d81c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">Memory</a> : uint8_t { <br />
 &#160;&#160;<b>H_IN_X</b>, 
 <b>H_IN_R</b>, 
@@ -146,40 +140,43 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afb4e0af6e195952b2b57b41eccd2f463"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#afb4e0af6e195952b2b57b41eccd2f463">RBCComputeDists</a> (clutils::CLEnv &amp;_env, clutils::CLEnvInfo&lt; 1 &gt; _info, <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab25a790e4fdecfffedfcc273d7a0c2f6">RBCComputeDists::KernelType</a> _kernelType=RBCComputeDists::KernelType::KINECT)</td></tr>
-<tr class="memdesc:afb4e0af6e195952b2b57b41eccd2f463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures an OpenCL environment as specified by <code>_info</code>.  <a href="#afb4e0af6e195952b2b57b41eccd2f463">More...</a><br /></td></tr>
-<tr class="separator:afb4e0af6e195952b2b57b41eccd2f463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a330fbee66ebced5f4b186fd66d1e8e36"><td class="memItemLeft" align="right" valign="top">cl::Memory &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a330fbee66ebced5f4b186fd66d1e8e36">get</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem)</td></tr>
-<tr class="memdesc:a330fbee66ebced5f4b186fd66d1e8e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to an internal memory object.  <a href="#a330fbee66ebced5f4b186fd66d1e8e36">More...</a><br /></td></tr>
-<tr class="separator:a330fbee66ebced5f4b186fd66d1e8e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d14d84a9f5292a5d6e64c6649bbf64b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a5d14d84a9f5292a5d6e64c6649bbf64b">init</a> (unsigned int _nx, unsigned int _nr, unsigned int _d=8, Staging _staging=Staging::IO)</td></tr>
-<tr class="memdesc:a5d14d84a9f5292a5d6e64c6649bbf64b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures kernel execution parameters.  <a href="#a5d14d84a9f5292a5d6e64c6649bbf64b">More...</a><br /></td></tr>
-<tr class="separator:a5d14d84a9f5292a5d6e64c6649bbf64b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46ef73da35ee2ccad6bdf8480ee52474"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a46ef73da35ee2ccad6bdf8480ee52474">write</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem=RBCComputeDists::Memory::D_IN_X, void *ptr=nullptr, bool block=CL_FALSE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:a46ef73da35ee2ccad6bdf8480ee52474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a device buffer.  <a href="#a46ef73da35ee2ccad6bdf8480ee52474">More...</a><br /></td></tr>
-<tr class="separator:a46ef73da35ee2ccad6bdf8480ee52474"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af52e216ac3f2d184900728e8bb2bdac9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#af52e216ac3f2d184900728e8bb2bdac9">read</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem=RBCComputeDists::Memory::H_OUT_D, bool block=CL_TRUE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:af52e216ac3f2d184900728e8bb2bdac9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a staging buffer.  <a href="#af52e216ac3f2d184900728e8bb2bdac9">More...</a><br /></td></tr>
-<tr class="separator:af52e216ac3f2d184900728e8bb2bdac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a538669de3087d88aae596a16b309ca75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a538669de3087d88aae596a16b309ca75">run</a> (const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
-<tr class="memdesc:a538669de3087d88aae596a16b309ca75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#a538669de3087d88aae596a16b309ca75">More...</a><br /></td></tr>
-<tr class="separator:a538669de3087d88aae596a16b309ca75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab95832288ef53c25a2d11e8aa14b0c45"><td class="memTemplParams" colspan="2">template&lt;typename period &gt; </td></tr>
-<tr class="memitem:ab95832288ef53c25a2d11e8aa14b0c45"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab95832288ef53c25a2d11e8aa14b0c45">run</a> (clutils::GPUTimer&lt; period &gt; &amp;timer, const std::vector&lt; cl::Event &gt; *events=nullptr)</td></tr>
-<tr class="memdesc:ab95832288ef53c25a2d11e8aa14b0c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#ab95832288ef53c25a2d11e8aa14b0c45">More...</a><br /></td></tr>
-<tr class="separator:ab95832288ef53c25a2d11e8aa14b0c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46a48cff933d77d976080911021f40e0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a46a48cff933d77d976080911021f40e0">RBCComputeDists</a> (clutils::CLEnv &amp;_env, clutils::CLEnvInfo&lt; 1 &gt; _info)</td></tr>
+<tr class="memdesc:a46a48cff933d77d976080911021f40e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures an OpenCL environment as specified by <code>_info</code>.  <a href="#a46a48cff933d77d976080911021f40e0">More...</a><br /></td></tr>
+<tr class="separator:a46a48cff933d77d976080911021f40e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8c1c04130efbd811da0399e0e6d1d50"><td class="memItemLeft" align="right" valign="top">cl::Memory &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab8c1c04130efbd811da0399e0e6d1d50">get</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem)</td></tr>
+<tr class="memdesc:ab8c1c04130efbd811da0399e0e6d1d50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to an internal memory object.  <a href="#ab8c1c04130efbd811da0399e0e6d1d50">More...</a><br /></td></tr>
+<tr class="separator:ab8c1c04130efbd811da0399e0e6d1d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73e4c12f41c43290b47aea7ae24778e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a73e4c12f41c43290b47aea7ae24778e9">init</a> (unsigned int _nx, unsigned int _nr, unsigned int _d=8, Staging _staging=Staging::IO)</td></tr>
+<tr class="memdesc:a73e4c12f41c43290b47aea7ae24778e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures kernel execution parameters.  <a href="#a73e4c12f41c43290b47aea7ae24778e9">More...</a><br /></td></tr>
+<tr class="separator:a73e4c12f41c43290b47aea7ae24778e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5494bb383d47b1b25734848adfe70d3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a5494bb383d47b1b25734848adfe70d3b">write</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem=RBCComputeDists::Memory::D_IN_X, void *ptr=nullptr, bool block=CL_FALSE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:a5494bb383d47b1b25734848adfe70d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a device buffer.  <a href="#a5494bb383d47b1b25734848adfe70d3b">More...</a><br /></td></tr>
+<tr class="separator:a5494bb383d47b1b25734848adfe70d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4671398a293c3978c9c82c233150c781"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a4671398a293c3978c9c82c233150c781">read</a> (<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a> mem=RBCComputeDists::Memory::H_OUT_D, bool block=CL_TRUE, const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:a4671398a293c3978c9c82c233150c781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a data transfer to a staging buffer.  <a href="#a4671398a293c3978c9c82c233150c781">More...</a><br /></td></tr>
+<tr class="separator:a4671398a293c3978c9c82c233150c781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace8c404b26a2a29c99c98d8dac2efc61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ace8c404b26a2a29c99c98d8dac2efc61">run</a> (const std::vector&lt; cl::Event &gt; *events=nullptr, cl::Event *event=nullptr)</td></tr>
+<tr class="memdesc:ace8c404b26a2a29c99c98d8dac2efc61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#ace8c404b26a2a29c99c98d8dac2efc61">More...</a><br /></td></tr>
+<tr class="separator:ace8c404b26a2a29c99c98d8dac2efc61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52af7e1412777d4877c10af375a2561f"><td class="memTemplParams" colspan="2">template&lt;typename period &gt; </td></tr>
+<tr class="memitem:a52af7e1412777d4877c10af375a2561f"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a52af7e1412777d4877c10af375a2561f">run</a> (clutils::GPUTimer&lt; period &gt; &amp;timer, const std::vector&lt; cl::Event &gt; *events=nullptr)</td></tr>
+<tr class="memdesc:a52af7e1412777d4877c10af375a2561f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the necessary kernels.  <a href="#a52af7e1412777d4877c10af375a2561f">More...</a><br /></td></tr>
+<tr class="separator:a52af7e1412777d4877c10af375a2561f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a068c4262d42a72f3074c178e1504d8a3"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a068c4262d42a72f3074c178e1504d8a3">hPtrInX</a></td></tr>
-<tr class="separator:a068c4262d42a72f3074c178e1504d8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a897e2e778e26b886fb6389b7e887abfb"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a897e2e778e26b886fb6389b7e887abfb">hPtrInR</a></td></tr>
-<tr class="separator:a897e2e778e26b886fb6389b7e887abfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62618b4ad76b631122ade7d289d0d36e"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a62618b4ad76b631122ade7d289d0d36e">hPtrOutD</a></td></tr>
-<tr class="separator:a62618b4ad76b631122ade7d289d0d36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dec2737efda3cc046e75069fc38fc75"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a5dec2737efda3cc046e75069fc38fc75">hPtrInX</a></td></tr>
+<tr class="separator:a5dec2737efda3cc046e75069fc38fc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73abad98c07248f505008665241a154d"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a73abad98c07248f505008665241a154d">hPtrInR</a></td></tr>
+<tr class="separator:a73abad98c07248f505008665241a154d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af96a9d315763a4f5f9cd45e08154a442"><td class="memItemLeft" align="right" valign="top">cl_float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#af96a9d315763a4f5f9cd45e08154a442">hPtrOutD</a></td></tr>
+<tr class="separator:af96a9d315763a4f5f9cd45e08154a442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Interface class for the <code>rbcComputeDists</code> kernels. </p>
+<div class="textblock"><h3>template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt;<br />
+class cl_algo::RBC::RBCComputeDists&lt; K &gt;</h3>
+
+<p>Interface class for the <code>rbcComputeDists</code> kernels. </p>
 <p>The <code>rbcComputeDists</code> kernels compute the distances between two sets of points in a brute force way. For more details, look at the kernel's documentation. </p><dl class="section note"><dt>Note</dt><dd>The <code>rbcComputeDists</code> kernels are available in <code><a class="el" href="rbc__kernels_8cl.html" title="Kernels for building and accessing the Random Ball Cover data structure. ">kernels/rbc_kernels.cl</a></code>. </dd>
 <dd>
 The class creates its own buffers. If you would like to provide your own buffers, call <code>get</code> to get references to the placeholders within the class and assign them to your buffers. You will have to do this strictly before the call to <code>init</code>. You can also call <code>get</code> (after the call to <code>init</code>) to get a reference to a buffer within the class and assign it to another kernel class instance further down in your task pipeline.</dd></dl>
@@ -200,40 +197,18 @@ The class creates its own buffers. If you would like to provide your own buffers
 <tr>
 <td>D_OUT_D</td><td align="center">Buffer </td><td align="center">Device </td><td align="center">O </td><td align="center">Processing </td><td align="center">CL_MEM_WRITE_ONLY </td><td align="center">\(n_x*n_r*sizeof\ (cl\_float)\) </td></tr>
 </table>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="ab25a790e4fdecfffedfcc273d7a0c2f6"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab25a790e4fdecfffedfcc273d7a0c2f6">cl_algo::RBC::RBCComputeDists::KernelType</a> : uint8_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enumerates the kernels available for computing the array of distances. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">SHARED_NONE</td><td>refers to the <code>rbcComputeDists_SharedNone</code> kernel. </td></tr>
-    <tr><td class="paramname">SHARED_R</td><td>refers to the <code>rbcComputeDists_SharedR</code> kernel. </td></tr>
-    <tr><td class="paramname">SHARED_X_R</td><td>refers to the <code>rbcComputeDists_SharedXR</code> kernel. </td></tr>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">K</td><td>configures the class for using one of the available kernels. </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a1f6f3f61480644e9d0f9d5094a58d81c"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -268,12 +243,14 @@ The class creates its own buffers. If you would like to provide your own buffers
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="afb4e0af6e195952b2b57b41eccd2f463"></a>
+<a class="anchor" id="a46a48cff933d77d976080911021f40e0"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_algo::RBC::RBCComputeDists::RBCComputeDists </td>
+          <td class="memname"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a> </td>
           <td>(</td>
           <td class="paramtype">clutils::CLEnv &amp;&#160;</td>
           <td class="paramname"><em>_env</em>, </td>
@@ -282,13 +259,7 @@ The class creates its own buffers. If you would like to provide your own buffers
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">clutils::CLEnvInfo&lt; 1 &gt;&#160;</td>
-          <td class="paramname"><em>_info</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#ab25a790e4fdecfffedfcc273d7a0c2f6">RBCComputeDists::KernelType</a>&#160;</td>
-          <td class="paramname"><em>_kernelType</em> = <code>RBCComputeDists::KernelType::KINECT</code>&#160;</td>
+          <td class="paramname"><em>_info</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -303,7 +274,6 @@ The class creates its own buffers. If you would like to provide your own buffers
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_env</td><td>opencl environment. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_info</td><td>opencl configuration. Specifies the context, queue, etc, to be used. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">_kernelType</td><td>enumeration value to specify which of the available kernels to use. </td></tr>
   </table>
   </dd>
 </dl>
@@ -311,14 +281,16 @@ The class creates its own buffers. If you would like to provide your own buffers
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a330fbee66ebced5f4b186fd66d1e8e36"></a>
+<a class="anchor" id="ab8c1c04130efbd811da0399e0e6d1d50"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl::Memory &amp; cl_algo::RBC::RBCComputeDists::get </td>
+          <td class="memname">cl::Memory &amp; <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::get </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a>&lt; K &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">Memory</a>&#160;</td>
           <td class="paramname"><em>mem</em></td><td>)</td>
           <td></td>
         </tr>
@@ -337,12 +309,14 @@ The class creates its own buffers. If you would like to provide your own buffers
 
 </div>
 </div>
-<a class="anchor" id="a5d14d84a9f5292a5d6e64c6649bbf64b"></a>
+<a class="anchor" id="a73e4c12f41c43290b47aea7ae24778e9"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void cl_algo::RBC::RBCComputeDists::init </td>
+          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::init </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>_nx</em>, </td>
@@ -387,15 +361,17 @@ The class creates its own buffers. If you would like to provide your own buffers
 
 </div>
 </div>
-<a class="anchor" id="af52e216ac3f2d184900728e8bb2bdac9"></a>
+<a class="anchor" id="a4671398a293c3978c9c82c233150c781"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void * cl_algo::RBC::RBCComputeDists::read </td>
+          <td class="memname">void * <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::read </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a>&#160;</td>
-          <td class="paramname"><em>mem</em> = <code>RBCComputeDists::Memory::H_OUT_D</code>, </td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a>&lt; K &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">Memory</a>&#160;</td>
+          <td class="paramname"><em>mem</em> = <code><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a>&lt;&#160;K&#160;&gt;::Memory::H_OUT_D</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -437,12 +413,14 @@ The class creates its own buffers. If you would like to provide your own buffers
 
 </div>
 </div>
-<a class="anchor" id="a538669de3087d88aae596a16b309ca75"></a>
+<a class="anchor" id="ace8c404b26a2a29c99c98d8dac2efc61"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void cl_algo::RBC::RBCComputeDists::run </td>
+          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::run </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; cl::Event &gt; *&#160;</td>
           <td class="paramname"><em>events</em> = <code>nullptr</code>, </td>
@@ -473,9 +451,11 @@ The class creates its own buffers. If you would like to provide your own buffers
 
 </div>
 </div>
-<a class="anchor" id="ab95832288ef53c25a2d11e8aa14b0c45"></a>
+<a class="anchor" id="a52af7e1412777d4877c10af375a2561f"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt; </div>
 <div class="memtemplate">
 template&lt;typename period &gt; </div>
 <table class="mlabels">
@@ -483,7 +463,7 @@ template&lt;typename period &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double cl_algo::RBC::RBCComputeDists::run </td>
+          <td class="memname">double <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::run </td>
           <td>(</td>
           <td class="paramtype">clutils::GPUTimer&lt; period &gt; &amp;&#160;</td>
           <td class="paramname"><em>timer</em>, </td>
@@ -520,15 +500,17 @@ template&lt;typename period &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a46ef73da35ee2ccad6bdf8480ee52474"></a>
+<a class="anchor" id="a5494bb383d47b1b25734848adfe70d3b"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void cl_algo::RBC::RBCComputeDists::write </td>
+          <td class="memname">void <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::write </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">RBCComputeDists::Memory</a>&#160;</td>
-          <td class="paramname"><em>mem</em> = <code>RBCComputeDists::Memory::D_IN_X</code>, </td>
+          <td class="paramtype"><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a>&lt; K &gt;::<a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html#a1f6f3f61480644e9d0f9d5094a58d81c">Memory</a>&#160;</td>
+          <td class="paramname"><em>mem</em> = <code><a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">RBCComputeDists</a>&lt;&#160;K&#160;&gt;::Memory::D_IN_X</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -578,12 +560,14 @@ template&lt;typename period &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a897e2e778e26b886fb6389b7e887abfb"></a>
+<a class="anchor" id="a73abad98c07248f505008665241a154d"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_float* cl_algo::RBC::RBCComputeDists::hPtrInR</td>
+          <td class="memname">cl_float* <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::hPtrInR</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -591,12 +575,14 @@ template&lt;typename period &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a068c4262d42a72f3074c178e1504d8a3"></a>
+<a class="anchor" id="a5dec2737efda3cc046e75069fc38fc75"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_float* cl_algo::RBC::RBCComputeDists::hPtrInX</td>
+          <td class="memname">cl_float* <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::hPtrInX</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -604,12 +590,14 @@ template&lt;typename period &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a62618b4ad76b631122ade7d289d0d36e"></a>
+<a class="anchor" id="af96a9d315763a4f5f9cd45e08154a442"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;KernelTypeC K = KernelTypeC::SHARED_NONE&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">cl_float* cl_algo::RBC::RBCComputeDists::hPtrOutD</td>
+          <td class="memname">cl_float* <a class="el" href="classcl__algo_1_1RBC_1_1RBCComputeDists.html">cl_algo::RBC::RBCComputeDists</a>&lt; K &gt;::hPtrOutD</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -624,7 +612,7 @@ template&lt;typename period &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 9 2015 19:48:34 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 14 2015 15:01:19 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

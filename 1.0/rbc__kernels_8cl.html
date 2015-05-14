@@ -131,6 +131,12 @@ Functions</h2></td></tr>
 <tr class="memitem:aec3a66877d6580a30eff6ddea6cc42c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#aec3a66877d6580a30eff6ddea6cc42c8">euclideanSquaredMetric</a> (float4 *x, float4 *r, float4 *dists, uint n)</td></tr>
 <tr class="memdesc:aec3a66877d6580a30eff6ddea6cc42c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes \( \ell_2 \)-norm based squared distances, \( d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \).  <a href="#aec3a66877d6580a30eff6ddea6cc42c8">More...</a><br /></td></tr>
 <tr class="separator:aec3a66877d6580a30eff6ddea6cc42c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac166219cf23b83161edc88cb04a4385b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ac166219cf23b83161edc88cb04a4385b">l1NormMetric8</a> (float8 *x, float8 *r, float4 *dists, uint n)</td></tr>
+<tr class="memdesc:ac166219cf23b83161edc88cb04a4385b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes \( \ell_1 \)-norm based distances, \( d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \).  <a href="#ac166219cf23b83161edc88cb04a4385b">More...</a><br /></td></tr>
+<tr class="separator:ac166219cf23b83161edc88cb04a4385b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9c1560c49ee2ee5f5ea7e4d47109e5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ad9c1560c49ee2ee5f5ea7e4d47109e5d">euclideanSquaredMetric8</a> (float8 *x, float8 *r, float4 *dists, uint n)</td></tr>
+<tr class="memdesc:ad9c1560c49ee2ee5f5ea7e4d47109e5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes \( \ell_2 \)-norm based squared distances, \( d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \).  <a href="#ad9c1560c49ee2ee5f5ea7e4d47109e5d">More...</a><br /></td></tr>
+<tr class="separator:ad9c1560c49ee2ee5f5ea7e4d47109e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d83f06697bfd6d3c00d9fb3b0159c20"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a3d83f06697bfd6d3c00d9fb3b0159c20">rbcComputeDists_SharedNone</a> (global float4 *X, global float4 *R, global float4 *D, uint d)</td></tr>
 <tr class="memdesc:a3d83f06697bfd6d3c00d9fb3b0159c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a3d83f06697bfd6d3c00d9fb3b0159c20">More...</a><br /></td></tr>
 <tr class="separator:a3d83f06697bfd6d3c00d9fb3b0159c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,9 +146,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a3ecabcf403bc86470feb18ecd5573c7f"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a3ecabcf403bc86470feb18ecd5573c7f">rbcComputeDists_SharedXR</a> (global float4 *X, global float4 *R, global float4 *D, local float4 *dataX, local float4 *dataR, uint d)</td></tr>
 <tr class="memdesc:a3ecabcf403bc86470feb18ecd5573c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a3ecabcf403bc86470feb18ecd5573c7f">More...</a><br /></td></tr>
 <tr class="separator:a3ecabcf403bc86470feb18ecd5573c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad47797acc1371f55aae0916505f1b785"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ad47797acc1371f55aae0916505f1b785">rbcComputeDists_Kinect</a> (global float4 *X, global float4 *R, global float4 *D, local float4 *dataX, local float4 *dataR)</td></tr>
-<tr class="memdesc:ad47797acc1371f55aae0916505f1b785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#ad47797acc1371f55aae0916505f1b785">More...</a><br /></td></tr>
-<tr class="separator:ad47797acc1371f55aae0916505f1b785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a701f9c8de66efe49bd844487d0855e6d"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a701f9c8de66efe49bd844487d0855e6d">rbcComputeDists_Kinect</a> (global float8 *X, global float8 *R, global float4 *D)</td></tr>
+<tr class="memdesc:a701f9c8de66efe49bd844487d0855e6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a701f9c8de66efe49bd844487d0855e6d">More...</a><br /></td></tr>
+<tr class="separator:a701f9c8de66efe49bd844487d0855e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af48029a151c39a5a745fcf231a8e14e1"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#af48029a151c39a5a745fcf231a8e14e1">rbcComputeDists_Kinect_R</a> (global float8 *X, global float8 *R, global float4 *D, local float8 *dataR)</td></tr>
+<tr class="memdesc:af48029a151c39a5a745fcf231a8e14e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#af48029a151c39a5a745fcf231a8e14e1">More...</a><br /></td></tr>
+<tr class="separator:af48029a151c39a5a745fcf231a8e14e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed8638fbb0e3ac445fde6841a262858"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a9ed8638fbb0e3ac445fde6841a262858">rbcComputeDists_Kinect_XR</a> (global float8 *X, global float8 *R, global float4 *D, local float8 *dataX, local float8 *dataR)</td></tr>
+<tr class="memdesc:a9ed8638fbb0e3ac445fde6841a262858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a9ed8638fbb0e3ac445fde6841a262858">More...</a><br /></td></tr>
+<tr class="separator:a9ed8638fbb0e3ac445fde6841a262858"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a009aca5f2a6d59dc566db5558b165564"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a009aca5f2a6d59dc566db5558b165564">rbcNInit</a> (global uint4 *N, uint val)</td></tr>
 <tr class="memdesc:a009aca5f2a6d59dc566db5558b165564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs an array initialization.  <a href="#a009aca5f2a6d59dc566db5558b165564">More...</a><br /></td></tr>
 <tr class="separator:a009aca5f2a6d59dc566db5558b165564"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,15 +164,21 @@ Functions</h2></td></tr>
 <tr class="memitem:a750c2f57954b626e1d53fb051c81620a"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a750c2f57954b626e1d53fb051c81620a">rbcGroupMinDists</a> (global <a class="el" href="structdist__id.html">dist_id</a> *GM, global <a class="el" href="structdist__id.html">dist_id</a> *ID, global uint *N, global uint *Rnk, local <a class="el" href="structdist__id.html">dist_id</a> *data, uint n, int accCounters)</td></tr>
 <tr class="memdesc:a750c2f57954b626e1d53fb051c81620a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a reduce operation on the columns of an array.  <a href="#a750c2f57954b626e1d53fb051c81620a">More...</a><br /></td></tr>
 <tr class="separator:a750c2f57954b626e1d53fb051c81620a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad50f087d2b9c0133edef27a381e124e9"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ad50f087d2b9c0133edef27a381e124e9">rbcPermute</a> (global float4 *X, global float4 *Xp, global <a class="el" href="structdist__id.html">dist_id</a> *ID, global uint *O, global uint *Rnk)</td></tr>
-<tr class="memdesc:ad50f087d2b9c0133edef27a381e124e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database.  <a href="#ad50f087d2b9c0133edef27a381e124e9">More...</a><br /></td></tr>
-<tr class="separator:ad50f087d2b9c0133edef27a381e124e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea361d8c276004118ec08d160a8f2665"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#aea361d8c276004118ec08d160a8f2665">rbcComputeQXMinDists</a> (global float4 *Q, global float4 *Xp, global uint *O, global uint *N, global <a class="el" href="structdist__id.html">dist_id</a> *RID, global <a class="el" href="structdist__id.html">dist_id</a> *NNID, local <a class="el" href="structdist__id.html">dist_id</a> *data, uint d)</td></tr>
-<tr class="memdesc:aea361d8c276004118ec08d160a8f2665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements the second step of the <code>RBC search</code> algorithm.  <a href="#aea361d8c276004118ec08d160a8f2665">More...</a><br /></td></tr>
-<tr class="separator:aea361d8c276004118ec08d160a8f2665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cc381fdce8cee23f40ca880ce3f9fc6"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a4cc381fdce8cee23f40ca880ce3f9fc6">rbcGetNNs</a> (global float4 *Xp, global float4 *NN, global <a class="el" href="structdist__id.html">dist_id</a> *NNID)</td></tr>
-<tr class="memdesc:a4cc381fdce8cee23f40ca880ce3f9fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects the query NNs into an array.  <a href="#a4cc381fdce8cee23f40ca880ce3f9fc6">More...</a><br /></td></tr>
-<tr class="separator:a4cc381fdce8cee23f40ca880ce3f9fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d9dd774eb86de520972b93d01d387a"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a06d9dd774eb86de520972b93d01d387a">rbcPermute</a> (global float4 *X, global <a class="el" href="structdist__id.html">dist_id</a> *ID, global float4 *Xp, global <a class="el" href="structdist__id.html">dist_id</a> *IDp, global uint *O, global uint *Rnk, int permID)</td></tr>
+<tr class="memdesc:a06d9dd774eb86de520972b93d01d387a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database.  <a href="#a06d9dd774eb86de520972b93d01d387a">More...</a><br /></td></tr>
+<tr class="separator:a06d9dd774eb86de520972b93d01d387a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8fb1a899ca4980d17725f0e4a55938e"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ad8fb1a899ca4980d17725f0e4a55938e">rbcPermute_Kinect</a> (global float8 *X, global <a class="el" href="structdist__id.html">dist_id</a> *ID, global float8 *Xp, global <a class="el" href="structdist__id.html">dist_id</a> *IDp, global uint *O, global uint *Rnk, int permID)</td></tr>
+<tr class="memdesc:ad8fb1a899ca4980d17725f0e4a55938e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a permutation of the <code>RBC</code> database for the case of Kinect data in \( \mathbb{R}^8 \).  <a href="#ad8fb1a899ca4980d17725f0e4a55938e">More...</a><br /></td></tr>
+<tr class="separator:ad8fb1a899ca4980d17725f0e4a55938e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a925bb1224bdccd58a297a9bb0d479b97"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a925bb1224bdccd58a297a9bb0d479b97">rbcComputeQXDists</a> (global float4 *Qp, global float4 *Xp, global float4 *D, global uint *XO, global uint *XN, global <a class="el" href="structdist__id.html">dist_id</a> *RID, uint d)</td></tr>
+<tr class="memdesc:a925bb1224bdccd58a297a9bb0d479b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a925bb1224bdccd58a297a9bb0d479b97">More...</a><br /></td></tr>
+<tr class="separator:a925bb1224bdccd58a297a9bb0d479b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0584fce1fc7b44e3bc3aa22a12fab502"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#a0584fce1fc7b44e3bc3aa22a12fab502">rbcComputeQXDists_Kinect</a> (global float8 *Qp, global float8 *Xp, global float4 *D, global uint *XO, global uint *XN, global <a class="el" href="structdist__id.html">dist_id</a> *RID)</td></tr>
+<tr class="memdesc:a0584fce1fc7b44e3bc3aa22a12fab502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distances between two sets of points in a brute force way.  <a href="#a0584fce1fc7b44e3bc3aa22a12fab502">More...</a><br /></td></tr>
+<tr class="separator:a0584fce1fc7b44e3bc3aa22a12fab502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac66f300fd1012d5cadc9561dc8758025"><td class="memItemLeft" align="right" valign="top">kernel void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rbc__kernels_8cl.html#ac66f300fd1012d5cadc9561dc8758025">rbcGetNNs</a> (global float4 *Xp, global float4 *NN, global uint *XO, global <a class="el" href="structdist__id.html">dist_id</a> *RID, global <a class="el" href="structdist__id.html">dist_id</a> *NNID)</td></tr>
+<tr class="memdesc:ac66f300fd1012d5cadc9561dc8758025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects the query NNs into an array.  <a href="#ac66f300fd1012d5cadc9561dc8758025">More...</a><br /></td></tr>
+<tr class="separator:ac66f300fd1012d5cadc9561dc8758025"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Kernels for building and accessing the Random Ball Cover data structure. </p>
@@ -218,11 +236,69 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Computes \( \ell_2 \)-norm based squared distances, \( d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \). </p>
-<p>Computes a 4x4 block of distances between the two input sets.</p>
+<p>Computes a <code>nx4</code> block of distances between the two input sets.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>array of database points holding only 4 of their dimensions. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>array of 4 representative points holding only 4 of their dimensions. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dists</td><td>array of distances. Each row contains the distances of a database point from all 4 of the representative points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of database points. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ad9c1560c49ee2ee5f5ea7e4d47109e5d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void euclideanSquaredMetric8 </td>
+          <td>(</td>
+          <td class="paramtype">float8 *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float8 *&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float4 *&#160;</td>
+          <td class="paramname"><em>dists</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes \( \ell_2 \)-norm based squared distances, \( d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \). </p>
+<p>Computes a <code>nx4</code> block of distances between the two input sets in \( \mathbb{R}^8 \).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>array of database points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>array of 4 representative points. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">dists</td><td>array of distances. Each row contains the distances of a database point from all 4 of the representative points. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of database points. </td></tr>
   </table>
@@ -276,7 +352,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Computes \( \ell_1 \)-norm based distances, \( d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \). </p>
-<p>Computes a 4x4 block of distances between the two input sets.</p>
+<p>Computes a <code>nx4</code> block of distances between the two input sets.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>array of database points holding only 4 of their dimensions. </td></tr>
@@ -289,20 +365,128 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad47797acc1371f55aae0916505f1b785"></a>
+<a class="anchor" id="ac166219cf23b83161edc88cb04a4385b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void l1NormMetric8 </td>
+          <td>(</td>
+          <td class="paramtype">float8 *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float8 *&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float4 *&#160;</td>
+          <td class="paramname"><em>dists</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes \( \ell_1 \)-norm based distances, \( d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \). </p>
+<p>Computes a <code>nx4</code> block of distances between the two input sets in \( \mathbb{R}^8 \).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>array of database points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>array of 4 representative points. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dists</td><td>array of distances. Each row contains the distances of a database point from all 4 of the representative points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of database points. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a701f9c8de66efe49bd844487d0855e6d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">kernel void rbcComputeDists_Kinect </td>
           <td>(</td>
-          <td class="paramtype">global float4 *&#160;</td>
+          <td class="paramtype">global float8 *&#160;</td>
           <td class="paramname"><em>X</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>R</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">global float4 *&#160;</td>
+          <td class="paramname"><em>D</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the distances between two sets of points in a brute force way. </p>
+<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). There is no requirement for the local workspace. </dd>
+<dd>
+Each <b>work-item</b> computes a <b>4x4 block</b> of output elements. The <b>number of points</b> in each set should be a <b>multiple of 4</b>. </dd>
+<dd>
+The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd>
+<dd>
+The names of the variables in the kernel are specialized for a particular use case (RBC construction). The functionality of the kernel remains generic. </dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>This is a specialization of the <code>rbcComputeDists_SharedNone</code> for the case of Kinect 8-D data <code>[geometric (Homogeneous coordinates) and photometric (RGBA values) information]</code>.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af48029a151c39a5a745fcf231a8e14e1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">kernel void rbcComputeDists_Kinect_R </td>
+          <td>(</td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float8 *&#160;</td>
           <td class="paramname"><em>R</em>, </td>
         </tr>
         <tr>
@@ -314,13 +498,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">local float4 *&#160;</td>
-          <td class="paramname"><em>dataX</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">local float4 *&#160;</td>
+          <td class="paramtype">local float8 *&#160;</td>
           <td class="paramname"><em>dataR</em>&#160;</td>
         </tr>
         <tr>
@@ -332,21 +510,84 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Computes the distances between two sets of points in a brute force way. </p>
-<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). The local workspace should be \( (lXdim=8,lYdim=maxLocalSize/8) \) for optimal performance. In general, it can be \( lXdim \leq lYdim \). </dd>
+<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). The local workspace should be \( (lXdim=4,lYdim=maxLocalSize/4) \) for optimal performance. In general, it can be \( lXdim \leq lYdim \). </dd>
 <dd>
 Each <b>work-item</b> computes a <b>4x4 block</b> of output elements. The <b>number of points</b> in the first set should be a <b>multiple of</b> \( 4*lYdim \). The <b>number of points</b> in the second set should be a <b>multiple of</b> \( 4*lXdim \). This restriction can be relaxed to a multiple of \( lYdim \) and \( lXdim \), respectively, by assigning one work-item per output element. </dd>
 <dd>
 The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd>
 <dd>
 The names of the variables in the kernel are specialized for a particular use case (RBC construction). The functionality of the kernel remains generic. </dd></dl>
-<dl class="section attention"><dt>Attention</dt><dd>This is a specialization of the <code>rbcComputeDists_SharedXR</code> for the case of Kinect 8-D data <code>[geometric (Homogeneous coordinates) and photometric (RGBA values) information]</code>.</dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>This is a specialization of the <code>rbcComputeDists_SharedR</code> for the case of Kinect 8-D data <code>[geometric (Homogeneous coordinates) and photometric (RGBA values) information]</code>. The kernel uses shared memory for staging blocks of data from R.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of the representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dataX</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( d*(4*lYdim)*sizeof\ (float) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dataR</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( d*(4*lYdim)*sizeof\ (float) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataR</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( 4*lXdim*sizeof\ (float8) \). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a9ed8638fbb0e3ac445fde6841a262858"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">kernel void rbcComputeDists_Kinect_XR </td>
+          <td>(</td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>R</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float4 *&#160;</td>
+          <td class="paramname"><em>D</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">local float8 *&#160;</td>
+          <td class="paramname"><em>dataX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">local float8 *&#160;</td>
+          <td class="paramname"><em>dataR</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the distances between two sets of points in a brute force way. </p>
+<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). The local workspace should be \( (lXdim=4,lYdim=maxLocalSize/4) \) for optimal performance. In general, it can be \( lYdim \geq lXdim \geq 4 \). </dd>
+<dd>
+Each <b>work-item</b> computes a <b>4x4 block</b> of output elements. The <b>number of points</b> in the first set should be a <b>multiple of</b> \( 4*lYdim \). The <b>number of points</b> in the second set should be a <b>multiple of</b> \( 4*lXdim \). This restriction can be relaxed to a multiple of \( lYdim \) and \( lXdim \), respectively, by assigning one work-item per output element. </dd>
+<dd>
+The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd>
+<dd>
+The names of the variables in the kernel are specialized for a particular use case (RBC construction). The functionality of the kernel remains generic. </dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>This is a specialization of the <code>rbcComputeDists_SharedXR</code> for the case of Kinect 8-D data <code>[geometric (Homogeneous coordinates) and photometric (RGBA values) information]</code>. The kernel uses shared memory for staging blocks of data from both X and R.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of the representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataX</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( 4*lYdim*sizeof\ (float8) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataR</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( 4*lXdim*sizeof\ (float8) \). </td></tr>
   </table>
   </dd>
 </dl>
@@ -390,7 +631,7 @@ The names of the variables in the kernel are specialized for a particular use ca
 </div><div class="memdoc">
 
 <p>Computes the distances between two sets of points in a brute force way. </p>
-<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). The local workspace is irrelevant. </dd>
+<p>For every point in the first set, the distances from that point to all points in the second set are computed. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of points in the second set, \( n \), divided by 4. That is, \( gXdim = n/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of points in the first set, \( m \), divided by 4. That is, \( gYdim = m/4 \). There is no requirement for the local workspace. </dd>
 <dd>
 Each <b>work-item</b> computes a <b>4x4 block</b> of output elements. The <b>number of points</b> in each set should be a <b>multiple of 4</b>. </dd>
 <dd>
@@ -400,8 +641,8 @@ The names of the variables in the kernel are specialized for a particular use ca
 <dl class="section attention"><dt>Attention</dt><dd>The kernel doesn't use any shared memory for staging data from X and R. There are other two cases implemented, <code>rbcComputeDists_SharedR</code> and <code>rbcComputeDists_SharedXR</code>. The access pattern for both arrays is strided, but the kernel's performance might actually be better than the other two cases', due to higher kernel occupancy.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of the representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">d</td><td>dimensionality of the associated points. </td></tr>
   </table>
@@ -463,8 +704,8 @@ The names of the variables in the kernel are specialized for a particular use ca
 <dl class="section attention"><dt>Attention</dt><dd>The kernel uses shared memory for staging blocks of data just from R. There are other two cases implemented, <code>rbcComputeDists_SharedNone</code> and <code>rbcComputeDists_SharedXR</code>. The kernel might have better performance than the last case, due to higher kernel occupancy.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of the representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( (4*lXdim)*(4*lYdim)*sizeof\ (float) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">d</td><td>dimensionality of the associated points. </td></tr>
@@ -533,8 +774,8 @@ The names of the variables in the kernel are specialized for a particular use ca
 <dl class="section attention"><dt>Attention</dt><dd>The kernel uses shared memory for staging blocks of data from both X and R. There are other two cases implemented, <code>rbcComputeDists_SharedNone</code> and <code>rbcComputeDists_SharedR</code>. The kernel might have worse performance than those cases, due to high use of VGPRs and LDS, resulting in low kernel occupancy.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of the representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>array of representative points (each row contains a point), \( R_{n_r \times d} \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances of the database points from the representative points (each row contains the distances of a database point from all the representative points), \( D_{n_x \times n_r} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dataX</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( (4*lXdim)*(4*lYdim)*sizeof\ (float) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dataR</td><td>local buffer. Its size should be <code>16 float</code> elements for each work-item in a work-group. That is, \( (4*lXdim)*(4*lYdim)*sizeof\ (float) \). </td></tr>
@@ -545,15 +786,15 @@ The names of the variables in the kernel are specialized for a particular use ca
 
 </div>
 </div>
-<a class="anchor" id="aea361d8c276004118ec08d160a8f2665"></a>
+<a class="anchor" id="a925bb1224bdccd58a297a9bb0d479b97"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">kernel void rbcComputeQXMinDists </td>
+          <td class="memname">kernel void rbcComputeQXDists </td>
           <td>(</td>
           <td class="paramtype">global float4 *&#160;</td>
-          <td class="paramname"><em>Q</em>, </td>
+          <td class="paramname"><em>Qp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -564,32 +805,26 @@ The names of the variables in the kernel are specialized for a particular use ca
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">global uint *&#160;</td>
-          <td class="paramname"><em>O</em>, </td>
+          <td class="paramtype">global float4 *&#160;</td>
+          <td class="paramname"><em>D</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">global uint *&#160;</td>
-          <td class="paramname"><em>N</em>, </td>
+          <td class="paramname"><em>XO</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>XN</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
           <td class="paramname"><em>RID</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
-          <td class="paramname"><em>NNID</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">local <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -605,22 +840,19 @@ The names of the variables in the kernel are specialized for a particular use ca
       </table>
 </div><div class="memdoc">
 
-<p>Implements the second step of the <code>RBC search</code> algorithm. </p>
-<p>Computes the distances of each query from its representative list, and outputs the query's nearest neighbors. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be greater than or equal to the number of points in the represetative list with the greatest cardinality, divided by 4. That is, \( gXdim \geq max_{id_r}{N[id_r]}/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of queries, \( n_q \). That is, \( gYdim = n_q \). The local workspace should be <code>1</code> in the <b>y</b> dimension, and a <b>power of 2</b> in the <b>x</b> dimension. It is recommended to use one <code>wavefront/warp</code> per work-group. </dd>
+<p>Computes the distances between two sets of points in a brute force way. </p>
+<p>Computes the distances from the queries to the points in their representative's list. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be greater than or equal to the number of points in the represetative list with the greatest cardinality, divided by 4. That is, \( gXdim \geq max_{r_{id}}{N[r_{id}]}/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of queries, \( n_q \), divided by 4. That is, \( gYdim = n_q/4 \). There is no requirement for the local workspace. </dd>
 <dd>
-The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd>
-<dd>
-When the number of points per query, \( max_{id_r}{N[id_r]}/4 \), is small enough to be handled by a single work-group, the output array, <code>RID</code>, will contain the final NNs. When the points are more than that, they are partitioned into blocks and reduced independently. In this case, the kernel outputs the minimums from each block reduction. A reduction should then be made on those minimums for the final NNs by dispatching the <code>rbcGroupMinDists</code> kernel. </dd></dl>
+The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd></dl>
 <dl class="section attention"><dt>Attention</dt><dd>In order for this kernel to be efficient there shouldn't be great load imbalance. That is, it is assumed that the database points are uniformly distributed across all representative lists. The alternative would be to process each query one at a time. But dispatching the kernel \( n_q \) times is not really a viable option.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">Q</td><td>array of the query points (each row contains a point), \( Q_{n_q \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">Xp</td><td>array of the database points (each row contains a point), \( Xp_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">O</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">N</td><td>array containing the cardinalities of the representative lists. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">RID</td><td>array with the representative ids for each query. Its size should be \( n_q*sizeof\ (dist\_id) \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">NNID</td><td>output array of <code><a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements. When the kernel is dispatched with one work-group per row, the array contains the final results, and its size should be \( n_q*sizeof\ (dist\_id) \). When the kernel is dispatched with more than one work-group per row, the array contains the results from each block reduction, and its size should be \( wgXdim*n_q*sizeof\ (dist\_id) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>2 <a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements for each work-item in a work-group. That is \( 2*lXdim*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qp</td><td>array of query points (each row contains a point), \( Q_{n_q \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Xp</td><td>array of database points (each row contains a point), \( Xp_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances from the query points to the database points in each query's representative list (each row contains the distances of a query point from all the points), \( D_{n_q \times max_{r_{id}}{N[r_{id}]}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">XO</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">XN</td><td>array containing the cardinalities of the representative lists. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">RID</td><td>array with the representative ids for each query in <b>Qp</b>. Its size should be \( n_q*sizeof\ (dist\_id) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">d</td><td>dimensionality of the associated points. </td></tr>
   </table>
   </dd>
@@ -628,7 +860,74 @@ When the number of points per query, \( max_{id_r}{N[id_r]}/4 \), is small enoug
 
 </div>
 </div>
-<a class="anchor" id="a4cc381fdce8cee23f40ca880ce3f9fc6"></a>
+<a class="anchor" id="a0584fce1fc7b44e3bc3aa22a12fab502"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">kernel void rbcComputeQXDists_Kinect </td>
+          <td>(</td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>Qp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>Xp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float4 *&#160;</td>
+          <td class="paramname"><em>D</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>XO</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>XN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
+          <td class="paramname"><em>RID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the distances between two sets of points in a brute force way. </p>
+<p>Computes the distances from the queries to the points in their representative's list. </p><dl class="section note"><dt>Note</dt><dd>The <b>x</b> dimension of the global workspace, \( gXdim \), should be greater than or equal to the number of points in the represetative list with the greatest cardinality, divided by 4. That is, \( gXdim \geq max_{r_{id}}{N[r_{id}]}/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of queries, \( n_q \), divided by 4. That is, \( gYdim = n_q/4 \). There is no requirement for the local workspace. </dd>
+<dd>
+The <b>dimensionality of the points</b> should be a <b>multiple of 4</b>. This restriction can be avoided by handling the input data as <code>float</code>. </dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>In order for this kernel to be efficient there shouldn't be great load imbalance. That is, it is assumed that the database points are uniformly distributed across all representative lists. The alternative would be to process each query one at a time. But dispatching the kernel \( n_q \) times is not really a viable option.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qp</td><td>array of query points (each row contains a point), \( Q_{n_q \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Xp</td><td>array of database points (each row contains a point), \( Xp_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">D</td><td>array of distances from the query points to the database points in each query's representative list (each row contains the distances of a query point from all the points), \( D_{n_q \times max_{r_{id}}{N[r_{id}]}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">XO</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">XN</td><td>array containing the cardinalities of the representative lists. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">RID</td><td>array with the representative ids for each query in <b>Qp</b>. Its size should be \( n_q*sizeof\ (dist\_id) \). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac66f300fd1012d5cadc9561dc8758025"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -647,6 +946,18 @@ When the number of points per query, \( max_{id_r}{N[id_r]}/4 \), is small enoug
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>XO</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
+          <td class="paramname"><em>RID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
           <td class="paramname"><em>NNID</em>&#160;</td>
         </tr>
@@ -659,12 +970,14 @@ When the number of points per query, \( max_{id_r}{N[id_r]}/4 \), is small enoug
 </div><div class="memdoc">
 
 <p>Collects the query NNs into an array. </p>
-<dl class="section note"><dt>Note</dt><dd>The <b>dimensionality of the points</b>, <code>d</code>, should be a <b>multiple of 4</b> (the data are handled as <code>float4</code>). The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the dimensionality of the points divided by 4. That is, \( \ gXdim=d/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of queries, \( n_q \). That is, \( \ gYdim = n_q \). The local workspace is irrelevant.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The <b>dimensionality of the points</b>, <code>d</code>, should be a <b>multiple of 4</b> (the data are handled as <code>float4</code>). The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the dimensionality of the points divided by 4. That is, \( \ gXdim=d/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of queries, \( n_q \). That is, \( \ gYdim = n_q \). There is no requirement for the local workspace.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">Xp</td><td>permuted array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">NN</td><td>array of queries' nearest neigbors (each row contains a point), \( X_{n_q \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">NNID</td><td>array with the minimum distances and NN ids per query. Its size should be \( n_q*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Xp</td><td>permuted array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">NN</td><td>array of queries' nearest neighbors (each row contains a point), \( X_{n_q \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">XO</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">RID</td><td>array with the representative ids for each query in <b>Qp</b>. Its size should be \( n_q*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">NNID</td><td>array with the minimum distances and NN ids per query. Its size should be \( n_q*sizeof\ (dist\_id) \). The NN ids index the points in the associated representative list. </td></tr>
   </table>
   </dd>
 </dl>
@@ -737,11 +1050,11 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">GM</td><td>input array of <code><a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ID</td><td>(reduced) output array of <code><a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements. When the kernel is dispatched with one work-group per row, the array contains the final results, and its size should be \( m*sizeof\ (dist\_id) \). When the kernel is dispatched with more than one work-group per row, the array contains the results from each block reduction, and its size should be \( wgXdim*m*sizeof\ (dist\_id) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>2 <a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements for each work-item in a work-group. That is \( 2*lXdim*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>2 <a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements for each work-item in a work-group. That is, \( 2*lXdim*sizeof\ (dist\_id) \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">N</td><td>array containing the cardinalities of the representative lists. Its size should be \( n*sizeof\ (uint) \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">Rnk</td><td>array containing the rank (aka order, index) of each database point within the associated representative list. Its size should be \( m*sizeof\ (uint) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of elements in a row of the array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">accCounters</td><td>a flag to indicate whether or not to involve in the computation the list element counters, <code>N</code>, and element ranks, <code>Rnk</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">accCounters</td><td>flag to indicate whether or not to involve in the computation the list element counters, <code>N</code>, and element ranks, <code>Rnk</code>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -814,11 +1127,11 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">D</td><td>input array of <code>float</code> elements. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ID</td><td>(reduced) output array of <code><a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements. When the kernel is dispatched with one work-group per row, the array contains the final results, and its size should be \( m*sizeof\ (dist\_id) \). When the kernel is dispatched with more than one work-group per row, the array contains the results from each block reduction, and its size should be \( wgXdim*m*sizeof\ (dist\_id) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>2 <a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements for each work-item in a work-group. That is \( 2*lXdim*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>local buffer. Its size should be <code>2 <a class="el" href="structdist__id.html" title="Struct holding a value and a key. ">dist_id</a></code> elements for each work-item in a work-group. That is, \( 2*lXdim*sizeof\ (dist\_id) \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">N</td><td>array containing the cardinalities of the representative lists. Its size should be \( n*sizeof\ (uint) \). </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">Rnk</td><td>array containing the rank (aka order, index) of each database point within the associated representative list. Its size should be \( m*sizeof\ (uint) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of elements in a row of the array divided by 4. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">accCounters</td><td>a flag to indicate whether or not to involve in the computation the list element counters, <code>N</code>, and element ranks, <code>Rnk</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">accCounters</td><td>flag to indicate whether or not to involve in the computation the list element counters, <code>N</code>, and element ranks, <code>Rnk</code>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -850,7 +1163,7 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
 </div><div class="memdoc">
 
 <p>Performs an array initialization. </p>
-<p>Initializes an 1-D array with a provided value. </p><dl class="section note"><dt>Note</dt><dd>The number of elements, <code>n</code>, in the array should be a <b>multiple of 4</b> (the data are handled as <code>uint4</code>). The global workspace should be one dimensional. The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of elements in the array divided by 4. That is, \( \ gXdim=n/4 \). The local workspace is irrelevant.</dd></dl>
+<p>Initializes an 1-D array with a provided value. </p><dl class="section note"><dt>Note</dt><dd>The number of elements, <code>n</code>, in the array should be a <b>multiple of 4</b> (the data are handled as <code>uint4</code>). The global workspace should be one dimensional. The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the number of elements in the array divided by 4. That is, \( \ gXdim=n/4 \). There is no requirement for the local workspace.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">N</td><td>array that is going to contain the cardinalities of the representative lists. Its size should be \( n*sizeof\ (uint) \). </td></tr>
@@ -861,7 +1174,7 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
 
 </div>
 </div>
-<a class="anchor" id="ad50f087d2b9c0133edef27a381e124e9"></a>
+<a class="anchor" id="a06d9dd774eb86de520972b93d01d387a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -874,6 +1187,12 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
+          <td class="paramname"><em>ID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">global float4 *&#160;</td>
           <td class="paramname"><em>Xp</em>, </td>
         </tr>
@@ -881,7 +1200,7 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
-          <td class="paramname"><em>ID</em>, </td>
+          <td class="paramname"><em>IDp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -893,7 +1212,13 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">global uint *&#160;</td>
-          <td class="paramname"><em>Rnk</em>&#160;</td>
+          <td class="paramname"><em>Rnk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>permID</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -904,14 +1229,87 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
 </div><div class="memdoc">
 
 <p>Performs a permutation of the <code>RBC</code> database. </p>
-<p>Permutes the database points to form the representative lists and allow for coalesced access pattern during the search operation. </p><dl class="section note"><dt>Note</dt><dd>The <b>dimensionality of the points</b>, <code>d</code>, should be a <b>multiple of 4</b> (the data are handled as <code>float4</code>). The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the dimensionality of the points divided by 4. That is, \( \ gXdim=d/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of database points, \( n_x \). That is, \( \ gYdim = n_x \). The local workspace is irrelevant.</dd></dl>
+<p>Permutes the database points to form the representative lists and allow for coalesced access pattern during the search operation. </p><dl class="section note"><dt>Note</dt><dd>The <b>dimensionality of the points</b>, <code>d</code>, should be a <b>multiple of 4</b> (the data are handled as <code>float4</code>). The <b>x</b> dimension of the global workspace, \( gXdim \), should be equal to the dimensionality of the points divided by 4. That is, \( \ gXdim=d/4 \). The <b>y</b> dimension of the global workspace, \( gYdim \), should be equal to the number of database points, \( n_x \). That is, \( \ gYdim = n_x \). There is no requirement for the local workspace.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">Xp</td><td>permuted array of the database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ID</td><td>array with the minimum distances and representative ids per database point. Its size should be \( n_x*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ID</td><td>array with the minimum distances and representative ids per database point in X. Its size should be \( n_x*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Xp</td><td>permuted array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">IDp</td><td>array with the minimum distances and representative ids per database point in Xp. Its size should be \( n_x*sizeof\ (dist\_id) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">O</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">Rnk</td><td>array containing the rank (aka order, index) of each database point within the associated representative list. Its size should be \( n_x*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">permID</td><td>flag to indicate whether or not to also permute the ID array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ad8fb1a899ca4980d17725f0e4a55938e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">kernel void rbcPermute_Kinect </td>
+          <td>(</td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
+          <td class="paramname"><em>ID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global float8 *&#160;</td>
+          <td class="paramname"><em>Xp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global <a class="el" href="structdist__id.html">dist_id</a> *&#160;</td>
+          <td class="paramname"><em>IDp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>O</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">global uint *&#160;</td>
+          <td class="paramname"><em>Rnk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>permID</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Performs a permutation of the <code>RBC</code> database for the case of Kinect data in \( \mathbb{R}^8 \). </p>
+<p>Permutes the database points to form the representative lists and allow for coalesced access pattern during the search operation. </p><dl class="section note"><dt>Note</dt><dd>The global workspace should be 1-dimensional and equal to the number of database points, \( n_x \). That is, \( gXdim=n_x \). There is no requirement for the local workspace.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">X</td><td>array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ID</td><td>array with the minimum distances and representative ids per database point in X. Its size should be \( n_x*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Xp</td><td>permuted array of database points (each row contains a point), \( X_{n_x \times d} \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">IDp</td><td>array with the minimum distances and representative ids per database point in Xp. Its size should be \( n_x*sizeof\ (dist\_id) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">O</td><td>array containing the offsets of the representative lists within the permuted database. Its size should be \( n_r*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Rnk</td><td>array containing the rank (aka order, index) of each database point within the associated representative list. Its size should be \( n_x*sizeof\ (uint) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">permID</td><td>flag to indicate whether or not to also permute the ID array. </td></tr>
   </table>
   </dd>
 </dl>
@@ -921,7 +1319,7 @@ The kernel increments the <code>N</code> counters. <code>rbcNListInit</code> sho
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 9 2015 19:48:34 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 14 2015 15:01:19 for RandomBallCover by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
