@@ -1,10 +1,9 @@
 /*! \file 2d_plot.cpp
  *  \brief An application examining the resulting arrangement of the 
  *         `Random Ball Cover` data structure on 2-D data.
- *  \details 
  *  \note The application requires further processing to extract 
  *        the representative radii. This feature is not offered by 
- *        the `RBCContruct` class and is implemented on the CPU.
+ *        the `RBCConstruct` class and is implemented on the CPU.
  *  \author Nick Lamprianidis
  *  \version 1.0
  *  \date 2015
@@ -160,7 +159,9 @@ public:
 
         // Configure kernel execution parameters
         clutils::CLEnvInfo<1> info (0, 0, 0, { 0 }, 0);
-        cl_algo::RBC::RBCConstruct rbc (clEnv, info);
+        const cl_algo::RBC::KernelTypeC K = cl_algo::RBC::KernelTypeC::SHARED_NONE;
+        const cl_algo::RBC::RBCPermuteConfig P = cl_algo::RBC::RBCPermuteConfig::GENERIC;
+        cl_algo::RBC::RBCConstruct<K, P> rbc (clEnv, info);
         rbc.init (nx, nr, d);
 
         // Prepare data for RBCConstruct
@@ -186,16 +187,16 @@ public:
         );
 
         // Copy data to device
-        rbc.write (cl_algo::RBC::RBCConstruct::Memory::D_IN_X);
-        rbc.write (cl_algo::RBC::RBCConstruct::Memory::D_IN_R);
+        rbc.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_X);
+        rbc.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_R);
         
         rbc.run ();  // Execute kernels
 
         // Copy results to host
-        rbc_dist_id *ID = (rbc_dist_id *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_ID, CL_FALSE);
-        cl_uint *N = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_N, CL_FALSE);
-        cl_uint *O = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_O, CL_FALSE);
-        cl_float *Xp = (cl_float *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_X_P);
+        rbc_dist_id *ID = (rbc_dist_id *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_ID, CL_FALSE);
+        cl_uint *N = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_N, CL_FALSE);
+        cl_uint *O = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_O, CL_FALSE);
+        cl_float *Xp = (cl_float *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_X_P);
 
         // Extract permuted database
         idx = 0;

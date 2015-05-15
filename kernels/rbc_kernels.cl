@@ -29,7 +29,7 @@
 
 /*! \brief Computes \f$ \ell_1 \f$-norm based distances, 
  *         \f$ d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \f$.
- *  \details Computes a 4x4 block of distances between the two input sets.
+ *  \details Computes a `nx4` block of distances between the two input sets.
  *            
  *  \param[in] x array of database points holding only 4 of their dimensions.
  *  \param[in] r array of 4 representative points holding only 4 of their dimensions.
@@ -52,7 +52,7 @@ void l1NormMetric (float4 *x, float4 *r, float4 *dists, uint n)
 
 /*! \brief Computes \f$ \ell_2 \f$-norm based squared distances, 
  *         \f$ d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \f$.
- *  \details Computes a 4x4 block of distances between the two input sets.
+ *  \details Computes a `nx4` block of distances between the two input sets.
  *            
  *  \param[in] x array of database points holding only 4 of their dimensions.
  *  \param[in] r array of 4 representative points holding only 4 of their dimensions.
@@ -73,6 +73,62 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
 }
 
 
+/*! \brief Computes \f$ \ell_1 \f$-norm based distances, 
+ *         \f$ d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \f$.
+ *  \details Computes a `nx4` block of distances between the two input sets
+ *           in \f$ \mathbb{R}^8 \f$.
+ *            
+ *  \param[in] x array of database points.
+ *  \param[in] r array of 4 representative points.
+ *  \param[out] dists array of distances. Each row contains the distances of a 
+ *                    database point from all 4 of the representative points.
+ *  \param[in] n number of database points.
+ */
+inline
+void l1NormMetric8 (float8 *x, float8 *r, float4 *dists, uint n)
+{
+    for (uint i = 0; i < n; ++i)
+    {
+        dists[i].x = dot (fabs (x[i].s0123 - r[0].s0123), (float4) (1.f)) + 
+                     dot (fabs (x[i].s4567 - r[0].s4567), (float4) (1.f));
+        dists[i].y = dot (fabs (x[i].s0123 - r[1].s0123), (float4) (1.f)) + 
+                     dot (fabs (x[i].s4567 - r[1].s4567), (float4) (1.f));
+        dists[i].z = dot (fabs (x[i].s0123 - r[2].s0123), (float4) (1.f)) + 
+                     dot (fabs (x[i].s4567 - r[2].s4567), (float4) (1.f));
+        dists[i].w = dot (fabs (x[i].s0123 - r[3].s0123), (float4) (1.f)) + 
+                     dot (fabs (x[i].s4567 - r[3].s4567), (float4) (1.f));
+    }
+}
+
+
+/*! \brief Computes \f$ \ell_2 \f$-norm based squared distances, 
+ *         \f$ d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \f$.
+ *  \details Computes a `nx4` block of distances between the two input sets 
+ *           in \f$ \mathbb{R}^8 \f$.
+ *            
+ *  \param[in] x array of database points.
+ *  \param[in] r array of 4 representative points.
+ *  \param[out] dists array of distances. Each row contains the distances of a 
+ *                    database point from all 4 of the representative points.
+ *  \param[in] n number of database points.
+ */
+inline
+void euclideanSquaredMetric8 (float8 *x, float8 *r, float4 *dists, uint n)
+{
+    for (uint i = 0; i < n; ++i)
+    {
+        dists[i].x = dot (pown (x[i].s0123 - r[0].s0123, 2), (float4) (1.f)) +
+                     dot (pown (x[i].s4567 - r[0].s4567, 2), (float4) (1.f));
+        dists[i].y = dot (pown (x[i].s0123 - r[1].s0123, 2), (float4) (1.f)) +
+                     dot (pown (x[i].s4567 - r[1].s4567, 2), (float4) (1.f));
+        dists[i].z = dot (pown (x[i].s0123 - r[2].s0123, 2), (float4) (1.f)) +
+                     dot (pown (x[i].s4567 - r[2].s4567, 2), (float4) (1.f));
+        dists[i].w = dot (pown (x[i].s0123 - r[3].s0123, 2), (float4) (1.f)) +
+                     dot (pown (x[i].s4567 - r[3].s4567, 2), (float4) (1.f));
+    }
+}
+
+
 /*! \brief Computes the distances between two sets of points in a brute force way.
  *  \details For every point in the first set, the distances from that point to 
  *           all points in the second set are computed.
@@ -80,7 +136,7 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
  *        to the number of points in the second set, \f$ n \f$, divided by 4. That is, 
  *        \f$ gXdim = n/4 \f$. The **y** dimension of the global workspace, \f$ gYdim \f$, 
  *        should be equal to the number of points in the first set, \f$ m \f$, divided by 4. 
- *        That is, \f$ gYdim = m/4 \f$. The local workspace is irrelevant.
+ *        That is, \f$ gYdim = m/4 \f$. There is no requirement for the local workspace.
  *  \note Each **work-item** computes a **4x4 block** of output elements. The 
  *        **number of points** in each set should be a **multiple of 4**.
  *  \note The **dimensionality of the points** should be a **multiple of 4**. This restriction 
@@ -93,8 +149,8 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
  *             but the kernel's performance might actually be better than
  *             the other two cases', due to higher kernel occupancy.
  *            
- *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
- *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
+ *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
+ *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
  *                points (each row contains the distances of a database point from 
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
@@ -105,7 +161,6 @@ void rbcComputeDists_SharedNone (global float4 *X, global float4 *R, global floa
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
-    uint lXdim = get_local_size (0);
 
     // Workspace indices
     uint gX = get_global_id (0);
@@ -122,8 +177,8 @@ void rbcComputeDists_SharedNone (global float4 *X, global float4 *R, global floa
     uint gPosX = (gY << 2) * d4;
     uint gPosR = (gX << 2) * d4;
 
-    // Walk through the dimensions within the block, and compute 
-    // intermediate results for the 4x4 block of the (gX, gY) work-item
+    // Walk through the dimensions within the block, and compute intermediate 
+    // results for the 4x4 block assigned to work-item (gX, gY)
     for (int j = 0; j < d4; ++j)
     {
         float4 x[4];
@@ -143,14 +198,14 @@ void rbcComputeDists_SharedNone (global float4 *X, global float4 *R, global floa
         euclideanSquaredMetric (x, r, dists, 4);
     }
 
-    uint gPos = (gY << 2) * gXdim + gX;
+    uint gPosD = (gY << 2) * gXdim + gX;
 
     // Store the 4x4 block of computed 
     // distances in the output array
-    D[gPos]             = dists[0];
-    D[gPos + gXdim]     = dists[1];
-    D[gPos + 2 * gXdim] = dists[2];
-    D[gPos + 3 * gXdim] = dists[3];
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
 }
 
 
@@ -175,8 +230,8 @@ void rbcComputeDists_SharedNone (global float4 *X, global float4 *R, global floa
  *             `rbcComputeDists_SharedXR`. The kernel might have better performance than
  *             the last case, due to higher kernel occupancy.
  *            
- *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
- *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
+ *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
+ *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
  *                points (each row contains the distances of a database point from 
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
@@ -233,8 +288,8 @@ void rbcComputeDists_SharedR (global float4 *X, global float4 *R,
         uint gPosX = (gY << 2) * d4 + i * lXdim;
         uint dIterations = select (lXdim, dLast, i == (dBlockIterations - 1));
 
-        // Walk through the dimensions within the block, and compute 
-        // intermediate results for the 4x4 block of the (gX, gY) work-item
+        // Walk through the dimensions within the block, and compute intermediate 
+        // results for the 4x4 block assigned to work-item (gX, gY)
         for (int j = 0; j < dIterations; ++j)
         {
             uint lPosR = (lX << 2) * lXdim + j;
@@ -259,14 +314,14 @@ void rbcComputeDists_SharedR (global float4 *X, global float4 *R,
         barrier (CLK_LOCAL_MEM_FENCE);        
     }
 
-    uint gPos = (gY << 2) * gXdim + gX;
+    uint gPosD = (gY << 2) * gXdim + gX;
 
     // Store the 4x4 block of computed 
     // distances in the output array
-    D[gPos]             = dists[0];
-    D[gPos + gXdim]     = dists[1];
-    D[gPos + 2 * gXdim] = dists[2];
-    D[gPos + 3 * gXdim] = dists[3];
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
 }
 
 
@@ -292,8 +347,8 @@ void rbcComputeDists_SharedR (global float4 *X, global float4 *R,
  *             those cases, due to high use of VGPRs and LDS, resulting in low kernel
  *             occupancy.
  *            
- *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
- *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
+ *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
+ *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
  *                points (each row contains the distances of a database point from 
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
@@ -357,8 +412,8 @@ void rbcComputeDists_SharedXR (global float4 *X, global float4 *R, global float4
 
         uint dIterations = select (lXdim, dLast, i == (dBlockIterations - 1));
 
-        // Walk through the dimensions within the block, and compute 
-        // intermediate results for the 4x4 block of the (gX, gY) work-item
+        // Walk through the dimensions within the block, and compute intermediate 
+        // results for the 4x4 block assigned to work-item (gX, gY)
         for (int j = 0; j < dIterations; ++j)
         {
             uint lPosX = (lY << 2) * lXdim + j;
@@ -384,14 +439,82 @@ void rbcComputeDists_SharedXR (global float4 *X, global float4 *R, global float4
         barrier (CLK_LOCAL_MEM_FENCE);        
     }
 
-    uint gPos = (gY << 2) * gXdim + gX;
+    uint gPosD = (gY << 2) * gXdim + gX;
 
     // Store the 4x4 block of computed 
     // distances in the output array
-    D[gPos]             = dists[0];
-    D[gPos + gXdim]     = dists[1];
-    D[gPos + 2 * gXdim] = dists[2];
-    D[gPos + 3 * gXdim] = dists[3];
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
+}
+
+
+/*! \brief Computes the distances between two sets of points in a brute force way.
+ *  \details For every point in the first set, the distances from that point to 
+ *           all points in the second set are computed.
+ *  \note The **x** dimension of the global workspace, \f$ gXdim \f$, should be equal 
+ *        to the number of points in the second set, \f$ n \f$, divided by 4. That is, 
+ *        \f$ gXdim = n/4 \f$. The **y** dimension of the global workspace, \f$ gYdim \f$, 
+ *        should be equal to the number of points in the first set, \f$ m \f$, divided by 4. 
+ *        That is, \f$ gYdim = m/4 \f$. There is no requirement for the local workspace.
+ *  \note Each **work-item** computes a **4x4 block** of output elements. The 
+ *        **number of points** in each set should be a **multiple of 4**.
+ *  \note The **dimensionality of the points** should be a **multiple of 4**. This restriction 
+ *        can be avoided by handling the input data as `float`.
+ *  \note The names of the variables in the kernel are specialized for a particular 
+ *        use case (RBC construction). The functionality of the kernel remains generic.
+ *  \attention This is a specialization of the `rbcComputeDists_SharedNone` for the case of Kinect 
+ *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
+ *            
+ *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
+ *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
+ *  \param[out] D array of distances of the database points from the representative
+ *                points (each row contains the distances of a database point from 
+ *                all the representative points), \f$ D_{n_x \times n_r} \f$.
+ */
+kernel
+void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *D)
+{
+    // Workspace dimensions
+    uint gXdim = get_global_size (0);
+
+    // Workspace indices
+    uint gX = get_global_id (0);
+    uint gY = get_global_id (1);
+
+    uint gPosX = gY << 2;
+    uint gPosR = gX << 2;
+
+    // Compute results for the 4x4 block 
+    // assigned to work-item (gX, gY)
+
+    float8 x[4];
+    x[0] = X[gPosX];
+    x[1] = X[gPosX + 1];
+    x[2] = X[gPosX + 2];
+    x[3] = X[gPosX + 3];
+
+    float8 r[4];
+    r[0] = R[gPosR];
+    r[1] = R[gPosR + 1];
+    r[2] = R[gPosR + 2];
+    r[3] = R[gPosR + 3];
+
+    float4 dists[4];
+
+    // Compute distances
+    // l1NormMetric8 (x, r, dists, 4);
+    euclideanSquaredMetric8 (x, r, dists, 4);
+
+    uint gPosD = (gY << 2) * gXdim + gX;
+
+    // Store the 4x4 block of computed 
+    // distances in the output array
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
 }
 
 
@@ -403,7 +526,7 @@ void rbcComputeDists_SharedXR (global float4 *X, global float4 *R, global float4
  *        \f$ gXdim = n/4 \f$. The **y** dimension of the global workspace, \f$ gYdim \f$, 
  *        should be equal to the number of points in the first set, \f$ m \f$, divided by 4. 
  *        That is, \f$ gYdim = m/4 \f$. The local workspace should be 
- *        \f$ (lXdim=8,lYdim=maxLocalSize/8) \f$ for optimal performance. 
+ *        \f$ (lXdim=4,lYdim=maxLocalSize/4) \f$ for optimal performance. 
  *        In general, it can be \f$ lXdim \leq lYdim \f$.
  *  \note Each **work-item** computes a **4x4 block** of output elements. The **number of points** 
  *        in the first set should be a **multiple of** \f$ 4*lYdim \f$. The **number of points** 
@@ -414,22 +537,21 @@ void rbcComputeDists_SharedXR (global float4 *X, global float4 *R, global float4
  *        can be avoided by handling the input data as `float`.
  *  \note The names of the variables in the kernel are specialized for a particular 
  *        use case (RBC construction). The functionality of the kernel remains generic.
- *  \attention This is a specialization of the `rbcComputeDists_SharedXR` for the case of Kinect 
+ *  \attention This is a specialization of the `rbcComputeDists_SharedR` for the case of Kinect 
  *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
+ *             The kernel uses shared memory for staging blocks of data from R.
  *            
  *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
  *                points (each row contains the distances of a database point from 
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
- *  \param[in] dataX local buffer. Its size should be `16 float` elements for each 
- *                   work-item in a work-group. That is, \f$ d*(4*lYdim)*sizeof\ (float) \f$.
  *  \param[in] dataR local buffer. Its size should be `16 float` elements for each 
- *                   work-item in a work-group. That is, \f$ d*(4*lYdim)*sizeof\ (float) \f$.
+ *                   work-item in a work-group. That is, \f$ 4*lXdim*sizeof\ (float8) \f$.
  */
 kernel
-void rbcComputeDists_Kinect (global float4 *X, global float4 *R, global float4 *D, 
-                             local float4 *dataX, local float4 *dataR)
+void rbcComputeDists_Kinect_R (global float8 *X, global float8 *R, global float4 *D, 
+                               local float8 *dataR)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -442,169 +564,149 @@ void rbcComputeDists_Kinect (global float4 *X, global float4 *R, global float4 *
     uint lX = get_local_id (0);
     uint lY = get_local_id (1);
     
-    float4 dists[4];
-    dists[0] = (float4) (0.f);
-    dists[1] = (float4) (0.f);
-    dists[2] = (float4) (0.f);
-    dists[3] = (float4) (0.f);
-
-    uint d4 = 2;  // d >> 2
+    // Fetch data ==============================================================
+    // Points in R are read multiple times, so load the points of 
+    // interest from R into local memory
 
     uint idx = lY * lXdim + lX;
-    uint xi = idx % d4;
-    uint yi = idx / d4;
-
-    // Both X and R access patterns are strided, so
-    // load blocks of data from both X and R into local memory
-    if (idx < d4 * lYdim)
-    {
-        uint gPosX = (get_group_id (1) * (lYdim << 2) + (yi << 2)) * d4 + xi;
-        uint gPosR = (get_group_id (0) * (lXdim << 2) + (yi << 2)) * d4 + xi;
-        uint lPos  = (yi << 2) * d4 + xi;
-
-        dataX[lPos]          = X[gPosX];
-        dataX[lPos + d4]     = X[gPosX + d4];
-        dataX[lPos + 2 * d4] = X[gPosX + 2 * d4];
-        dataX[lPos + 3 * d4] = X[gPosX + 3 * d4];
-
-        dataR[lPos]          = R[gPosR];
-        dataR[lPos + d4]     = R[gPosR + d4];
-        dataR[lPos + 2 * d4] = R[gPosR + 2 * d4];
-        dataR[lPos + 3 * d4] = R[gPosR + 3 * d4];
-    }
+    
+    if (idx < (lXdim << 2))
+        dataR[idx] = R[get_group_id (0) * (lXdim << 2) + idx];
 
     barrier (CLK_LOCAL_MEM_FENCE);
 
-    // Walk through the dimensions within the block, and compute 
-    // intermediate results for the 4x4 block of the (gX, gY) work-item
-    for (int j = 0; j < d4; ++j)
-    {
-        uint lPosX = (lY << 2) * d4 + j;
-        uint lPosR = (lX << 2) * d4 + j;
+    // Compute distances =======================================================
+    // Compute results for the 4x4 block assigned to work-item (gX, gY)
 
-        float4 x[4];
-        x[0] = dataX[lPosX];
-        x[1] = dataX[lPosX + d4];
-        x[2] = dataX[lPosX + 2 * d4];
-        x[3] = dataX[lPosX + 3 * d4];
+    uint gPosX = get_group_id (1) * (lYdim << 2) + (lY << 2);
+    uint lPosR = lX << 2;
 
-        float4 r[4];
-        r[0] = dataR[lPosR];
-        r[1] = dataR[lPosR + d4];
-        r[2] = dataR[lPosR + 2 * d4];
-        r[3] = dataR[lPosR + 3 * d4];
+    float8 x[4];
+    x[0] = X[gPosX];
+    x[1] = X[gPosX + 1];
+    x[2] = X[gPosX + 2];
+    x[3] = X[gPosX + 3];
 
-        // Compute distances
-        // l1NormMetric (x, r, dists, 4);
-        euclideanSquaredMetric (x, r, dists, 4);
-    }
+    float8 r[4];
+    r[0] = dataR[lPosR];
+    r[1] = dataR[lPosR + 1];
+    r[2] = dataR[lPosR + 2];
+    r[3] = dataR[lPosR + 3];
+    
+    float4 dists[4];
 
-    uint gPos = (gY << 2) * gXdim + gX;
+    // Compute distances
+    // l1NormMetric8 (x, r, dists, 4);
+    euclideanSquaredMetric8 (x, r, dists, 4);
 
-    // Store the 4x4 block of computed 
-    // distances in the output array
-    D[gPos]             = dists[0];
-    D[gPos + gXdim]     = dists[1];
-    D[gPos + 2 * gXdim] = dists[2];
-    D[gPos + 3 * gXdim] = dists[3];
+    // Store results ===========================================================
+    // Store the 4x4 block of computed distances
+
+    uint gPosD = (gY << 2) * gXdim + gX;
+
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
 }
 
 
-// / *! \brief Computes the distances between two sets of points in a brute force way.
-//  *  \note Same implementation as above. Only difference is that the transfer of the 
-//  *        data into local memory is spread across double the work-items.
-//  *        It is a bit slower due to all the extra computation.
-//  */
-// kernel
-// void rbcComputeDists_Kinect_2 (global float4 *X, global float4 *R, global float4 *D, 
-//                                local float4 *dataX, local float4 *dataR)
-// {
-//     // Workspace dimensions
-//     uint gXdim = get_global_size (0);
-//     uint lXdim = get_local_size (0);
-//     uint lYdim = get_local_size (1);
+/*! \brief Computes the distances between two sets of points in a brute force way.
+ *  \details For every point in the first set, the distances from that point to 
+ *           all points in the second set are computed.
+ *  \note The **x** dimension of the global workspace, \f$ gXdim \f$, should be equal 
+ *        to the number of points in the second set, \f$ n \f$, divided by 4. That is, 
+ *        \f$ gXdim = n/4 \f$. The **y** dimension of the global workspace, \f$ gYdim \f$, 
+ *        should be equal to the number of points in the first set, \f$ m \f$, divided by 4. 
+ *        That is, \f$ gYdim = m/4 \f$. The local workspace should be 
+ *        \f$ (lXdim=4,lYdim=maxLocalSize/4) \f$ for optimal performance. 
+ *        In general, it can be \f$ lYdim \geq lXdim \geq 4 \f$.
+ *  \note Each **work-item** computes a **4x4 block** of output elements. The **number of points** 
+ *        in the first set should be a **multiple of** \f$ 4*lYdim \f$. The **number of points** 
+ *        in the second set should be a **multiple of** \f$ 4*lXdim \f$. This restriction can be 
+ *        relaxed to a multiple of \f$ lYdim \f$ and \f$ lXdim \f$, respectively, by assigning 
+ *        one work-item per output element.
+ *  \note The **dimensionality of the points** should be a **multiple of 4**. This restriction 
+ *        can be avoided by handling the input data as `float`.
+ *  \note The names of the variables in the kernel are specialized for a particular 
+ *        use case (RBC construction). The functionality of the kernel remains generic.
+ *  \attention This is a specialization of the `rbcComputeDists_SharedXR` for the case of Kinect 
+ *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
+ *             The kernel uses shared memory for staging blocks of data from both X and R.
+ *            
+ *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
+ *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
+ *  \param[out] D array of distances of the database points from the representative
+ *                points (each row contains the distances of a database point from 
+ *                all the representative points), \f$ D_{n_x \times n_r} \f$.
+ *  \param[in] dataX local buffer. Its size should be `16 float` elements for each 
+ *                   work-item in a work-group. That is, \f$ 4*lYdim*sizeof\ (float8) \f$.
+ *  \param[in] dataR local buffer. Its size should be `16 float` elements for each 
+ *                   work-item in a work-group. That is, \f$ 4*lXdim*sizeof\ (float8) \f$.
+ */
+kernel
+void rbcComputeDists_Kinect_XR (global float8 *X, global float8 *R, global float4 *D, 
+                                local float8 *dataX, local float8 *dataR)
+{
+    // Workspace dimensions
+    uint gXdim = get_global_size (0);
+    uint lXdim = get_local_size (0);
+    uint lYdim = get_local_size (1);
 
-//     // Workspace indices
-//     uint gX = get_global_id (0);
-//     uint gY = get_global_id (1);
-//     uint lX = get_local_id (0);
-//     uint lY = get_local_id (1);
+    // Workspace indices
+    uint gX = get_global_id (0);
+    uint gY = get_global_id (1);
+    uint lX = get_local_id (0);
+    uint lY = get_local_id (1);
     
-//     float4 dists[4];
-//     dists[0] = (float4) (0.f);
-//     dists[1] = (float4) (0.f);
-//     dists[2] = (float4) (0.f);
-//     dists[3] = (float4) (0.f);
+    // Fetch data ==============================================================
+    // Points in X and R are read multiple times, so load the points of 
+    // interest from both X and R into local memory
 
-//     uint d4 = 2;  // d >> 2
+    uint idx = lY * lXdim + lX;
+    
+    if (idx < (lYdim << 2))
+        dataX[idx] = X[get_group_id (1) * (lYdim << 2) + idx];
 
-//     uint idx = lY * lXdim + lX;
-//     uint xi = idx % d4;
-//     uint yi = idx / d4;
+    if (idx < (lXdim << 2))
+        dataR[idx] = R[get_group_id (0) * (lXdim << 2) + idx];
 
-//     // Both X and R access patterns are strided, so
-//     // load blocks of data from both X and R into local memory
-//     if (idx < d4 * (lYdim << 1))
-//     {
-//         global float4 *gPtr[2] = { X, R };
-//         local  float4 *lPtr[2] = { dataX, dataR };
+    barrier (CLK_LOCAL_MEM_FENCE);
 
-//         uint XRflag = (idx / (d4 * lYdim)) == 1;
+    // Compute distances =======================================================
+    // Compute results for the 4x4 block assigned to work-item (gX, gY)
 
-//         global float4  *In = gPtr[XRflag];
-//         local  float4 *Out = lPtr[XRflag];
+    uint lPosX = lY << 2;
+    uint lPosR = lX << 2;
 
-//         uint gPos = select (
-//             (get_group_id (1) * (lYdim << 2) + (yi << 2)) * d4 + xi,
-//             (get_group_id (0) * (lXdim << 2) + ((yi - lYdim) << 2)) * d4 + xi,
-//             XRflag);
+    float8 x[4];
+    x[0] = dataX[lPosX];
+    x[1] = dataX[lPosX + 1];
+    x[2] = dataX[lPosX + 2];
+    x[3] = dataX[lPosX + 3];
 
-//         uint lPos = select (
-//             (yi << 2) * d4 + xi, 
-//             ((yi - lYdim) << 2) * d4 + xi, 
-//             XRflag);
+    float8 r[4];
+    r[0] = dataR[lPosR];
+    r[1] = dataR[lPosR + 1];
+    r[2] = dataR[lPosR + 2];
+    r[3] = dataR[lPosR + 3];
 
-//         Out[lPos]          = In[gPos];
-//         Out[lPos + d4]     = In[gPos + d4];
-//         Out[lPos + 2 * d4] = In[gPos + 2 * d4];
-//         Out[lPos + 3 * d4] = In[gPos + 3 * d4];
-//     }
+    float4 dists[4];
 
-//     barrier (CLK_LOCAL_MEM_FENCE);
+    // Compute distances
+    // l1NormMetric8 (x, r, dists, 4);
+    euclideanSquaredMetric8 (x, r, dists, 4);
 
-//     // Walk through the dimensions within the block, and compute 
-//     // intermediate results for the 4x4 block of the (gX, gY) work-item
-//     for (int j = 0; j < d4; ++j)
-//     {
-//         uint lPosX = (lY << 2) * d4 + j;
-//         uint lPosR = (lX << 2) * d4 + j;
+    // Store results ===========================================================
+    // Store the 4x4 block of computed distances
 
-//         float4 x[4];
-//         x[0] = dataX[lPosX];
-//         x[1] = dataX[lPosX + d4];
-//         x[2] = dataX[lPosX + 2 * d4];
-//         x[3] = dataX[lPosX + 3 * d4];
+    uint gPosD = (gY << 2) * gXdim + gX;
 
-//         float4 r[4];
-//         r[0] = dataR[lPosR];
-//         r[1] = dataR[lPosR + d4];
-//         r[2] = dataR[lPosR + 2 * d4];
-//         r[3] = dataR[lPosR + 3 * d4];
-
-//         // Compute distances
-//         // l1NormMetric (x, r, dists, 4);
-//         euclideanSquaredMetric (x, r, dists, 4);
-//     }
-
-//     uint gPos = (gY << 2) * gXdim + gX;
-
-//     // Store the 4x4 block of computed 
-//     // distances in the output array
-//     D[gPos]             = dists[0];
-//     D[gPos + gXdim]     = dists[1];
-//     D[gPos + 2 * gXdim] = dists[2];
-//     D[gPos + 3 * gXdim] = dists[3];
-// }
+    D[gPosD]             = dists[0];
+    D[gPosD + gXdim]     = dists[1];
+    D[gPosD + 2 * gXdim] = dists[2];
+    D[gPosD + 3 * gXdim] = dists[3];
+}
 
 
 /*! \brief Performs an array initialization.
@@ -613,7 +715,7 @@ void rbcComputeDists_Kinect (global float4 *X, global float4 *R, global float4 *
  *        (the data are handled as `uint4`). The global workspace should be one 
  *        dimensional. The **x** dimension of the global workspace, \f$ gXdim \f$, 
  *        should be equal to the number of elements in the array divided by 4. 
- *        That is, \f$ \ gXdim=n/4 \f$. The local workspace is irrelevant.
+ *        That is, \f$ \ gXdim=n/4 \f$. There is no requirement for the local workspace.
  *
  *  \param[out] N array that is going to contain the cardinalities of the 
  *                representative lists. Its size should be \f$ n*sizeof\ (uint) \f$.
@@ -674,14 +776,14 @@ typedef struct
  *                 the array contains the results from each block reduction, and its 
  *                 size should be \f$ wgXdim*m*sizeof\ (dist\_id) \f$.
  *  \param[in] data local buffer. Its size should be `2 dist_id` elements for each 
- *                  work-item in a work-group. That is \f$ 2*lXdim*sizeof\ (dist\_id) \f$.
+ *                  work-item in a work-group. That is, \f$ 2*lXdim*sizeof\ (dist\_id) \f$.
  *  \param[out] N array containing the cardinalities of the representative lists.
  *                Its size should be \f$ n*sizeof\ (uint) \f$.
  *  \param[out] Rnk array containing the rank (aka order, index) of each database 
  *                  point within the associated representative list. Its size should 
  *                  be \f$ m*sizeof\ (uint) \f$.
  *  \param[in] n number of elements in a row of the array divided by 4.
- *  \param[in] accCounters a flag to indicate whether or not to involve in the computation 
+ *  \param[in] accCounters flag to indicate whether or not to involve in the computation 
  *                         the list element counters, `N`, and element ranks, `Rnk`.
  */
 kernel
@@ -799,14 +901,14 @@ void rbcMinDists (global float4 *D, global dist_id *ID,
  *                 the array contains the results from each block reduction, and its 
  *                 size should be \f$ wgXdim*m*sizeof\ (dist\_id) \f$.
  *  \param[in] data local buffer. Its size should be `2 dist_id` elements for each 
- *                  work-item in a work-group. That is \f$ 2*lXdim*sizeof\ (dist\_id) \f$.
+ *                  work-item in a work-group. That is, \f$ 2*lXdim*sizeof\ (dist\_id) \f$.
  *  \param[out] N array containing the cardinalities of the representative lists.
  *                Its size should be \f$ n*sizeof\ (uint) \f$.
  *  \param[out] Rnk array containing the rank (aka order, index) of each database 
  *                  point within the associated representative list. Its size should 
  *                  be \f$ m*sizeof\ (uint) \f$.
  *  \param[in] n number of elements in a row of the array.
- *  \param[in] accCounters a flag to indicate whether or not to involve in the computation 
+ *  \param[in] accCounters flag to indicate whether or not to involve in the computation 
  *                         the list element counters, `N`, and element ranks, `Rnk`.
  */
 kernel
@@ -866,23 +968,27 @@ void rbcGroupMinDists (global dist_id *GM, global dist_id *ID,
  *        points divided by 4. That is, \f$ \ gXdim=d/4 \f$. The **y** dimension 
  *        of the global workspace, \f$ gYdim \f$, should be equal to the number 
  *        of database points, \f$ n_x \f$. That is, \f$ \ gYdim = n_x \f$. 
- *        The local workspace is irrelevant.
+ *        There is no requirement for the local workspace.
  *
- *  \param[in] X array of the database points (each row contains a point), 
+ *  \param[in] X array of database points (each row contains a point), 
  *               \f$ X_{n_x \times d} \f$.
- *  \param[out] Xp permuted array of the database points (each row contains 
+ *  \param[in] ID array with the minimum distances and representative ids per database 
+ *                point in X. Its size should be \f$ n_x*sizeof\ (dist\_id) \f$.
+ *  \param[out] Xp permuted array of database points (each row contains 
  *                 a point), \f$ X_{n_x \times d} \f$.
- *  \param[in] ID array with the minimum distances and representative ids per
- *                database point. Its size should be \f$ n_x*sizeof\ (dist\_id) \f$.
+ *  \param[out] IDp array with the minimum distances and representative ids per database 
+ *                point in Xp. Its size should be \f$ n_x*sizeof\ (dist\_id) \f$.
  *  \param[in] O array containing the offsets of the representative lists within 
  *               the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
  *  \param[in] Rnk array containing the rank (aka order, index) of each database 
  *                 point within the associated representative list. Its size should 
  *                 be \f$ n_x*sizeof\ (uint) \f$.
+ *  \param[in] permID flag to indicate whether or not to also permute the ID array.
  */
 kernel
-void rbcPermute (global float4 *X, global float4 *Xp, 
-                 global dist_id *ID, global uint *O, global uint *Rnk)
+void rbcPermute (global float4 *X, global dist_id *ID, 
+                 global float4 *Xp, global dist_id *IDp, 
+                 global uint *O, global uint *Rnk, int permID)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -895,7 +1001,8 @@ void rbcPermute (global float4 *X, global float4 *Xp,
     float4 p = X[gY * gXdim + gX];
 
     // Read the point's representative id
-    uint id = ID[gY].id;
+    dist_id r_id = ID[gY];
+    uint id = r_id.id;
 
     // Read the representative list's offset within the database
     uint offset = O[id];
@@ -905,142 +1012,271 @@ void rbcPermute (global float4 *X, global float4 *Xp,
 
     // Store the point in its representative list
     Xp[(offset + rank) * gXdim + gX] = p;
+
+    // Copy the representative's info to the same index position
+    if (permID == 1 && gX == 0)
+        IDp[offset + rank] = r_id;
 }
 
 
-/*! \brief Implements the second step of the `RBC search` algorithm.
- *  \details Computes the distances of each query from its representative list, 
- *           and outputs the query's nearest neighbors.
+/*! \brief Performs a permutation of the `RBC` database for the case of Kinect
+ *         data in \f$ \mathbb{R}^8 \f$.
+ *  \details Permutes the database points to form the representative lists and 
+ *           allow for coalesced access pattern during the search operation.
+ *  \note The global workspace should be 1-dimensional and equal to the number 
+ *        of database points, \f$ n_x \f$. That is, \f$ gXdim=n_x \f$. 
+ *        There is no requirement for the local workspace.
+ *
+ *  \param[in] X array of database points (each row contains a point), 
+ *               \f$ X_{n_x \times d} \f$.
+ *  \param[in] ID array with the minimum distances and representative ids per database 
+ *                point in X. Its size should be \f$ n_x*sizeof\ (dist\_id) \f$.
+ *  \param[out] Xp permuted array of database points (each row contains 
+ *                 a point), \f$ X_{n_x \times d} \f$.
+ *  \param[out] IDp array with the minimum distances and representative ids per database 
+ *                point in Xp. Its size should be \f$ n_x*sizeof\ (dist\_id) \f$.
+ *  \param[in] O array containing the offsets of the representative lists within 
+ *               the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] Rnk array containing the rank (aka order, index) of each database 
+ *                 point within the associated representative list. Its size should 
+ *                 be \f$ n_x*sizeof\ (uint) \f$.
+ *  \param[in] permID flag to indicate whether or not to also permute the ID array.
+ */
+kernel
+void rbcPermute_Kinect (global float8 *X, global dist_id *ID, 
+                        global float8 *Xp, global dist_id *IDp, 
+                        global uint *O, global uint *Rnk, int permID)
+{
+    // Workspace indices
+    uint gX = get_global_id (0);
+
+    // Read the point's representative id
+    dist_id r_id = ID[gX];
+    uint id = r_id.id;
+
+    // Read the representative list's offset within the database
+    uint offset = O[id];
+
+    // Read the point's index within the representative list
+    uint rank = Rnk[gX];
+
+    // Store the point in its representative list
+    Xp[offset + rank] = X[gX];
+
+    // Copy the representative's info to the same index position
+    if (permID == 1)
+        IDp[offset + rank] = r_id;
+}
+
+
+/*! \brief Computes the distances between two sets of points in a brute force way.
+ *  \details Computes the distances from the queries to the points in their representative's list.
  *  \note The **x** dimension of the global workspace, \f$ gXdim \f$, should be greater 
  *        than or equal to the number of points in the represetative list with the greatest 
- *        cardinality, divided by 4. That is, \f$ gXdim \geq max_{id_r}{N[id_r]}/4 \f$. The 
+ *        cardinality, divided by 4. That is, \f$ gXdim \geq max_{r_{id}}{N[r_{id}]}/4 \f$. The 
  *        **y** dimension of the global workspace, \f$ gYdim \f$, should be equal to the 
- *        number of queries, \f$ n_q \f$. That is, \f$ gYdim = n_q \f$. The local workspace 
- *        should be `1` in the **y** dimension, and a **power of 2** in the **x** dimension. 
- *        It is recommended to use one `wavefront/warp` per work-group.
+ *        number of queries, \f$ n_q \f$, divided by 4. That is, \f$ gYdim = n_q/4 \f$. 
+ *        There is no requirement for the local workspace.
  *  \note The **dimensionality of the points** should be a **multiple of 4**. This restriction 
  *        can be avoided by handling the input data as `float`.
- *  \note When the number of points per query, \f$ max_{id_r}{N[id_r]}/4 \f$, is small 
- *        enough to be handled by a single work-group, the output array, `RID`, will 
- *        contain the final NNs. When the points are more than that, they are partitioned 
- *        into blocks and reduced independently. In this case, the kernel outputs the 
- *        minimums from each block reduction. A reduction should then be made on those 
- *        minimums for the final NNs by dispatching the `rbcGroupMinDists` kernel.
  *  \attention In order for this kernel to be efficient there shouldn't be great load 
  *             imbalance. That is, it is assumed that the database points are uniformly 
  *             distributed across all representative lists. The alternative would be 
  *             to process each query one at a time. But dispatching the kernel 
  *             \f$ n_q \f$ times is not really a viable option.
  *            
- *  \param[in] Q array of the query points (each row contains a point), \f$ Q_{n_q \times d} \f$.
- *  \param[in] Xp array of the database points (each row contains a point), \f$ Xp_{n_x \times d} \f$.
- *  \param[in] O array containing the offsets of the representative lists within 
- *               the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
- *  \param[in] N array containing the cardinalities of the representative lists.
- *               Its size should be \f$ n_r*sizeof\ (uint) \f$.
- *  \param[in] RID array with the representative ids for each query. Its size 
- *                 should be \f$ n_q*sizeof\ (dist\_id) \f$.
- *  \param[out] NNID output array of `dist_id` elements. When the kernel is dispatched 
- *                   with one work-group per row, the array contains the final results, 
- *                   and its size should be \f$ n_q*sizeof\ (dist\_id) \f$. When the 
- *                   kernel is dispatched with more than one work-group per row, the 
- *                   array contains the results from each block reduction, and its size 
- *                   should be \f$ wgXdim*n_q*sizeof\ (dist\_id) \f$.
- *  \param[in] data local buffer. Its size should be `2 dist_id` elements for each 
- *                  work-item in a work-group. That is \f$ 2*lXdim*sizeof\ (dist\_id) \f$.
+ *  \param[in] Qp array of query points (each row contains a point), \f$ Q_{n_q \times d} \f$.
+ *  \param[in] Xp array of database points (each row contains a point), \f$ Xp_{n_x \times d} \f$.
+ *  \param[out] D array of distances from the query points to the database points in 
+ *                each query's representative list (each row contains the distances of 
+ *                a query point from all the  points), \f$ D_{n_q \times max_{r_{id}}{N[r_{id}]}} \f$.
+ *  \param[in] XO array containing the offsets of the representative lists within 
+ *                the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] XN array containing the cardinalities of the representative lists.
+ *                Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] RID array with the representative ids for each query in **Qp**. 
+ *                 Its size should be \f$ n_q*sizeof\ (dist\_id) \f$.
  *  \param[in] d dimensionality of the associated points.
  */
 kernel
-void rbcComputeQXMinDists (global float4 *Q, global float4 *Xp, global uint *O, global uint *N, 
-                           global dist_id *RID, global dist_id *NNID, local dist_id *data, uint d)
+void rbcComputeQXDists (global float4 *Qp, global float4 *Xp, global float4 *D,
+                        global uint *XO, global uint *XN, global dist_id *RID, uint d)
 {
     // Workspace dimensions
-    uint lXdim = get_local_size (0);
-    uint wgXdim = get_num_groups (0);
+    uint gXdim = get_global_size (0);
 
     // Workspace indices
     uint gX = get_global_id (0);
     uint gY = get_global_id (1);
-    uint lX = get_local_id (0);
-    uint wgX = get_group_id (0);
-
-    uint d4 = d >> 2;       // Number of 4-dimensions
-    uint rID = RID[gY].id;  // Representative ID
-    uint o = O[rID];        // Offset of rID's list within the database
-    uint n = N[rID];        // Number of points in rID's list
-
-    global float4 *L = Xp + o * d4;  // rID's list
-
-    // Compute distances =======================================================
-
-    float4 dists = (float4) (0.f);
 
     uint gX4 = gX << 2;
-    uint gPosQ = gY * d4;
-    uint gPosL = gX4 * d4;
+    uint gY4 = gY << 2;
 
-    int4 f0 = (uint4) (gX4)     < (uint4) (n);
-    int4 f1 = (uint4) (gX4 + 1) < (uint4) (n);
-    int4 f2 = (uint4) (gX4 + 2) < (uint4) (n);
-    int4 f3 = (uint4) (gX4 + 3) < (uint4) (n);
+    uint d4 = d >> 2;  // Number of 4-dimensions
 
-    // Walk through the dimensions and compute intermediate 
-    // results for the 1x4 block of the (gX, gY) work-item
-    for (int j = 0; j < d4; ++j)
+    uint gPosQ = gY4 * d4;
+    uint gPosD = gY4 * gXdim + gX;
+
+    global float4 *L;
+    float4 q, l[4];
+    int4 f0, f1, f2, f3;
+    uint rID, xo, xn;
+    float4 dists;
+
+    // Will hold the previous query's rep id
+    // Initialize with some dummy value
+    uint _rID = RID[gY4].id + 1;
+
+    // Walk through the rows of the assigned 
+    // 4x4 block in the output array
+    for (int i = 0; i < 4; ++i)
     {
-        float4 q = Q[gPosQ + j];
+        rID = RID[gY4 + i].id;  // Read current query's rep id
+        int same_rID = rID == _rID;
 
-        float4 l[4];
-        l[0] = select ((float4) (INFINITY), L[gPosL + j], f0);
-        l[1] = select ((float4) (INFINITY), L[gPosL + d4 + j], f1);
-        l[2] = select ((float4) (INFINITY), L[gPosL + 2 * d4 + j], f2);
-        l[3] = select ((float4) (INFINITY), L[gPosL + 3 * d4 + j], f3);
+        // If the current query has a different representative from the 
+        // previous query, fetch new rID's info. Otherwise, reuse info
+        if (!same_rID)
+        {
+            xo = XO[rID];  // Read representative's list offset
+            xn = XN[rID];  // Read representative's list cardinality
+
+            // Compute pointer to the points of interest in rID's list
+            L = Xp + (xo + gX4) * d4;
+
+            // Check bounds for the points of interest in rID's list
+            f0 = (uint4) (gX4)     < (uint4) (xn);
+            f1 = (uint4) (gX4 + 1) < (uint4) (xn);
+            f2 = (uint4) (gX4 + 2) < (uint4) (xn);
+            f3 = (uint4) (gX4 + 3) < (uint4) (xn);
+        }
+
+        dists = (float4) (0.f);
+
+        // Walk through the dimensions and compute intermediate results 
+        // for row i of the assigned 4x4 block in the output array
+        for (int j = 0; j < d4; ++j)
+        {
+            q = Qp[gPosQ + i * d4 + j];
+
+            l[0] = select ((float4) (INFINITY), L[j], f0);
+            l[1] = select ((float4) (INFINITY), L[d4 + j], f1);
+            l[2] = select ((float4) (INFINITY), L[2 * d4 + j], f2);
+            l[3] = select ((float4) (INFINITY), L[3 * d4 + j], f3);
+            
+            // Compute distances
+            // l1NormMetric (&q, l, &dists, 1);
+            euclideanSquaredMetric (&q, l, &dists, 1);
+        }
+
+        // Store row i of the 4x4 block of 
+        // distances in the output array
+        D[gPosD + i * gXdim] = dists;
+
+        _rID = rID;
+    }
+}
+
+
+/*! \brief Computes the distances between two sets of points in a brute force way.
+ *  \details Computes the distances from the queries to the points in their representative's list.
+ *  \note The **x** dimension of the global workspace, \f$ gXdim \f$, should be greater 
+ *        than or equal to the number of points in the represetative list with the greatest 
+ *        cardinality, divided by 4. That is, \f$ gXdim \geq max_{r_{id}}{N[r_{id}]}/4 \f$. The 
+ *        **y** dimension of the global workspace, \f$ gYdim \f$, should be equal to the 
+ *        number of queries, \f$ n_q \f$, divided by 4. That is, \f$ gYdim = n_q/4 \f$. 
+ *        There is no requirement for the local workspace.
+ *  \note The **dimensionality of the points** should be a **multiple of 4**. This restriction 
+ *        can be avoided by handling the input data as `float`.
+ *  \attention In order for this kernel to be efficient there shouldn't be great load 
+ *             imbalance. That is, it is assumed that the database points are uniformly 
+ *             distributed across all representative lists. The alternative would be 
+ *             to process each query one at a time. But dispatching the kernel 
+ *             \f$ n_q \f$ times is not really a viable option.
+ *            
+ *  \param[in] Qp array of query points (each row contains a point), \f$ Q_{n_q \times d} \f$.
+ *  \param[in] Xp array of database points (each row contains a point), \f$ Xp_{n_x \times d} \f$.
+ *  \param[out] D array of distances from the query points to the database points in 
+ *                each query's representative list (each row contains the distances of 
+ *                a query point from all the  points), \f$ D_{n_q \times max_{r_{id}}{N[r_{id}]}} \f$.
+ *  \param[in] XO array containing the offsets of the representative lists within 
+ *                the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] XN array containing the cardinalities of the representative lists.
+ *                Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] RID array with the representative ids for each query in **Qp**. 
+ *                 Its size should be \f$ n_q*sizeof\ (dist\_id) \f$.
+ */
+kernel
+void rbcComputeQXDists_Kinect (global float8 *Qp, global float8 *Xp, global float4 *D,
+                               global uint *XO, global uint *XN, global dist_id *RID)
+{
+    // Workspace dimensions
+    uint gXdim = get_global_size (0);
+
+    // Workspace indices
+    uint gX = get_global_id (0);
+    uint gY = get_global_id (1);
+
+    uint gX4 = gX << 2;
+    uint gY4 = gY << 2;
+
+    uint gPosD = gY4 * gXdim + gX;
+
+    global float8 *Q = Qp + gY4;
+    global float8 *L;
+    float8 q, l[4];
+    int8 f0, f1, f2, f3;
+    uint rID, xo, xn;
+    float4 dists;
+
+    // Will hold the previous query's rep id
+    // Initialize with some dummy value
+    uint _rID = RID[gY4].id + 1;
+
+    // Walk through the rows of the assigned 
+    // 4x4 block in the output array
+    for (int i = 0; i < 4; ++i)
+    {
+        rID = RID[gY4 + i].id;  // Read current query's rep id
+        int same_rID = rID == _rID;
+
+        // If the current query has a different representative from the 
+        // previous query, fetch new rID's info. Otherwise, reuse info
+        if (!same_rID)
+        {
+            xo = XO[rID];  // Read representative's list offset
+            xn = XN[rID];  // Read representative's list cardinality
+
+            // Compute pointer to the points of interest in rID's list
+            L = Xp + xo + gX4;
+
+            // Check bounds for the points of interest in rID's list
+            f0 = (uint8) (gX4)     < (uint8) (xn);
+            f1 = (uint8) (gX4 + 1) < (uint8) (xn);
+            f2 = (uint8) (gX4 + 2) < (uint8) (xn);
+            f3 = (uint8) (gX4 + 3) < (uint8) (xn);
+        }
+
+        q = Q[i];
+
+        if (!same_rID)
+        {
+            l[0] = select ((float8) (INFINITY), L[0], f0);
+            l[1] = select ((float8) (INFINITY), L[1], f1);
+            l[2] = select ((float8) (INFINITY), L[2], f2);
+            l[3] = select ((float8) (INFINITY), L[3], f3);
+        }
 
         // Compute distances
-        // l1NormMetric (q, l, dists, 1);
-        euclideanSquaredMetric (&q, l, &dists, 1);
+        // l1NormMetric8 (&q, l, &dists, 1);
+        euclideanSquaredMetric8 (&q, l, &dists, 1);
+
+        // Store row i of the 4x4 block of 
+        // distances in the output array
+        D[gPosD + i * gXdim] = dists;
+
+        _rID = rID;
     }
-
-    // Reduce ==================================================================
-    // The previous step uses 1 work-item per 4 database points
-    // The current step needs 1 work-item per 2 database points
-    // The data are going to be reduced in half per work-item, 
-    // and then the usual reduction algorithm will be executed
-
-    uint idx = o + (gX << 2);
-    dist_id a, b;
-
-    // Reduce float4 element
-    int fa = isless (dists.x, dists.y);
-    a.dist = select (dists.y, dists.x, fa);
-    a.id   = select (idx + 1, idx    , fa);
-    int fb = isless (dists.z, dists.w);
-    b.dist = select (dists.w, dists.z, fb);
-    b.id   = select (idx + 3, idx + 2, fb);
-
-    data[2 * lX] = a;
-    data[2 * lX + 1] = b;
-
-    // Reduce
-    for (uint d = lXdim; d > 0; d >>= 1)
-    {
-        barrier (CLK_LOCAL_MEM_FENCE);
-
-        if (lX < d)
-        {
-            a = data[lX];
-            b = data[lX + d];
-
-            int flag = isless (a.dist, b.dist);
-            data[lX].dist = select (b.dist, a.dist, flag);
-            data[lX].id = select (b.id, a.id, flag);
-        }
-    }
-
-    // One work-item per work-group 
-    // stores the minimum element
-    if (lX == 0)
-        NNID[gY * wgXdim + wgX] = data[0];
 }
 
 
@@ -1051,17 +1287,23 @@ void rbcComputeQXMinDists (global float4 *Q, global float4 *Xp, global uint *O, 
  *        points divided by 4. That is, \f$ \ gXdim=d/4 \f$. The **y** dimension 
  *        of the global workspace, \f$ gYdim \f$, should be equal to the number 
  *        of queries, \f$ n_q \f$. That is, \f$ \ gYdim = n_q \f$. 
- *        The local workspace is irrelevant.
+ *        There is no requirement for the local workspace.
  *
- *  \param[in] Xp permuted array of the database points (each row contains 
+ *  \param[in] Xp permuted array of database points (each row contains 
  *                a point), \f$ X_{n_x \times d} \f$.
- *  \param[out] NN array of queries' nearest neigbors (each row contains 
+ *  \param[out] NN array of queries' nearest neighbors (each row contains 
  *                 a point), \f$ X_{n_q \times d} \f$.
+ *  \param[in] XO array containing the offsets of the representative lists within 
+ *                the permuted database. Its size should be \f$ n_r*sizeof\ (uint) \f$.
+ *  \param[in] RID array with the representative ids for each query in **Qp**. 
+ *                 Its size should be \f$ n_q*sizeof\ (dist\_id) \f$.
  *  \param[in] NNID array with the minimum distances and NN ids per query. 
- *                  Its size should be \f$ n_q*sizeof\ (dist\_id) \f$.
+ *                  Its size should be \f$ n_q*sizeof\ (dist\_id) \f$. The NN 
+ *                  ids index the points in the associated representative list.
  */
 kernel
-void rbcGetNNs (global float4 *Xp, global float4 *NN, global dist_id *NNID)
+void rbcGetNNs (global float4 *Xp, global float4 *NN, global uint *XO, 
+                global dist_id *RID, global dist_id *NNID)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -1071,11 +1313,17 @@ void rbcGetNNs (global float4 *Xp, global float4 *NN, global dist_id *NNID)
     uint gX = get_global_id (0);
     uint gY = get_global_id (1);
 
+    // Read the representative id
+    uint rID = RID[gY].id;
+
+    // Read the representative's offset
+    uint o = XO[rID];
+
     // Read the NN id
-    uint id = NNID[gY].id;
+    uint nnID = NNID[gY].id;
 
     // Read (part of) the NN
-    float4 p = Xp[id * gXdim + gX];
+    float4 p = Xp[(o + nnID) * gXdim + gX];
 
     // Store the NN
     NN[gY * gXdim + gX] = p;

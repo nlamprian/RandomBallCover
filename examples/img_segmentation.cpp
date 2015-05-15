@@ -79,7 +79,9 @@ int main (int argc, const char **argv)
 
         // Configure kernel execution parameters
         clutils::CLEnvInfo<1> info (0, 0, 0, { 0 }, 0);
-        cl_algo::RBC::RBCConstruct rbc (clEnv, info);
+        const cl_algo::RBC::KernelTypeC K = cl_algo::RBC::KernelTypeC::SHARED_NONE;
+        const cl_algo::RBC::RBCPermuteConfig P = cl_algo::RBC::RBCPermuteConfig::GENERIC;
+        cl_algo::RBC::RBCConstruct<K, P> rbc (clEnv, info);
         rbc.init (nx, nr, d);
 
         // Initialize data (writes on staging buffers directly)
@@ -108,15 +110,15 @@ int main (int argc, const char **argv)
             rbc.hPtrInR[j] = std::numeric_limits<cl_float>::infinity ();
 
         // Copy data to device
-        rbc.write (cl_algo::RBC::RBCConstruct::Memory::D_IN_X);
-        rbc.write (cl_algo::RBC::RBCConstruct::Memory::D_IN_R);
+        rbc.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_X);
+        rbc.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_R);
         
         rbc.run ();  // Execute kernels (~ 36 ms)
         
         // Copy results to host
-        cl_uint *N = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_N, CL_FALSE);
-        rbc_dist_id *ID = (rbc_dist_id *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_ID);
-        // cl_float *Xp = (cl_float *) rbc.read (cl_algo::RBC::RBCConstruct::Memory::H_OUT_X_P);
+        cl_uint *N = (cl_uint *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_N, CL_FALSE);
+        rbc_dist_id *ID = (rbc_dist_id *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_ID);
+        // cl_float *Xp = (cl_float *) rbc.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_X_P);
         // RBC::printBuffer ("N:", N, nr, 1);
 
         // Assign to each pixel the intensity of its representative

@@ -24,13 +24,21 @@ if ( PLplot_FOUND )
     include_directories ( ${PLplot_INCLUDE_DIRS} )
 
     add_executable ( ${FNAME}_2d_plot 2d_plot.cpp )
+    add_executable ( ${FNAME}_2d_plot_nn 2d_plot_nn.cpp )
 
     add_dependencies ( ${FNAME}_2d_plot CLUtils )
+    add_dependencies ( ${FNAME}_2d_plot_nn CLUtils )
 
     target_link_libraries ( ${FNAME}_2d_plot ${CLUtils_LIBRARIES} 
                                              RBCAlgorithms 
                                              ${OPENGL_LIBRARIES} 
                                              ${OPENCL_LIBRARIES}
                                              ${PLplot_LIBRARIES} )
+
+    target_link_libraries ( ${FNAME}_2d_plot_nn ${CLUtils_LIBRARIES} 
+                                                RBCAlgorithms 
+                                                ${OPENGL_LIBRARIES} 
+                                                ${OPENCL_LIBRARIES}
+                                                ${PLplot_LIBRARIES} )
 
 endif ( PLplot_FOUND )

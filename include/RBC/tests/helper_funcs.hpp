@@ -30,6 +30,7 @@
 #define HELPERFUNCS_HPP
 
 #include <cassert>
+#include <algorithm>
 #include <functional>
 #include <RBC/data_types.hpp>
 
@@ -120,6 +121,74 @@ namespace RBC
     }
 
 
+    /*! \brief Reduces each row of an array to a single element.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \param[in] in input data.
+     *  \param[out] out output (reduced) data.
+     *  \param[in] cols number of columns in the input array.
+     *  \param[in] rows number of rows in the input array.
+     */
+    template <typename T>
+    void cpuReduce (T *in, T *out, uint32_t cols, uint32_t rows, std::function<bool (T, T)> func)
+    {
+        for (uint r = 0; r < rows; ++r)
+        {
+            T rec = in[r * cols];
+            for (uint c = 1; c < cols; ++c)
+            {
+                T tmp = in[r * cols + c];
+                if (func (tmp, rec)) rec = tmp;
+            }
+            out[r] = rec;
+        }
+    }
+
+
+    /*! \brief Performs an inclusive scan operation on the columns of an array.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] in input data.
+     *  \param[out] out output (scan) data.
+     *  \param[in] width width of the array.
+     *  \param[in] height height of the array.
+     */
+    template <typename T>
+    void cpuInScan (T *in, T *out, uint32_t width, uint32_t height)
+    {
+        // Initialize the first element of each row
+        for (uint32_t row = 0; row < height; ++row)
+            out[row * width] = in[row * width];
+        // Perform the scan
+        for (uint32_t row = 0; row < height; ++row)
+            for (uint32_t col = 1; col < width; ++col)
+                out[row * width + col] = out[row * width + col - 1] + in[row * width + col];
+    }
+
+
+    /*! \brief Performs an exclusive scan operation on the columns of an array.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] in input data.
+     *  \param[out] out output (scan) data.
+     *  \param[in] width width of the array.
+     *  \param[in] height height of the array.
+     */
+    template <typename T>
+    void cpuExScan (T *in, T *out, uint32_t width, uint32_t height)
+    {
+        // Initialize the first element of each row
+        for (uint32_t row = 0; row < height; ++row)
+            out[row * width] = 0;
+        // Perform the scan
+        for (uint32_t row = 0; row < height; ++row)
+            for (uint32_t col = 1; col < width; ++col)
+                out[row * width + col] = out[row * width + col - 1] + in[row * width + col - 1];
+    }
+
+
     /*! \brief Computes the distances between two sets of points in a brute force way.
      *  \details It is just a naive serial implementation.
      *
@@ -145,30 +214,6 @@ namespace RBC
 
                 D[x * nr + r] = dist;
             }
-        }
-    }
-
-
-    /*! \brief Reduces each row of an array to a single element.
-     *  \details It is just a naive serial implementation.
-     *
-     *  \param[in] in input data.
-     *  \param[out] out output (reduced) data.
-     *  \param[in] cols number of columns in the input array.
-     *  \param[in] rows number of rows in the input array.
-     */
-    template <typename T>
-    void cpuReduce (T *in, T *out, uint32_t cols, uint32_t rows, std::function<bool (T, T)> func)
-    {
-        for (uint r = 0; r < rows; ++r)
-        {
-            T rec = in[r * cols];
-            for (uint c = 1; c < cols; ++c)
-            {
-                T tmp = in[r * cols + c];
-                if (func (tmp, rec)) rec = tmp;
-            }
-            out[r] = rec;
         }
     }
 
@@ -221,50 +266,6 @@ namespace RBC
     }
 
 
-    /*! \brief Performs an inclusive scan operation on the columns of an array.
-     *  \details It is just a naive serial implementation.
-     *
-     *  \tparam T type of the data to be handled.
-     *  \param[in] in input data.
-     *  \param[out] out output (scan) data.
-     *  \param[in] width width of the array.
-     *  \param[in] height height of the array.
-     */
-    template <typename T>
-    void cpuInScan (T *in, T *out, uint32_t width, uint32_t height)
-    {
-        // Initialize the first element of each row
-        for (uint32_t row = 0; row < height; ++row)
-            out[row * width] = in[row * width];
-        // Perform the scan
-        for (uint32_t row = 0; row < height; ++row)
-            for (uint32_t col = 1; col < width; ++col)
-                out[row * width + col] = out[row * width + col - 1] + in[row * width + col];
-    }
-
-
-    /*! \brief Performs an exclusive scan operation on the columns of an array.
-     *  \details It is just a naive serial implementation.
-     *
-     *  \tparam T type of the data to be handled.
-     *  \param[in] in input data.
-     *  \param[out] out output (scan) data.
-     *  \param[in] width width of the array.
-     *  \param[in] height height of the array.
-     */
-    template <typename T>
-    void cpuExScan (T *in, T *out, uint32_t width, uint32_t height)
-    {
-        // Initialize the first element of each row
-        for (uint32_t row = 0; row < height; ++row)
-            out[row * width] = 0;
-        // Perform the scan
-        for (uint32_t row = 0; row < height; ++row)
-            for (uint32_t col = 1; col < width; ++col)
-                out[row * width + col] = out[row * width + col - 1] + in[row * width + col - 1];
-    }
-
-
     /*! \brief Performs a permutation of the `RBC` database 
      *         to form the representative lists.
      *  \details It is just a naive serial implementation.
@@ -272,18 +273,20 @@ namespace RBC
      *  \tparam T type of the data to be handled.
      *  \param[in] X array of database points (each row contains a point).
      *  \param[in] ID array with the minimum distances and representative ids per database point.
+     *  \param[out] Xp permuted database.
+     *  \param[out] IDp array with the minimum distances and representative ids per database point in Xp.
      *  \param[in] O array containing the index (offset) of the first element of 
      *               each representative list within the database.
      *  \param[in] Rnk array containing the rank (aka order, index) of each database 
      *                 point within the associated representative list.
-     *  \param[out] Xp permuted database.
      *  \param[in] nx number of database points.
      *  \param[in] nr number of representative points.
      *  \param[in] d dimensionality of the associated points.
+     *  \param[in] permID flag to indicate whether or not to also permute the ID array.
      */
     template <typename T>
-    void cpuRBCPermute (T *X, rbc_dist_id *ID, uint32_t *O, uint32_t *Rnk, T *Xp, 
-                        uint32_t nx, uint32_t nr, uint32_t d)
+    void cpuRBCPermute (T *X, rbc_dist_id *ID, T *Xp, rbc_dist_id *IDp, uint32_t *O, uint32_t *Rnk, 
+                        uint32_t nx, uint32_t nr, uint32_t d, bool permID)
     {
         for (uint32_t x = 0; x < nx; ++x)
         {
@@ -293,23 +296,24 @@ namespace RBC
 
             for (uint32_t j = 0; j < d; ++j)
                 Xp[(offset + rank) * d + j] = X[x * d + j];
+
+            if (permID == true)
+                IDp[offset + rank] = ID[x];
         }
     }
 
 
-    /*! \brief Performs a permutation of the `RBC` database 
-     *         to form the representative lists.
+    /*! \brief Uses the RBC data structure to search for the nearest neighbors.
      *  \details It is just a naive serial implementation.
      *
      *  \tparam T type of the data to be handled.
-     *  \param[in] Q array of query points (each row contains a point).
-     *  \param[in] R array of representative points (each row contains a point).
+     *  \param[in] Qp permuted array of query points (each row contains a point).
+     *  \param[in] RID array with minimum distances and representative ids per query point in Qp.
      *  \param[in] Xp permuted array of database points (each row contains a point).
      *  \param[in] O array containing the index (offset) of the first element of 
      *               each representative list within the database.
      *  \param[in] N array with the representative list cardinalities.
-     *  \param[out] RID array with minimum distances and representative ids per query point.
-     *  \param[out] NNID array with distances and NN ids per query point.
+     *  \param[out] NNID array with distances and NN ids for each query point.
      *  \param[out] NN array of NN points (each row contains a point).
      *  \param[in] nq number of query points.
      *  \param[in] nr number of representative points.
@@ -317,35 +321,139 @@ namespace RBC
      *  \param[in] d dimensionality of the associated points.
      */
     template <typename T>
-    void cpuRBCSearch (T *Q, T *R, T *Xp, cl_uint *O, cl_uint *N, rbc_dist_id *RID, rbc_dist_id *NNID, T *NN, 
+    void cpuRBCSearch (T *Qp, rbc_dist_id *RID, T *Xp, cl_uint *O, cl_uint *N, rbc_dist_id *NNID, T *NN, 
                        uint32_t nq, uint32_t nr, uint32_t nx, uint32_t d)
     {
-        cl_float *D = new cl_float[nq * nr];
-        cpuRBCComputeDists (Q, R, D, nq, nr, d);
-        cpuRBCMinDists (D, RID, nullptr, nullptr, nr, nq, false);
+        cl_uint max_n = std::accumulate (N, N + nr, 0, 
+            [](cl_uint a, cl_uint b) -> cl_uint { return std::max (a, b); });
 
-        for (uint32_t qi = 0; qi < nq; ++qi)
+        cl_float *D = new cl_float[nq * max_n];
+        
+        // Compute distances Q - X[L]
+        for (uint q = 0; q < nq; ++q)
         {
-            uint r_id = RID[qi].id;
-            uint offset = O[r_id];
-            cl_float *L = Xp + offset * d;
-            uint nl = N[r_id];
-            cl_float *q = Q + qi * d;
-            rbc_dist_id *nn_id = NNID + qi;
+            cl_uint rID = RID[q].id;
+            cl_uint o = O[rID];
+            cl_uint n = N[rID];
 
-            cpuRBCComputeDists (q, L, D, 1, nl, d);
-            cpuRBCMinDists (D, nn_id, nullptr, nullptr, nl, 1, false);
-            nn_id->id += offset;
+            for (uint x = 0; x < max_n; ++x)
+            {
+                float dist = 0.f;
+
+                if (x < n)
+                    for (uint j = 0; j < d; ++j)
+                        dist += std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
+                else
+                    dist = std::numeric_limits<float>::infinity ();
+
+                D[q * max_n + x] = dist;
+            }
         }
+        
+        cpuRBCMinDists (D, NNID, nullptr, nullptr, max_n, nq, false);
 
-        for (uint32_t qi = 0; qi < nq; ++qi)
+        for (uint32_t q = 0; q < nq; ++q)
         {
-            uint nn_id = NNID[qi].id;
+            uint nnID = O[RID[q].id] + NNID[q].id;
+
             for (uint32_t j = 0; j < d; ++j)
-                NN[qi * d + j] = Xp[nn_id * d + j];
+                NN[q * d + j] = Xp[nnID * d + j];
         }
 
         delete[] D;
+    }
+
+
+    /*! \brief Calculates the euclidean distance betweeen two points.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] p1 first point.
+     *  \param[in] p2 second point.
+     *  \param[in] d dimensionality of the associated points.
+     */
+    template <typename T>
+    T euclideanMetric (T *p1, T *p2, uint32_t d)
+    {
+        T dist = 0.f;
+
+        for (int i = 0; i < d; ++i)
+            dist += std::pow (p1[i] - p2[i], 2);
+
+        return std::sqrt (dist);
+    }
+
+
+    /*! \brief Computes (brute force) the nearest neighbors of a set of queries.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] Q array of query points (each row contains a point).
+     *  \param[in] X array of database points (each row contains a point).
+     *  \param[out] NN array of NN points (each row contains a point).
+     *  \param[in] nq number of query points.
+     *  \param[in] nx number of database points.
+     *  \param[in] d dimensionality of the associated points.
+     */
+    template <typename T>
+    void cpuNNSearch (T *Q, T *X, T *NN, uint32_t nq, uint32_t nx, uint32_t d)
+    {
+        // Compute distance array
+        std::vector<T> D (nq * nx);
+
+        for (uint32_t q = 0; q < nq; ++q)
+            for (uint32_t x = 0; x < nx; ++x)
+                D[q * nx + x] = euclideanMetric (&Q[q * d], &X[x * d], d);
+
+        // Find NN IDs
+        std::vector<uint32_t> minID (nq);
+
+        for (uint32_t q = 0; q < nq; ++q)
+        {
+            T minDist = D[q * nx];
+            uint32_t id = 0;
+
+            for (uint32_t x = 1; x < nx; ++x)
+            {
+                T tmp = D[q * nx + x];
+                if (tmp < minDist)
+                {
+                    minDist = tmp;
+                    id = x;
+                }
+            }
+
+            minID[q] = id;
+        }
+
+        // Collect NNs
+        for (uint32_t q = 0; q < nq; ++q)
+            for (uint32_t j = 0; j < d; ++j)
+                NN[q * d + j] = X[minID[q] * d + j];     
+    }
+
+
+    /*! \brief Computes the mean euclidean distance from the queries to their NNs.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] Q array of queries (each row contains a point).
+     *  \param[in] NN array of NNs (each row contains a point).
+     *  \param[in] n number of points in the arrays.
+     *  \param[in] d dimensionality of the associated points.
+     */
+    template <typename T>
+    T meanError (T *Q, T *NN, uint32_t n, uint32_t d)
+    {
+        std::vector<T> D (n);
+        unsigned int i = -1;
+
+        std::generate (D.begin (), D.end (), 
+            [&]() { i++; return euclideanMetric (&Q[i * d], &NN[i * d], d); });
+
+        T sumD = std::accumulate (D.begin (), D.end (), 0.f);
+
+        return sumD / (T) n;
     }
 
 }
