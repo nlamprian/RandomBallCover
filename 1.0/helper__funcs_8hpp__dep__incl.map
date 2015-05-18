@@ -1,8 +1,0 @@
-<map id="helper_funcs.hpp" name="helper_funcs.hpp">
-<area shape="rect" id="node2" href="$helper__funcs_8cpp.html" title="Helper functions for testing. " alt="" coords="5,80,125,107"/>
-<area shape="rect" id="node3" href="$testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="150,80,255,107"/>
-<area shape="rect" id="node4" href="$testsRBC__RGBD_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="279,80,429,107"/>
-<area shape="rect" id="node5" href="$testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="454,80,575,107"/>
-<area shape="rect" id="node6" href="$testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="600,80,707,107"/>
-<area shape="rect" id="node7" href="$img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="731,80,884,107"/>
-</map>

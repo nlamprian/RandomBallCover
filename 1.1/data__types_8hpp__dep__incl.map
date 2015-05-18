@@ -1,0 +1,14 @@
+<map id="data_types.hpp" name="data_types.hpp">
+<area shape="rect" id="node2" href="$algorithms_8hpp.html" title="Declares classes that organize the execution of OpenCL kernels. " alt="" coords="677,80,784,107"/>
+<area shape="rect" id="node12" href="$helper__funcs_8hpp.html" title="Declarations of helper functions for testing. " alt="" coords="493,80,613,107"/>
+<area shape="rect" id="node3" href="$algorithms_8cpp.html" title="Defines classes that organize the execution of OpenCL kernels. " alt="" coords="1112,155,1219,181"/>
+<area shape="rect" id="node4" href="$testsRBC_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="150,155,255,181"/>
+<area shape="rect" id="node5" href="$testsRBC__RGBD_8cpp.html" title="Google Test Unit Tests for the kernels associated with the Random Ball Cover data structure..." alt="" coords="279,155,429,181"/>
+<area shape="rect" id="node6" href="$testsReduce_8cpp.html" title="Google Test Unit Tests for the Reduce kernels. " alt="" coords="454,155,575,181"/>
+<area shape="rect" id="node7" href="$testsScan_8cpp.html" title="Google Test Unit Tests for the Scan kernels. " alt="" coords="600,155,707,181"/>
+<area shape="rect" id="node8" href="$2d__plot_8cpp.html" title="An application examining the resulting arrangement of the Random Ball Cover data structure on 2&#45;D dat..." alt="" coords="1243,155,1332,181"/>
+<area shape="rect" id="node9" href="$2d__plot__nn_8cpp.html" title="An application examining the resulting arrangement and operation of the Random Ball Cover data struct..." alt="" coords="1357,155,1467,181"/>
+<area shape="rect" id="node10" href="$img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="731,155,884,181"/>
+<area shape="rect" id="node11" href="$rgb__img__segmentation_8cpp.html" title="An application examining the potential of the Random Ball Cover data structure for image segmentation..." alt="" coords="909,155,1088,181"/>
+<area shape="rect" id="node13" href="$helper__funcs_8cpp.html" title="Helper functions for testing. " alt="" coords="5,155,125,181"/>
+</map>
