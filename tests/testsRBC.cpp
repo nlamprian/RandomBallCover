@@ -6,7 +6,7 @@
  *        of the associated algorithms. They are used only for testing purposes, 
  *        and not for examining the performance of their GPU alternatives.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -922,7 +922,8 @@ TEST (RBC, rbcSearch)
             rbcCon.get (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_OUT_O);
         rbcSearch.get (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_N) = 
             rbcCon.get (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_OUT_N);
-        rbcSearch.init (nq, nr, nx, d);
+        rbcSearch.init (nq, nr, nx, d);  // Use with KernelTypeC::SHARED_x
+        // rbcSearch.init (nq, nr, nx, 1.f);  // Use with KernelTypeC::KINECT_x
 
         // Initialize data (writes on staging buffer directly)
         std::generate (rbcSearch.hPtrInQ, rbcSearch.hPtrInQ + bufferQSize / sizeof (cl_float), rNum_R_0_1_);
@@ -932,10 +933,15 @@ TEST (RBC, rbcSearch)
         rbcSearch.write (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_Q);
 
         // Execute kernels
-        //~ KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC : 800 us
-        //~ KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC, KernelTypeS::KINECT  : 620 us
-        //~ KernelTypeC::SHARED_NONE, RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 625 us
-        //~ KernelTypeC::KINECT_R,    RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 630 us
+        //~ KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC : 786 us
+        //~ KernelTypeC::SHARED_R,    RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC : 879 us
+        //~ KernelTypeC::SHARED_X_R,  RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC : 913 us
+        //~ KernelTypeC::KINECT,      RBCPermuteConfig::GENERIC, KernelTypeS::KINECT  : 630 us
+        //~ KernelTypeC::KINECT,      RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 638 us
+        //~ KernelTypeC::KINECT_R,    RBCPermuteConfig::GENERIC, KernelTypeS::KINECT  : 621 us
+        //~ KernelTypeC::KINECT_R,    RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 623 us
+        //~ KernelTypeC::KINECT_X_R,  RBCPermuteConfig::GENERIC, KernelTypeS::KINECT  : 638 us
+        //~ KernelTypeC::KINECT_X_R,  RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 644 us
         rbcSearch.run ();
 
         // Copy results to host

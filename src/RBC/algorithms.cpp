@@ -4,7 +4,7 @@
  *           initialize the necessary buffers, set up the workspaces, and 
  *           run the kernels.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -117,12 +117,18 @@ namespace RBC
      *  \param[in] _nx number of database points.
      *  \param[in] _nr number of representative points.
      *  \param[in] _d dimensionality of the associated points.
+     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
+     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
+     *                points (`cl_float8` vectors). This parameter is applicable when involving 
+     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
+     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`. For more details, take a look 
+     *                at `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
     template <KernelTypeC K>
-    void RBCComputeDists<K>::init (unsigned int _nx, unsigned int _nr, unsigned int _d, Staging _staging)
+    void RBCComputeDists<K>::init (unsigned int _nx, unsigned int _nr, unsigned int _d, float _a, Staging _staging)
     {
-        nx = _nx; nr = _nr; d = _d;
+        nx = _nx; nr = _nr; d = _d; a = _a;
         bufferXSize = nx * d * sizeof (cl_float);
         bufferRSize = nr * d * sizeof (cl_float);
         bufferDSize = nx * nr * sizeof (cl_float);
@@ -266,25 +272,31 @@ namespace RBC
         switch (K)
         {
             case KernelTypeC::SHARED_NONE:
+                a = std::numeric_limits<cl_float>::infinity ();
                 kernel.setArg (3, d);
                 break;
             case KernelTypeC::SHARED_R:
+                a = std::numeric_limits<cl_float>::infinity ();
                 kernel.setArg (3, cl::Local ((local[0] << 2) * (local[1] << 2) * sizeof (cl_float)));
                 kernel.setArg (4, d);
                 break;
             case KernelTypeC::SHARED_X_R:
+                a = std::numeric_limits<cl_float>::infinity ();
                 kernel.setArg (3, cl::Local ((local[0] << 2) * (local[1] << 2) * sizeof (cl_float)));
                 kernel.setArg (4, cl::Local ((local[0] << 2) * (local[1] << 2) * sizeof (cl_float)));
                 kernel.setArg (5, d);
                 break;
             case KernelTypeC::KINECT:
+                kernel.setArg (3, a);
                 break;
             case KernelTypeC::KINECT_R:
                 kernel.setArg (3, cl::Local (4 * local[0] * sizeof (cl_float8)));
+                kernel.setArg (4, a);
                 break;
             case KernelTypeC::KINECT_X_R:
                 kernel.setArg (3, cl::Local (4 * local[1] * sizeof (cl_float8)));
                 kernel.setArg (4, cl::Local (4 * local[0] * sizeof (cl_float8)));
+                kernel.setArg (5, a);
                 break;
         }
     }
@@ -363,6 +375,53 @@ namespace RBC
     void RBCComputeDists<K>::run (const std::vector<cl::Event> *events, cl::Event *event)
     {
         queue.enqueueNDRangeKernel (kernel, cl::NullRange, global, local, events, event);
+    }
+
+
+    /*! \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, or
+     *        `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        value returned is \f$ \infty \f$.
+     *  
+     *  \return The scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K>
+    float RBCComputeDists<K>::getAlpha ()
+    {
+        return a;
+    }
+
+
+    /*! \details Updates the kernel argument for the scaling factor \f$ \alpha \f$.
+     *  \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, 
+     *        or `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        function has no effect.
+     *
+     *  \param[in] _a scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K>
+    void RBCComputeDists<K>::setAlpha (float _a)
+    {
+        switch (K)
+        {
+            case KernelTypeC::SHARED_NONE:
+            case KernelTypeC::SHARED_R:
+            case KernelTypeC::SHARED_X_R:
+                std::cerr << "The parameter alpha is not applicable in ";
+                std::cerr << "this template instantiation" << std::endl;
+                break;
+            case KernelTypeC::KINECT:
+                a = _a;
+                kernel.setArg (3, a);
+                break;
+            case KernelTypeC::KINECT_R:
+                a = _a;
+                kernel.setArg (4, a);
+                break;
+            case KernelTypeC::KINECT_X_R:
+                a = _a;
+                kernel.setArg (5, a);
+                break;
+        }
     }
 
 
@@ -1291,8 +1350,6 @@ namespace RBC
      *  \note If you have assigned a memory object to one member variable of the class 
      *        before the call to `init`, then that memory will be maintained. Otherwise, 
      *        a new memory object will be created.
-     *  \note Working with `float` elements and having large summations can be problematic.
-     *        It is advised that a scaling is applied on the elements for better accuracy.
      *        
      *  \param[in] _nx number of database points.
      *  \param[in] _nr number of representative points.
@@ -1595,18 +1652,22 @@ namespace RBC
      *  \note If you have assigned a memory object to one member variable of the class 
      *        before the call to `init`, then that memory will be maintained. Otherwise, 
      *        a new memory object will be created.
-     *  \note Working with `float` elements and having large summations can be problematic.
-     *        It is advised that a scaling is applied on the elements for better accuracy.
      *        
      *  \param[in] _nx number of database points.
      *  \param[in] _nr number of representative points.
      *  \param[in] _d dimensionality of the associated points.
+     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
+     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
+     *                points (`cl_float8` vectors). This parameter is applicable when involving 
+     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
+     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`. For more details, take a look 
+     *                at `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *  \param[in] _permID flag to indicate whether or not to also permute the ID array.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
     template <KernelTypeC K, RBCPermuteConfig P>
     void RBCConstruct<K, P>::init (unsigned int _nx, unsigned int _nr, unsigned int _d, 
-                                   int _permID, Staging _staging)
+                                   float _a, int _permID, Staging _staging)
     {
         nx = _nx; nr = _nr; d = _d; permID = _permID;
         bufferXSize = nx * d * sizeof (cl_float);
@@ -1733,7 +1794,7 @@ namespace RBC
         rbcCompDists.get (RBCComputeDists<K>::Memory::D_IN_R) = dBufferInR;
         rbcCompDists.get (RBCComputeDists<K>::Memory::D_OUT_D) = 
             cl::Buffer (context, CL_MEM_READ_WRITE, bufferDSize);
-        rbcCompDists.init (nx, nr, d, Staging::NONE);
+        rbcCompDists.init (nx, nr, d, _a, Staging::NONE);
 
         rbcMinDists.get (RBCMin::Memory::D_IN_D) = 
             rbcCompDists.get (RBCComputeDists<K>::Memory::D_OUT_D);
@@ -1851,6 +1912,33 @@ namespace RBC
     }
 
 
+    /*! \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, or
+     *        `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        value returned is \f$ \infty \f$.
+     *  
+     *  \return The scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    float RBCConstruct<K, P>::getAlpha ()
+    {
+        return rbcCompDists.getAlpha ();
+    }
+
+
+    /*! \details Updates the kernel argument for the scaling factor \f$ \alpha \f$.
+     *  \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, 
+     *        or `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        function has no effect.
+     *
+     *  \param[in] _a scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCConstruct<K, P>::setAlpha (float _a)
+    {
+        rbcCompDists.setAlpha (_a);
+    }
+
+
     /*! \brief Template instantiation for the case of the `rbcComputeDists_SharedNone` 
      *         and `rbcPermute` kernels. */
     template class RBCConstruct<KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC>;
@@ -1880,24 +1968,40 @@ namespace RBC
     /*! \param[in] _env opencl environment.
      *  \param[in] _info opencl configuration. Specifies the context, queue, etc, to be used.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    RBCSearch<K, P, S>::RBCSearch (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info) : 
+    template <KernelTypeC K, RBCPermuteConfig P>
+    RBCSearch<K, P, KernelTypeS::GENERIC>::RBCSearch (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info) : 
         env (_env), info (_info), 
         context (env.getContext (info.pIdx)), 
         queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
+        rbcCompQXDistsKernel (env.getProgram (info.pgIdx), "rbcComputeQXDists"), 
         nnidMinsKernel (env.getProgram (info.pgIdx), "rbcMinDists"), 
         nnidGroupMinsKernel (env.getProgram (info.pgIdx), "rbcGroupMinDists"), 
         rbcNNKernel (env.getProgram (info.pgIdx), "rbcGetNNs"), 
         rbcCompRIDs (env, info), compMaxN (env, info)
     {
-        switch (S)
-        {
-            case KernelTypeS::GENERIC:
-                rbcCompQXDistsKernel = cl::Kernel (env.getProgram (info.pgIdx), "rbcComputeQXDists");
-                break;
-            case KernelTypeS::KINECT:
-                rbcCompQXDistsKernel = cl::Kernel (env.getProgram (info.pgIdx), "rbcComputeQXDists_Kinect");
-        }
+        // try
+        // {
+        //     switch (K)
+        //     {
+        //         case KernelTypeC::KINECT:
+        //             throw "The K = KernelTypeC::KINECT instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::GENERIC";
+        //             break;
+        //         case KernelTypeC::KINECT_R:
+        //             throw "The K = KernelTypeC::KINECT_R instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::GENERIC";
+        //             break;
+        //         case KernelTypeC::KINECT_X_R:
+        //             throw "The K = KernelTypeC::KINECT_X_R instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::GENERIC";
+        //             break;
+        //     }
+        // }
+        // catch (const char *error)
+        // {
+        //     std::cerr << "Error[RBCSearch]: " << error << std::endl;
+        //     exit (EXIT_FAILURE);
+        // }
 
         wgMultiple = rbcCompQXDistsKernel.getWorkGroupInfo
             <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
@@ -1909,8 +2013,8 @@ namespace RBC
      *  \param[in] mem enumeration value specifying the requested memory object.
      *  \return A reference to the requested memory object.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    cl::Memory& RBCSearch<K, P, S>::get (RBCSearch::Memory mem)
+    template <KernelTypeC K, RBCPermuteConfig P>
+    cl::Memory& RBCSearch<K, P, KernelTypeS::GENERIC>::get (RBCSearch::Memory mem)
     {
         switch (mem)
         {
@@ -1962,8 +2066,6 @@ namespace RBC
      *  \note If you have assigned a memory object to one member variable of the class 
      *        before the call to `init`, then that memory will be maintained. Otherwise, 
      *        a new memory object will be created.
-     *  \note Working with `float` elements and having large summations can be problematic.
-     *        It is advised that a scaling is applied on the elements for better accuracy.
      *        
      *  \param[in] _nq number of query points.
      *  \param[in] _nr number of representative points.
@@ -1971,9 +2073,9 @@ namespace RBC
      *  \param[in] _d dimensionality of the associated points.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    void RBCSearch<K, P, S>::init (unsigned int _nq, unsigned int _nr, unsigned int _nx, 
-                                   unsigned int _d, Staging _staging)
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::init (
+        unsigned int _nq, unsigned int _nr, unsigned int _nx, unsigned int _d, Staging _staging)
     {
         nq = _nq; nr = _nr; nx = _nx; d = _d;
         bufferQSize = nq * d * sizeof (cl_float);
@@ -2124,7 +2226,7 @@ namespace RBC
         rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_IN_R) = dBufferInR;
         rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_X_P) = dBufferOutQp;
         rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_ID_P) = dBufferOutRID;
-        rbcCompRIDs.init (nq, nr, d, 1, Staging::NONE);
+        rbcCompRIDs.init (nq, nr, d, 1.f, 1, Staging::NONE);
 
         compMaxN.get (Reduce<ReduceConfig::MAX, cl_uint>::Memory::D_IN) = dBufferInN;
         compMaxN.init (nr, 1, Staging::O);
@@ -2134,7 +2236,7 @@ namespace RBC
         rbcCompQXDistsKernel.setArg (3, dBufferInO);
         rbcCompQXDistsKernel.setArg (4, dBufferInN);
         rbcCompQXDistsKernel.setArg (5, dBufferOutRID);
-        if (S == KernelTypeS::GENERIC) rbcCompQXDistsKernel.setArg (6, d);
+        rbcCompQXDistsKernel.setArg (6, d);
 
         nnidMinsKernel.setArg (2, dBufferOutNNID);  // Unused
         nnidMinsKernel.setArg (3, dBufferOutNNID);  // Unused
@@ -2158,8 +2260,8 @@ namespace RBC
     /*! \details Computes the maximum representative list cardinality, and sets the 
      *           workspaces and arguments for the execution of the associated kernels.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    void RBCSearch<K, P, S>::setExecParams ()
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::setExecParams ()
     {
         // Get maximum representative list cardinality
         // It is assumed the data are already on the device
@@ -2232,9 +2334,9 @@ namespace RBC
      *  \param[in] events a wait-list of events.
      *  \param[out] event event associated with the write operation to the device buffer.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    void RBCSearch<K, P, S>::write (RBCSearch::Memory mem, void *ptr, bool block, 
-                                    const std::vector<cl::Event> *events, cl::Event *event)
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::write (
+        RBCSearch::Memory mem, void *ptr, bool block, const std::vector<cl::Event> *events, cl::Event *event)
     {
         if (staging == Staging::I || staging == Staging::IO)
         {
@@ -2282,9 +2384,9 @@ namespace RBC
      *  \param[in] events a wait-list of events.
      *  \param[out] event event associated with the read operation to the staging buffer.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    void* RBCSearch<K, P, S>::read (RBCSearch::Memory mem, bool block, 
-                                    const std::vector<cl::Event> *events, cl::Event *event)
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void* RBCSearch<K, P, KernelTypeS::GENERIC>::read (
+        RBCSearch::Memory mem, bool block, const std::vector<cl::Event> *events, cl::Event *event)
     {
         if (staging == Staging::O || staging == Staging::IO)
         {
@@ -2315,8 +2417,8 @@ namespace RBC
      *  \param[in] events a wait-list of events.
      *  \param[out] event event associated with the last kernel execution.
      */
-    template <KernelTypeC K, RBCPermuteConfig P, KernelTypeS S>
-    void RBCSearch<K, P, S>::run (const std::vector<cl::Event> *events, cl::Event *event)
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::run (const std::vector<cl::Event> *events, cl::Event *event)
     {
         if (wgXdim == 0) setExecParams ();
 
@@ -2336,6 +2438,514 @@ namespace RBC
     }
 
 
+    /*! \param[in] _env opencl environment.
+     *  \param[in] _info opencl configuration. Specifies the context, queue, etc, to be used.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    RBCSearch<K, P, KernelTypeS::KINECT>::RBCSearch (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info) : 
+        env (_env), info (_info), 
+        context (env.getContext (info.pIdx)), 
+        queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
+        rbcCompQXDistsKernel (env.getProgram (info.pgIdx), "rbcComputeQXDists_Kinect"), 
+        nnidMinsKernel (env.getProgram (info.pgIdx), "rbcMinDists"), 
+        nnidGroupMinsKernel (env.getProgram (info.pgIdx), "rbcGroupMinDists"), 
+        rbcNNKernel (env.getProgram (info.pgIdx), "rbcGetNNs"), 
+        rbcCompRIDs (env, info), compMaxN (env, info), d (8)
+    {
+        // try
+        // {
+        //     switch (K)
+        //     {
+        //         case KernelTypeC::SHARED_NONE:
+        //             throw "The K = KernelTypeC::SHARED_NONE instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::KINECT";
+        //             break;
+        //         case KernelTypeC::SHARED_R:
+        //             throw "The K = KernelTypeC::SHARED_R instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::KINECT";
+        //             break;
+        //         case KernelTypeC::SHARED_X_R:
+        //             throw "The K = KernelTypeC::SHARED_X_R instantiation is not applicable in the "
+        //                   "current configuration, S = KernelTypeS::KINECT";
+        //             break;
+        //     }
+        // }
+        // catch (const char *error)
+        // {
+        //     std::cerr << "Error[RBCSearch]: " << error << std::endl;
+        //     exit (EXIT_FAILURE);
+        // }
+
+        wgMultiple = rbcCompQXDistsKernel.getWorkGroupInfo
+            <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
+    }
+
+
+    /*! \details This interface exists to allow CL memory sharing between different kernels.
+     *
+     *  \param[in] mem enumeration value specifying the requested memory object.
+     *  \return A reference to the requested memory object.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    cl::Memory& RBCSearch<K, P, KernelTypeS::KINECT>::get (RBCSearch::Memory mem)
+    {
+        switch (mem)
+        {
+            case RBCSearch::Memory::H_IN_Q:
+                return hBufferInQ;
+            case RBCSearch::Memory::H_IN_R:
+                return hBufferInR;
+            case RBCSearch::Memory::H_IN_X_P:
+                return hBufferInXp;
+            case RBCSearch::Memory::H_IN_O:
+                return hBufferInO;
+            case RBCSearch::Memory::H_IN_N:
+                return hBufferInN;
+            case RBCSearch::Memory::H_OUT_R_ID:
+                return hBufferOutRID;
+            case RBCSearch::Memory::H_OUT_Q_P:
+                return hBufferOutQp;
+            case RBCSearch::Memory::H_OUT_NN_ID:
+                return hBufferOutNNID;
+            case RBCSearch::Memory::H_OUT_NN:
+                return hBufferOutNN;
+            case RBCSearch::Memory::D_IN_Q:
+                return dBufferInQ;
+            case RBCSearch::Memory::D_IN_R:
+                return dBufferInR;
+            case RBCSearch::Memory::D_IN_X_P:
+                return dBufferInXp;
+            case RBCSearch::Memory::D_IN_O:
+                return dBufferInO;
+            case RBCSearch::Memory::D_IN_N:
+                return dBufferInN;
+            case RBCSearch::Memory::D_OUT_R_ID:
+                return dBufferOutRID;
+            case RBCSearch::Memory::D_OUT_Q_P:
+                return dBufferOutQp;
+            case RBCSearch::Memory::D_OUT_NN_ID:
+                return dBufferOutNNID;
+            case RBCSearch::Memory::D_OUT_NN:
+                return dBufferOutNN;
+            case RBCSearch::Memory::D_OUT_QR_D:
+                return rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_D);
+            case RBCSearch::Memory::D_OUT_QX_D:
+                return dBufferOutQXD;
+        }
+    }
+
+
+    /*! \details Sets up memory objects as necessary, and defines the kernel workspaces.
+     *  \note If you have assigned a memory object to one member variable of the class 
+     *        before the call to `init`, then that memory will be maintained. Otherwise, 
+     *        a new memory object will be created.
+     *        
+     *  \param[in] _nq number of query points.
+     *  \param[in] _nr number of representative points.
+     *  \param[in] _nx number of database points.
+     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
+     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
+     *                points (`cl_float8` vectors). This parameter is applicable when involving 
+     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
+     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`, and the template parameter, 
+     *                `S`, gets the value `KINECT`. For more details, take a look at 
+     *                `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
+     *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::KINECT>::init (
+        unsigned int _nq, unsigned int _nr, unsigned int _nx, float _a, Staging _staging)
+    {
+        nq = _nq; nr = _nr; nx = _nx; a = _a;
+        bufferQSize = nq * d * sizeof (cl_float);
+        bufferRSize = nr * d * sizeof (cl_float);
+        bufferXSize = nx * d * sizeof (cl_float);
+        bufferOSize = nr * sizeof (cl_uint);
+        bufferNSize = nr * sizeof (cl_uint);
+        bufferRIDSize = nq * sizeof (rbc_dist_id);
+        bufferNNIDSize = nq * sizeof (rbc_dist_id);
+        bufferNNSize = nq * d * sizeof (cl_float);
+        wgXdim = 0;
+        staging = _staging;
+
+        cl::Device &device = env.devices[info.pIdx][info.dIdx];
+        size_t lXYdim, maxLocalSize = device.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE> ();
+        for (lXYdim = maxLocalSize; lXYdim > (size_t) std::sqrt (maxLocalSize); lXYdim >>= 1) ;
+
+        try
+        {
+            if (nq == 0 || nr == 0 || nx == 0)
+                throw "The number of points in Q, R or X cannot be zero";
+        }
+        catch (const char *error)
+        {
+            std::cerr << "Error[RBCSearch]: " << error << std::endl;
+            exit (EXIT_FAILURE);
+        }
+
+        // Set workspaces
+        globalGNNID = cl::NDRange (wgMultiple, nq);
+        globalNN = cl::NDRange (d >> 2, nq);
+        localQXD = cl::NDRange (lXYdim, lXYdim);
+        local = cl::NDRange (wgMultiple, 1);
+
+        // Create staging buffers
+        bool io = false;
+        switch (staging)
+        {
+            case Staging::NONE:
+                hPtrInQ = nullptr;
+                hPtrInR = nullptr;
+                hPtrInXp = nullptr;
+                hPtrInO = nullptr;
+                hPtrInN = nullptr;
+                hPtrOutRID = nullptr;
+                hPtrOutQp = nullptr;
+                hPtrOutNNID = nullptr;
+                hPtrOutNN = nullptr;
+                break;
+
+            case Staging::IO:
+                io = true;
+
+            case Staging::I:
+                if (hBufferInQ () == nullptr)
+                    hBufferInQ = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferQSize);
+                if (hBufferInR () == nullptr)
+                    hBufferInR = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferRSize);
+                if (hBufferInXp () == nullptr)
+                    hBufferInXp = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferXSize);
+                if (hBufferInO () == nullptr)
+                    hBufferInO = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferOSize);
+                if (hBufferInN () == nullptr)
+                    hBufferInN = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferNSize);
+
+                hPtrInQ = (cl_float *) queue.enqueueMapBuffer (
+                    hBufferInQ, CL_FALSE, CL_MAP_WRITE, 0, bufferQSize);
+                hPtrInR = (cl_float *) queue.enqueueMapBuffer (
+                    hBufferInR, CL_FALSE, CL_MAP_WRITE, 0, bufferRSize);
+                hPtrInXp = (cl_float *) queue.enqueueMapBuffer (
+                    hBufferInXp, CL_FALSE, CL_MAP_WRITE, 0, bufferXSize);
+                hPtrInO = (cl_uint *) queue.enqueueMapBuffer (
+                    hBufferInO, CL_FALSE, CL_MAP_WRITE, 0, bufferOSize);
+                hPtrInN = (cl_uint *) queue.enqueueMapBuffer (
+                    hBufferInN, CL_FALSE, CL_MAP_WRITE, 0, bufferNSize);
+                queue.enqueueUnmapMemObject (hBufferInQ, hPtrInQ);
+                queue.enqueueUnmapMemObject (hBufferInR, hPtrInR);
+                queue.enqueueUnmapMemObject (hBufferInXp, hPtrInXp);
+                queue.enqueueUnmapMemObject (hBufferInO, hPtrInO);
+                queue.enqueueUnmapMemObject (hBufferInN, hPtrInN);
+
+                if (!io)
+                {
+                    queue.finish ();
+                    hPtrOutRID = nullptr;
+                    hPtrOutQp = nullptr;
+                    hPtrOutNNID = nullptr;
+                    hPtrOutNN = nullptr;
+                    break;
+                }
+
+            case Staging::O:
+                if (hBufferOutRID () == nullptr)
+                    hBufferOutRID = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferRIDSize);
+                if (hBufferOutQp () == nullptr)
+                    hBufferOutQp = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferQSize);
+                if (hBufferOutNNID () == nullptr)
+                    hBufferOutNNID = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferNNIDSize);
+                if (hBufferOutNN () == nullptr)
+                    hBufferOutNN = cl::Buffer (context, CL_MEM_ALLOC_HOST_PTR, bufferNNSize);
+
+                hPtrOutRID = (rbc_dist_id *) queue.enqueueMapBuffer (
+                    hBufferOutRID, CL_FALSE, CL_MAP_READ, 0, bufferRIDSize);
+                hPtrOutQp = (cl_float *) queue.enqueueMapBuffer (
+                    hBufferOutQp, CL_FALSE, CL_MAP_READ, 0, bufferQSize);
+                hPtrOutNNID = (rbc_dist_id *) queue.enqueueMapBuffer (
+                    hBufferOutNNID, CL_FALSE, CL_MAP_READ, 0, bufferNNIDSize);
+                hPtrOutNN = (cl_float *) queue.enqueueMapBuffer (
+                    hBufferOutNN, CL_FALSE, CL_MAP_READ, 0, bufferNNSize);
+                queue.enqueueUnmapMemObject (hBufferOutRID, hPtrOutRID);
+                queue.enqueueUnmapMemObject (hBufferOutQp, hPtrOutQp);
+                queue.enqueueUnmapMemObject (hBufferOutNNID, hPtrOutNNID);
+                queue.enqueueUnmapMemObject (hBufferOutNN, hPtrOutNN);
+                queue.finish ();
+
+                if (!io)
+                {
+                    hPtrInQ = nullptr;
+                    hPtrInR = nullptr;
+                    hPtrInXp = nullptr;
+                    hPtrInO = nullptr;
+                    hPtrInN = nullptr;
+                }
+                break;
+        }
+        
+        // Create device buffers
+        if (dBufferInQ () == nullptr)
+            dBufferInQ = cl::Buffer (context, CL_MEM_READ_ONLY, bufferQSize);
+        if (dBufferInR () == nullptr)
+            dBufferInR = cl::Buffer (context, CL_MEM_READ_ONLY, bufferRSize);
+        if (dBufferInXp () == nullptr)
+            dBufferInXp = cl::Buffer (context, CL_MEM_READ_ONLY, bufferXSize);
+        if (dBufferInO () == nullptr)
+            dBufferInO = cl::Buffer (context, CL_MEM_READ_ONLY, bufferOSize);
+        if (dBufferInN () == nullptr)
+            dBufferInN = cl::Buffer (context, CL_MEM_READ_ONLY, bufferNSize);
+        if (dBufferOutRID () == nullptr)
+            dBufferOutRID = cl::Buffer (context, CL_MEM_READ_WRITE, bufferRIDSize);
+        if (dBufferOutQp () == nullptr)
+            dBufferOutQp = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQSize);
+        if (dBufferOutNNID () == nullptr)
+            dBufferOutNNID = cl::Buffer (context, CL_MEM_READ_WRITE, bufferNNIDSize);
+        if (dBufferOutNN () == nullptr)
+            dBufferOutNN = cl::Buffer (context, CL_MEM_WRITE_ONLY, bufferNNSize);
+
+        rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_IN_X) = dBufferInQ;
+        rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_IN_R) = dBufferInR;
+        rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_X_P) = dBufferOutQp;
+        rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_ID_P) = dBufferOutRID;
+        rbcCompRIDs.init (nq, nr, d, a, 1, Staging::NONE);
+
+        compMaxN.get (Reduce<ReduceConfig::MAX, cl_uint>::Memory::D_IN) = dBufferInN;
+        compMaxN.init (nr, 1, Staging::O);
+
+        rbcCompQXDistsKernel.setArg (0, dBufferOutQp);
+        rbcCompQXDistsKernel.setArg (1, dBufferInXp);
+        rbcCompQXDistsKernel.setArg (3, dBufferInO);
+        rbcCompQXDistsKernel.setArg (4, dBufferInN);
+        rbcCompQXDistsKernel.setArg (5, dBufferOutRID);
+        rbcCompQXDistsKernel.setArg (6, a);
+
+        nnidMinsKernel.setArg (2, dBufferOutNNID);  // Unused
+        nnidMinsKernel.setArg (3, dBufferOutNNID);  // Unused
+        nnidMinsKernel.setArg (4, cl::Local (2 * local[0] * sizeof (rbc_dist_id)));
+        nnidMinsKernel.setArg (6, 0);
+
+        nnidGroupMinsKernel.setArg (1, dBufferOutNNID);
+        nnidGroupMinsKernel.setArg (2, dBufferOutNNID);  // Unused
+        nnidGroupMinsKernel.setArg (3, dBufferOutNNID);  // Unused
+        nnidGroupMinsKernel.setArg (4, cl::Local (2 * local[0] * sizeof (rbc_dist_id)));
+        nnidGroupMinsKernel.setArg (6, 0);
+
+        rbcNNKernel.setArg (0, dBufferInXp);
+        rbcNNKernel.setArg (1, dBufferOutNN);
+        rbcNNKernel.setArg (2, dBufferInO);
+        rbcNNKernel.setArg (3, dBufferOutRID);
+        rbcNNKernel.setArg (4, dBufferOutNNID);
+    }
+
+
+    /*! \details Computes the maximum representative list cardinality, and sets the 
+     *           workspaces and arguments for the execution of the associated kernels.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::KINECT>::setExecParams ()
+    {
+        // Get maximum representative list cardinality
+        // It is assumed the data are already on the device
+        compMaxN.run ();
+        max_n = *((cl_uint *) compMaxN.read ());
+        if (max_n % 4) max_n += 4 - (max_n % 4);
+
+        // Establish the number of work-groups per row
+        wgXdim = std::ceil (max_n / (float) (8 * wgMultiple));
+
+        bufferQXDSize = nq * max_n * sizeof (cl_float);
+        bufferGNNIDSize = wgXdim * (nq * sizeof (rbc_dist_id));
+
+        try
+        {
+            if (max_n == 0)
+                throw "The array, QXD, cannot have zero columns";
+
+            // (8 * wgMultiple) elements per work-group
+            // (2 * wgMultiple) work-groups maximum
+            if (max_n > 16 * wgMultiple * wgMultiple)
+            {
+                std::ostringstream ss;
+                ss << "The current configuration of RBCSearch supports arrays ";
+                ss << "of up to " << 16 * wgMultiple * wgMultiple << " list cardinalities";
+                throw ss.str ().c_str ();
+            }
+        }
+        catch (const char *error)
+        {
+            std::cerr << "Error[RBCSearch]: " << error << std::endl;
+            exit (EXIT_FAILURE);
+        }
+
+        // Set workspaces
+        globalQXD = cl::NDRange (max_n / 4, nq / 4);
+        globalNNID = cl::NDRange (wgXdim * wgMultiple, nq);
+
+        // Create device buffers
+        dBufferOutQXD = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQXDSize);
+        if (wgXdim == 1)
+            dBufferOutGNNID = cl::Buffer ();
+        else
+            dBufferOutGNNID = cl::Buffer (context, CL_MEM_READ_WRITE, bufferGNNIDSize);
+
+        // Set kernel arguments
+        rbcCompQXDistsKernel.setArg (2, dBufferOutQXD);
+
+        nnidMinsKernel.setArg (0, dBufferOutQXD);
+        nnidMinsKernel.setArg (5, max_n / 4);
+
+        if (wgXdim == 1)
+            nnidMinsKernel.setArg (1, dBufferOutNNID);
+        else
+            nnidMinsKernel.setArg (1, dBufferOutGNNID);
+
+        nnidGroupMinsKernel.setArg (0, dBufferOutGNNID);
+        nnidGroupMinsKernel.setArg (5, (cl_uint) wgXdim);
+    }
+
+
+    /*! \details The transfer happens from a staging buffer on the host to the 
+     *           associated (specified) device buffer.
+     *  
+     *  \param[in] mem enumeration value specifying an input device buffer.
+     *  \param[in] ptr a pointer to an array holding input data. If not NULL, the 
+     *                 data from `ptr` will be copied to the associated staging buffer.
+     *  \param[in] block a flag to indicate whether to perform a blocking 
+     *                   or a non-blocking operation.
+     *  \param[in] events a wait-list of events.
+     *  \param[out] event event associated with the write operation to the device buffer.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::KINECT>::write (
+        RBCSearch::Memory mem, void *ptr, bool block, const std::vector<cl::Event> *events, cl::Event *event)
+    {
+        if (staging == Staging::I || staging == Staging::IO)
+        {
+            switch (mem)
+            {
+                case RBCSearch::Memory::D_IN_Q:
+                    if (ptr != nullptr)
+                        std::copy ((cl_float *) ptr, (cl_float *) ptr + nq * d, hPtrInQ);
+                    queue.enqueueWriteBuffer (dBufferInQ, block, 0, bufferQSize, hPtrInQ, events, event);
+                    break;
+                case RBCSearch::Memory::D_IN_R:
+                    if (ptr != nullptr)
+                        std::copy ((cl_float *) ptr, (cl_float *) ptr + nr * d, hPtrInR);
+                    queue.enqueueWriteBuffer (dBufferInR, block, 0, bufferRSize, hPtrInR, events, event);
+                    break;
+                case RBCSearch::Memory::H_IN_X_P:
+                    if (ptr != nullptr)
+                        std::copy ((cl_float *) ptr, (cl_float *) ptr + nx * d, hPtrInXp);
+                    queue.enqueueWriteBuffer (dBufferInXp, block, 0, bufferXSize, hPtrInXp, events, event);
+                    break;
+                case RBCSearch::Memory::H_IN_O:
+                    if (ptr != nullptr)
+                        std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInO);
+                    queue.enqueueWriteBuffer (dBufferInO, block, 0, bufferOSize, hPtrInO, events, event);
+                    break;
+                case RBCSearch::Memory::H_IN_N:
+                    wgXdim = 0;  // Reconfigure execution parameters
+                    if (ptr != nullptr)
+                        std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInN);
+                    queue.enqueueWriteBuffer (dBufferInN, block, 0, bufferNSize, hPtrInN, events, event);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    /*! \details The transfer happens from a device buffer to the associated 
+     *           (specified) staging buffer on the host.
+     *  
+     *  \param[in] mem enumeration value specifying an output staging buffer.
+     *  \param[in] block a flag to indicate whether to perform a blocking 
+     *                   or a non-blocking operation.
+     *  \param[in] events a wait-list of events.
+     *  \param[out] event event associated with the read operation to the staging buffer.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void* RBCSearch<K, P, KernelTypeS::KINECT>::read (
+        RBCSearch::Memory mem, bool block, const std::vector<cl::Event> *events, cl::Event *event)
+    {
+        if (staging == Staging::O || staging == Staging::IO)
+        {
+            switch (mem)
+            {
+                case RBCSearch::Memory::H_OUT_R_ID:
+                    queue.enqueueReadBuffer (dBufferOutRID, block, 0, bufferRIDSize, hPtrOutRID, events, event);
+                    return hPtrOutRID;
+                case RBCSearch::Memory::H_OUT_Q_P:
+                    queue.enqueueReadBuffer (dBufferOutQp, block, 0, bufferQSize, hPtrOutQp, events, event);
+                    return hPtrOutQp;
+                case RBCSearch::Memory::H_OUT_NN_ID:
+                    queue.enqueueReadBuffer (dBufferOutNNID, block, 0, bufferNNIDSize, hPtrOutNNID, events, event);
+                    return hPtrOutNNID;
+                case RBCSearch::Memory::H_OUT_NN:
+                    queue.enqueueReadBuffer (dBufferOutNN, block, 0, bufferNNSize, hPtrOutNN, events, event);
+                    return hPtrOutNN;
+                default:
+                    return nullptr;
+            }
+        }
+        return nullptr;
+    }
+
+
+    /*! \details The function call is non-blocking.
+     *
+     *  \param[in] events a wait-list of events.
+     *  \param[out] event event associated with the last kernel execution.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::KINECT>::run (const std::vector<cl::Event> *events, cl::Event *event)
+    {
+        if (wgXdim == 0) setExecParams ();
+
+        // Compute nearest representatives
+        rbcCompRIDs.run (events);
+
+        // Compute distances from the points in the representative lists
+        queue.enqueueNDRangeKernel (rbcCompQXDistsKernel, cl::NullRange, globalQXD, localQXD);
+
+        // Compute NN ids
+        queue.enqueueNDRangeKernel (nnidMinsKernel, cl::NullRange, globalNNID, local);
+        if (wgXdim > 1)
+            queue.enqueueNDRangeKernel (nnidGroupMinsKernel, cl::NullRange, globalGNNID, local);
+        
+        // Collect NNs
+        queue.enqueueNDRangeKernel (rbcNNKernel, cl::NullRange, globalNN, cl::NullRange, nullptr, event);
+    }
+
+
+    /*! \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, or
+     *        `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        value returned is \f$ \infty \f$.
+     *  
+     *  \return The scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    float RBCSearch<K, P, KernelTypeS::KINECT>::getAlpha ()
+    {
+        return a;
+    }
+
+
+    /*! \details Updates the kernel arguments for the scaling factor \f$ \alpha \f$.
+     *  \note If the template parameter, `K`, has the value `SHARED_NONE`, `SHARED_R`, 
+     *        or `SHARED_X_R`, the parameter \f$ \alpha \f$ is not applicable and the 
+     *        function has no effect.
+     *
+     *  \param[in] _a scaling factor \f$ \alpha \f$.
+     */
+    template <KernelTypeC K, RBCPermuteConfig P>
+    void RBCSearch<K, P, KernelTypeS::KINECT>::setAlpha (float _a)
+    {
+        a = _a;
+        rbcCompRIDs.setAlpha (a);
+        rbcCompQXDistsKernel.setArg (6, a);
+    }
+
+
     /*! \brief Template instantiation for the case of the `rbcComputeDists_SharedNone`, 
      *         `rbcPermute` and `rbcComputeQXDists` kernels. */
     template class RBCSearch<KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC>;
@@ -2345,24 +2955,18 @@ namespace RBC
     /*! \brief Template instantiation for the case of the `rbcComputeDists_SharedXR`, 
      *         `rbcPermute` and `rbcComputeQXDists` kernels. */
     template class RBCSearch<KernelTypeC::SHARED_X_R, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC>;
-    /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect_R`, 
-     *         `rbcPermute` and `rbcComputeQXDists` kernels. */
-    template class RBCSearch<KernelTypeC::KINECT_R, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC>;
-    /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect_XR`, 
-     *         `rbcPermute` and `rbcComputeQXDists` kernels. */
-    template class RBCSearch<KernelTypeC::KINECT_X_R, RBCPermuteConfig::GENERIC, KernelTypeS::GENERIC>;
-    /*! \brief Template instantiation for the case of the `rbcComputeDists_SharedNone`, 
+    /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect`, 
      *         `rbcPermute` and `rbcComputeQXDists_Kinect` kernels. */
-    template class RBCSearch<KernelTypeC::SHARED_NONE, RBCPermuteConfig::GENERIC, KernelTypeS::KINECT>;
+    template class RBCSearch<KernelTypeC::KINECT, RBCPermuteConfig::GENERIC, KernelTypeS::KINECT>;
     /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect_R`, 
      *         `rbcPermute` and `rbcComputeQXDists_Kinect` kernels. */
     template class RBCSearch<KernelTypeC::KINECT_R, RBCPermuteConfig::GENERIC, KernelTypeS::KINECT>;
     /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect_XR`, 
      *         `rbcPermute` and `rbcComputeQXDists_Kinect` kernels. */
     template class RBCSearch<KernelTypeC::KINECT_X_R, RBCPermuteConfig::GENERIC, KernelTypeS::KINECT>;
-    /*! \brief Template instantiation for the case of the `rbcComputeDists_SharedNone`, 
+    /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect`, 
      *         `rbcPermute_Kinect` and `rbcComputeQXDists_Kinect` kernels. */
-    template class RBCSearch<KernelTypeC::SHARED_NONE, RBCPermuteConfig::KINECT, KernelTypeS::KINECT>;
+    template class RBCSearch<KernelTypeC::KINECT, RBCPermuteConfig::KINECT, KernelTypeS::KINECT>;
     /*! \brief Template instantiation for the case of the `rbcComputeDists_Kinect_R`, 
      *         `rbcPermute_Kinect` and `rbcComputeQXDists_Kinect` kernels. */
     template class RBCSearch<KernelTypeC::KINECT_R, RBCPermuteConfig::KINECT, KernelTypeS::KINECT>;

@@ -2,7 +2,7 @@ cmake_minimum_required ( VERSION 2.8.12.2 )
 project ( RandomBallCover )
 set ( FNAME "rbc" )
 set ( PROJECT_VERSION_MAJOR 1 )
-set ( PROJECT_VERSION_MINOR 0 )
+set ( PROJECT_VERSION_MINOR 1 )
 
 option ( BUILD_TESTS "Build tests" OFF )
 
@@ -26,7 +26,7 @@ include_directories ( ${COMMON_INCLUDES}
                       ${OPENCL_INCLUDE_DIR} )
 
 # set ( CLUtils_ROOT <set-to-your-local-path-if-necessary> )
-find_package ( CLUtils REQUIRED )
+find_package ( CLUtils QUIET )
 if ( NOT CLUtils_FOUND )
     add_subdirectory ( external/CLUtils )
 endif ( NOT CLUtils_FOUND )
@@ -39,7 +39,7 @@ add_subdirectory ( docs )
 if ( BUILD_TESTS )
     enable_testing (  )
     
-    find_package ( GTest REQUIRED )
+    find_package ( GTest QUIET )
     if ( NOT GTEST_FOUND )
         add_subdirectory ( external/gtest )
     endif ( NOT GTEST_FOUND )

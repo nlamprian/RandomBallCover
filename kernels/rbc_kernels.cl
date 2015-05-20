@@ -1,7 +1,7 @@
 /*! \file rbc_kernels.cl
  *  \brief Kernels for building and accessing the Random Ball Cover data structure.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -30,7 +30,7 @@
 /*! \brief Computes \f$ \ell_1 \f$-norm based distances, 
  *         \f$ d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \f$.
  *  \details Computes a `nx4` block of distances between the two input sets.
- *            
+ * 
  *  \param[in] x array of database points holding only 4 of their dimensions.
  *  \param[in] r array of 4 representative points holding only 4 of their dimensions.
  *  \param[out] dists array of distances. Each row contains the distances of a 
@@ -53,7 +53,7 @@ void l1NormMetric (float4 *x, float4 *r, float4 *dists, uint n)
 /*! \brief Computes \f$ \ell_2 \f$-norm based squared distances, 
  *         \f$ d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \f$.
  *  \details Computes a `nx4` block of distances between the two input sets.
- *            
+ * 
  *  \param[in] x array of database points holding only 4 of their dimensions.
  *  \param[in] r array of 4 representative points holding only 4 of their dimensions.
  *  \param[out] dists array of distances. Each row contains the distances of a 
@@ -74,57 +74,59 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
 
 
 /*! \brief Computes \f$ \ell_1 \f$-norm based distances, 
- *         \f$ d(x,y)=\|x-y\|_1=\sum_{i}|x_i-y_i| \f$.
+ *         \f$ d(x,y)=\sum_{i=0}^{3}|x_i-y_i| + \alpha*\sum_{i=4}^{7}|x_i-y_i| \f$.
  *  \details Computes a `nx4` block of distances between the two input sets
  *           in \f$ \mathbb{R}^8 \f$.
- *            
+ * 
  *  \param[in] x array of database points.
  *  \param[in] r array of 4 representative points.
  *  \param[out] dists array of distances. Each row contains the distances of a 
  *                    database point from all 4 of the representative points.
+ *  \param[in] a scaling factor for the result from the `high` part of the vectors.
  *  \param[in] n number of database points.
  */
 inline
-void l1NormMetric8 (float8 *x, float8 *r, float4 *dists, uint n)
+void l1NormMetric8 (float8 *x, float8 *r, float4 *dists, float a, uint n)
 {
     for (uint i = 0; i < n; ++i)
     {
-        dists[i].x = dot (fabs (x[i].s0123 - r[0].s0123), (float4) (1.f)) + 
-                     dot (fabs (x[i].s4567 - r[0].s4567), (float4) (1.f));
-        dists[i].y = dot (fabs (x[i].s0123 - r[1].s0123), (float4) (1.f)) + 
-                     dot (fabs (x[i].s4567 - r[1].s4567), (float4) (1.f));
-        dists[i].z = dot (fabs (x[i].s0123 - r[2].s0123), (float4) (1.f)) + 
-                     dot (fabs (x[i].s4567 - r[2].s4567), (float4) (1.f));
-        dists[i].w = dot (fabs (x[i].s0123 - r[3].s0123), (float4) (1.f)) + 
-                     dot (fabs (x[i].s4567 - r[3].s4567), (float4) (1.f));
+        dists[i].x = dot (fabs (x[i].lo - r[0].lo), (float4) (1.f)) + a * 
+                     dot (fabs (x[i].hi - r[0].hi), (float4) (1.f));
+        dists[i].y = dot (fabs (x[i].lo - r[1].lo), (float4) (1.f)) + a * 
+                     dot (fabs (x[i].hi - r[1].hi), (float4) (1.f));
+        dists[i].z = dot (fabs (x[i].lo - r[2].lo), (float4) (1.f)) + a * 
+                     dot (fabs (x[i].hi - r[2].hi), (float4) (1.f));
+        dists[i].w = dot (fabs (x[i].lo - r[3].lo), (float4) (1.f)) + a * 
+                     dot (fabs (x[i].hi - r[3].hi), (float4) (1.f));
     }
 }
 
 
 /*! \brief Computes \f$ \ell_2 \f$-norm based squared distances, 
- *         \f$ d(x,y)=\|x-y\|^2_2=\sum_{i}(x_i-y_i)^{2} \f$.
+ *         \f$ d(x,y)=\sum_{i=0}^{3}(x_i-y_i)^{2} + \alpha*\sum_{i=4}^{7}(x_i-y_i)^{2} \f$.
  *  \details Computes a `nx4` block of distances between the two input sets 
  *           in \f$ \mathbb{R}^8 \f$.
- *            
+ * 
  *  \param[in] x array of database points.
  *  \param[in] r array of 4 representative points.
  *  \param[out] dists array of distances. Each row contains the distances of a 
  *                    database point from all 4 of the representative points.
+ *  \param[in] a scaling factor for the result from the `high` part of the vectors.
  *  \param[in] n number of database points.
  */
 inline
-void euclideanSquaredMetric8 (float8 *x, float8 *r, float4 *dists, uint n)
+void euclideanSquaredMetric8 (float8 *x, float8 *r, float4 *dists, float a, uint n)
 {
     for (uint i = 0; i < n; ++i)
     {
-        dists[i].x = dot (pown (x[i].s0123 - r[0].s0123, 2), (float4) (1.f)) +
-                     dot (pown (x[i].s4567 - r[0].s4567, 2), (float4) (1.f));
-        dists[i].y = dot (pown (x[i].s0123 - r[1].s0123, 2), (float4) (1.f)) +
-                     dot (pown (x[i].s4567 - r[1].s4567, 2), (float4) (1.f));
-        dists[i].z = dot (pown (x[i].s0123 - r[2].s0123, 2), (float4) (1.f)) +
-                     dot (pown (x[i].s4567 - r[2].s4567, 2), (float4) (1.f));
-        dists[i].w = dot (pown (x[i].s0123 - r[3].s0123, 2), (float4) (1.f)) +
-                     dot (pown (x[i].s4567 - r[3].s4567, 2), (float4) (1.f));
+        dists[i].x = dot (pown (x[i].lo - r[0].lo, 2), (float4) (1.f)) + a * 
+                     dot (pown (x[i].hi - r[0].hi, 2), (float4) (1.f));
+        dists[i].y = dot (pown (x[i].lo - r[1].lo, 2), (float4) (1.f)) + a * 
+                     dot (pown (x[i].hi - r[1].hi, 2), (float4) (1.f));
+        dists[i].z = dot (pown (x[i].lo - r[2].lo, 2), (float4) (1.f)) + a * 
+                     dot (pown (x[i].hi - r[2].hi, 2), (float4) (1.f));
+        dists[i].w = dot (pown (x[i].lo - r[3].lo, 2), (float4) (1.f)) + a * 
+                     dot (pown (x[i].hi - r[3].hi, 2), (float4) (1.f));
     }
 }
 
@@ -148,7 +150,7 @@ void euclideanSquaredMetric8 (float8 *x, float8 *r, float4 *dists, uint n)
  *             `rbcComputeDists_SharedXR`. The access pattern for both arrays is strided,
  *             but the kernel's performance might actually be better than
  *             the other two cases', due to higher kernel occupancy.
- *            
+ * 
  *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
@@ -229,7 +231,7 @@ void rbcComputeDists_SharedNone (global float4 *X, global float4 *R, global floa
  *             There are other two cases implemented, `rbcComputeDists_SharedNone` and
  *             `rbcComputeDists_SharedXR`. The kernel might have better performance than
  *             the last case, due to higher kernel occupancy.
- *            
+ * 
  *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
@@ -346,7 +348,7 @@ void rbcComputeDists_SharedR (global float4 *X, global float4 *R,
  *             `rbcComputeDists_SharedR`. The kernel might have worse performance than
  *             those cases, due to high use of VGPRs and LDS, resulting in low kernel
  *             occupancy.
- *            
+ * 
  *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
@@ -466,15 +468,17 @@ void rbcComputeDists_SharedXR (global float4 *X, global float4 *R, global float4
  *        use case (RBC construction). The functionality of the kernel remains generic.
  *  \attention This is a specialization of the `rbcComputeDists_SharedNone` for the case of Kinect 
  *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
- *            
+ * 
  *  \param[in] X array of database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
  *                points (each row contains the distances of a database point from 
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
+ *  \param[in] a scaling factor multiplying the result of the distance calculation 
+ *               for the `high` part of the points (`float8` vectors).
  */
 kernel
-void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *D)
+void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *D, float a)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -504,8 +508,8 @@ void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *
     float4 dists[4];
 
     // Compute distances
-    // l1NormMetric8 (x, r, dists, 4);
-    euclideanSquaredMetric8 (x, r, dists, 4);
+    // l1NormMetric8 (x, r, dists, a, 4);
+    euclideanSquaredMetric8 (x, r, dists, a, 4);
 
     uint gPosD = (gY << 2) * gXdim + gX;
 
@@ -540,7 +544,7 @@ void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *
  *  \attention This is a specialization of the `rbcComputeDists_SharedR` for the case of Kinect 
  *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
  *             The kernel uses shared memory for staging blocks of data from R.
- *            
+ * 
  *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
@@ -548,10 +552,12 @@ void rbcComputeDists_Kinect (global float8 *X, global float8 *R, global float4 *
  *                all the representative points), \f$ D_{n_x \times n_r} \f$.
  *  \param[in] dataR local buffer. Its size should be `16 float` elements for each 
  *                   work-item in a work-group. That is, \f$ 4*lXdim*sizeof\ (float8) \f$.
+ *  \param[in] a scaling factor multiplying the result of the distance calculation 
+ *               for the `high` part of the points (`float8` vectors).
  */
 kernel
 void rbcComputeDists_Kinect_R (global float8 *X, global float8 *R, global float4 *D, 
-                               local float8 *dataR)
+                               local float8 *dataR, float a)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -596,8 +602,8 @@ void rbcComputeDists_Kinect_R (global float8 *X, global float8 *R, global float4
     float4 dists[4];
 
     // Compute distances
-    // l1NormMetric8 (x, r, dists, 4);
-    euclideanSquaredMetric8 (x, r, dists, 4);
+    // l1NormMetric8 (x, r, dists, a, 4);
+    euclideanSquaredMetric8 (x, r, dists, a, 4);
 
     // Store results ===========================================================
     // Store the 4x4 block of computed distances
@@ -633,7 +639,7 @@ void rbcComputeDists_Kinect_R (global float8 *X, global float8 *R, global float4
  *  \attention This is a specialization of the `rbcComputeDists_SharedXR` for the case of Kinect 
  *             8-D data `[geometric (Homogeneous coordinates) and photometric (RGBA values) information]`.
  *             The kernel uses shared memory for staging blocks of data from both X and R.
- *            
+ * 
  *  \param[in] X array of the database points (each row contains a point), \f$ X_{n_x \times d} \f$.
  *  \param[in] R array of the representative points (each row contains a point), \f$ R_{n_r \times d} \f$.
  *  \param[out] D array of distances of the database points from the representative
@@ -643,10 +649,12 @@ void rbcComputeDists_Kinect_R (global float8 *X, global float8 *R, global float4
  *                   work-item in a work-group. That is, \f$ 4*lYdim*sizeof\ (float8) \f$.
  *  \param[in] dataR local buffer. Its size should be `16 float` elements for each 
  *                   work-item in a work-group. That is, \f$ 4*lXdim*sizeof\ (float8) \f$.
+ *  \param[in] a scaling factor multiplying the result of the distance calculation 
+ *               for the `high` part of the points (`float8` vectors).
  */
 kernel
 void rbcComputeDists_Kinect_XR (global float8 *X, global float8 *R, global float4 *D, 
-                                local float8 *dataX, local float8 *dataR)
+                                local float8 *dataX, local float8 *dataR, float a)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -694,8 +702,8 @@ void rbcComputeDists_Kinect_XR (global float8 *X, global float8 *R, global float
     float4 dists[4];
 
     // Compute distances
-    // l1NormMetric8 (x, r, dists, 4);
-    euclideanSquaredMetric8 (x, r, dists, 4);
+    // l1NormMetric8 (x, r, dists, a, 4);
+    euclideanSquaredMetric8 (x, r, dists, a, 4);
 
     // Store results ===========================================================
     // Store the 4x4 block of computed distances
@@ -716,7 +724,7 @@ void rbcComputeDists_Kinect_XR (global float8 *X, global float8 *R, global float
  *        dimensional. The **x** dimension of the global workspace, \f$ gXdim \f$, 
  *        should be equal to the number of elements in the array divided by 4. 
  *        That is, \f$ \ gXdim=n/4 \f$. There is no requirement for the local workspace.
- *
+ * 
  *  \param[out] N array that is going to contain the cardinalities of the 
  *                representative lists. Its size should be \f$ n*sizeof\ (uint) \f$.
  *  \param[in] val initialization value.
@@ -767,7 +775,7 @@ typedef struct
  *        `rbcGroupMinDists` kernel.
  *  \note The kernel increments the `N` counters. `rbcNListInit` should be called, 
  *        before `rbcMinDists` is dispatched, in order to initialize the counters.
- *
+ * 
  *  \param[in] D input array of `float` elements.
  *  \param[out] ID (reduced) output array of `dist_id` elements. When the kernel is
  *                 dispatched with one work-group per row, the array contains the 
@@ -892,7 +900,7 @@ void rbcMinDists (global float4 *D, global dist_id *ID,
  *        made on those minimums for the final results. 
  *  \note The kernel increments the `N` counters. `rbcNListInit` should be called, 
  *        before `rbcGroupMinDists` is dispatched, in order to initialize the counters.
- *
+ * 
  *  \param[in] GM input array of `dist_id` elements.
  *  \param[out] ID (reduced) output array of `dist_id` elements. When the kernel is
  *                 dispatched with one work-group per row, the array contains the 
@@ -969,7 +977,7 @@ void rbcGroupMinDists (global dist_id *GM, global dist_id *ID,
  *        of the global workspace, \f$ gYdim \f$, should be equal to the number 
  *        of database points, \f$ n_x \f$. That is, \f$ \ gYdim = n_x \f$. 
  *        There is no requirement for the local workspace.
- *
+ * 
  *  \param[in] X array of database points (each row contains a point), 
  *               \f$ X_{n_x \times d} \f$.
  *  \param[in] ID array with the minimum distances and representative ids per database 
@@ -1026,7 +1034,7 @@ void rbcPermute (global float4 *X, global dist_id *ID,
  *  \note The global workspace should be 1-dimensional and equal to the number 
  *        of database points, \f$ n_x \f$. That is, \f$ gXdim=n_x \f$. 
  *        There is no requirement for the local workspace.
- *
+ * 
  *  \param[in] X array of database points (each row contains a point), 
  *               \f$ X_{n_x \times d} \f$.
  *  \param[in] ID array with the minimum distances and representative ids per database 
@@ -1084,7 +1092,7 @@ void rbcPermute_Kinect (global float8 *X, global dist_id *ID,
  *             distributed across all representative lists. The alternative would be 
  *             to process each query one at a time. But dispatching the kernel 
  *             \f$ n_q \f$ times is not really a viable option.
- *            
+ * 
  *  \param[in] Qp array of query points (each row contains a point), \f$ Q_{n_q \times d} \f$.
  *  \param[in] Xp array of database points (each row contains a point), \f$ Xp_{n_x \times d} \f$.
  *  \param[out] D array of distances from the query points to the database points in 
@@ -1193,7 +1201,7 @@ void rbcComputeQXDists (global float4 *Qp, global float4 *Xp, global float4 *D,
  *             distributed across all representative lists. The alternative would be 
  *             to process each query one at a time. But dispatching the kernel 
  *             \f$ n_q \f$ times is not really a viable option.
- *            
+ * 
  *  \param[in] Qp array of query points (each row contains a point), \f$ Q_{n_q \times d} \f$.
  *  \param[in] Xp array of database points (each row contains a point), \f$ Xp_{n_x \times d} \f$.
  *  \param[out] D array of distances from the query points to the database points in 
@@ -1205,10 +1213,12 @@ void rbcComputeQXDists (global float4 *Qp, global float4 *Xp, global float4 *D,
  *                Its size should be \f$ n_r*sizeof\ (uint) \f$.
  *  \param[in] RID array with the representative ids for each query in **Qp**. 
  *                 Its size should be \f$ n_q*sizeof\ (dist\_id) \f$.
+ *  \param[in] a scaling factor multiplying the result of the distance calculation 
+ *               for the `high` part of the points (`float8` vectors).
  */
 kernel
 void rbcComputeQXDists_Kinect (global float8 *Qp, global float8 *Xp, global float4 *D,
-                               global uint *XO, global uint *XN, global dist_id *RID)
+                               global uint *XO, global uint *XN, global dist_id *RID, float a)
 {
     // Workspace dimensions
     uint gXdim = get_global_size (0);
@@ -1268,8 +1278,8 @@ void rbcComputeQXDists_Kinect (global float8 *Qp, global float8 *Xp, global floa
         }
 
         // Compute distances
-        // l1NormMetric8 (&q, l, &dists, 1);
-        euclideanSquaredMetric8 (&q, l, &dists, 1);
+        // l1NormMetric8 (&q, l, &dists, a, 1);
+        euclideanSquaredMetric8 (&q, l, &dists, a, 1);
 
         // Store row i of the 4x4 block of 
         // distances in the output array
@@ -1288,7 +1298,7 @@ void rbcComputeQXDists_Kinect (global float8 *Qp, global float8 *Xp, global floa
  *        of the global workspace, \f$ gYdim \f$, should be equal to the number 
  *        of queries, \f$ n_q \f$. That is, \f$ \ gYdim = n_q \f$. 
  *        There is no requirement for the local workspace.
- *
+ * 
  *  \param[in] Xp permuted array of database points (each row contains 
  *                a point), \f$ X_{n_x \times d} \f$.
  *  \param[out] NN array of queries' nearest neighbors (each row contains 

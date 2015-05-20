@@ -1,7 +1,7 @@
 /*! \file helper_funcs.hpp
  *  \brief Declarations of helper functions for testing.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -303,6 +303,48 @@ namespace RBC
     }
 
 
+    /*! \brief Calculates the euclidean distance betweeen two points.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] p1 first point.
+     *  \param[in] p2 second point.
+     *  \param[in] d dimensionality of the associated points.
+     */
+    template <typename T>
+    T euclideanMetric (T *p1, T *p2, uint32_t d)
+    {
+        T dist = 0.f;
+
+        for (int i = 0; i < d; ++i)
+            dist += std::pow (p1[i] - p2[i], 2);
+
+        return std::sqrt (dist);
+    }
+
+    /*! \brief Calculates the euclidean distance betweeen two points in \f$ \mathbb{R}^8 \f$..
+     *  \details It is just a naive serial implementation.
+     *
+     *  \tparam T type of the data to be handled.
+     *  \param[in] p1 first point.
+     *  \param[in] p2 second point.
+     *  \param[in] a scaling factor multiplying the result of the distance calculation 
+     *               for the `high` part of the points (`cl_float8` vectors).
+     */
+    template <typename T>
+    T euclideanMetric8Squared (T *p1, T *p2, float a)
+    {
+        T dist = 0.f;
+
+        for (int i = 0; i < 4; ++i)
+            dist += std::pow (p1[i] - p2[i], 2);
+        for (int i = 4; i < 8; ++i)
+            dist += a * std::pow (p1[i] - p2[i], 2);
+
+        return dist;
+    }
+
+
     /*! \brief Uses the RBC data structure to search for the nearest neighbors.
      *  \details It is just a naive serial implementation.
      *
@@ -364,23 +406,70 @@ namespace RBC
     }
 
 
-    /*! \brief Calculates the euclidean distance betweeen two points.
+    /*! \brief Uses the RBC data structure to search for the nearest neighbors.
      *  \details It is just a naive serial implementation.
      *
      *  \tparam T type of the data to be handled.
-     *  \param[in] p1 first point.
-     *  \param[in] p2 second point.
-     *  \param[in] d dimensionality of the associated points.
+     *  \param[in] Qp permuted array of query points (each row contains a point).
+     *  \param[in] RID array with minimum distances and representative ids per query point in Qp.
+     *  \param[in] Xp permuted array of database points (each row contains a point).
+     *  \param[in] O array containing the index (offset) of the first element of 
+     *               each representative list within the database.
+     *  \param[in] N array with the representative list cardinalities.
+     *  \param[out] NNID array with distances and NN ids for each query point.
+     *  \param[out] NN array of NN points (each row contains a point).
+     *  \param[in] nq number of query points.
+     *  \param[in] nr number of representative points.
+     *  \param[in] nx number of database points.
+     *  \param[in] a scaling factor multiplying the result of the distance calculation 
+     *               for the `high` part of the points (`cl_float8` vectors).
      */
     template <typename T>
-    T euclideanMetric (T *p1, T *p2, uint32_t d)
+    void cpuRBCSearch8 (T *Qp, rbc_dist_id *RID, T *Xp, cl_uint *O, cl_uint *N, rbc_dist_id *NNID, T *NN, 
+                        uint32_t nq, uint32_t nr, uint32_t nx, T a)
     {
-        T dist = 0.f;
+        const unsigned int d = 8;
+        cl_uint max_n = std::accumulate (N, N + nr, 0, 
+            [](cl_uint a, cl_uint b) -> cl_uint { return std::max (a, b); });
 
-        for (int i = 0; i < d; ++i)
-            dist += std::pow (p1[i] - p2[i], 2);
+        cl_float *D = new cl_float[nq * max_n];
+        
+        // Compute distances Q - X[L]
+        for (uint q = 0; q < nq; ++q)
+        {
+            cl_uint rID = RID[q].id;
+            cl_uint o = O[rID];
+            cl_uint n = N[rID];
 
-        return std::sqrt (dist);
+            for (uint x = 0; x < max_n; ++x)
+            {
+                float dist = 0.f;
+
+                if (x < n)
+                {
+                    for (uint j = 0; j < 4; ++j)
+                        dist += std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
+                    for (uint j = 4; j < d; ++j)
+                        dist += a * std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
+                }
+                else
+                    dist = std::numeric_limits<float>::infinity ();
+
+                D[q * max_n + x] = dist;
+            }
+        }
+        
+        cpuRBCMinDists (D, NNID, nullptr, nullptr, max_n, nq, false);
+
+        for (uint32_t q = 0; q < nq; ++q)
+        {
+            uint nnID = O[RID[q].id] + NNID[q].id;
+
+            for (uint32_t j = 0; j < d; ++j)
+                NN[q * d + j] = Xp[nnID * d + j];
+        }
+
+        delete[] D;
     }
 
 

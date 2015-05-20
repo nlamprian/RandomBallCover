@@ -8,14 +8,22 @@ if ( OpenCV_FOUND )
     include_directories ( ${OpenCV_INCLUDE_DIR} )
 
     add_executable ( ${FNAME}_img_segmentation img_segmentation.cpp )
+    add_executable ( ${FNAME}_rgb_img_segmentation rgb_img_segmentation.cpp )
 
     add_dependencies ( ${FNAME}_img_segmentation CLUtils )
+    add_dependencies ( ${FNAME}_rgb_img_segmentation CLUtils )
 
     target_link_libraries ( ${FNAME}_img_segmentation ${CLUtils_LIBRARIES} 
                                                       RBCAlgorithms 
                                                       ${OPENGL_LIBRARIES} 
                                                       ${OPENCL_LIBRARIES}
                                                       ${OpenCV_LIBRARIES} )
+
+    target_link_libraries ( ${FNAME}_rgb_img_segmentation ${CLUtils_LIBRARIES} 
+                                                          RBCAlgorithms 
+                                                          ${OPENGL_LIBRARIES} 
+                                                          ${OPENCL_LIBRARIES}
+                                                          ${OpenCV_LIBRARIES} )
 
 endif ( OpenCV_FOUND )
 

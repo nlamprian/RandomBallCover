@@ -36,13 +36,13 @@ if ( FREENECT_FOUND )
                           ${LIBUSB_1_INCLUDE_DIRS} 
                           ${FREENECT_INCLUDE_DIR} )
 
-    add_executable ( grub_kinect_frames grub_kinect_frames.cpp )
+    add_executable ( kinect_frame_grabber kinect_frame_grabber.cpp )
 
-    target_link_libraries ( grub_kinect_frames ${OPENGL_LIBRARIES} 
-                                               ${GLUT_LIBRARY} 
-                                               ${GLEW_LIBRARIES} 
-                                               ${FREENECT_LIBRARIES} 
-                                               ${OPENCL_LIBRARIES} 
-                                               ${CMAKE_THREAD_LIBS_INIT} )
+    target_link_libraries ( kinect_frame_grabber ${OPENGL_LIBRARIES} 
+                                                 ${GLUT_LIBRARY} 
+                                                 ${GLEW_LIBRARIES} 
+                                                 ${FREENECT_LIBRARIES} 
+                                                 ${OPENCL_LIBRARIES} 
+                                                 ${CMAKE_THREAD_LIBS_INIT} )
 
 endif ( FREENECT_FOUND )

@@ -1,7 +1,7 @@
-/*! \file grub_kinect_frames.cpp
- *  \brief Grubs and stores in binary files an RGB and a Depth Kinect frame.
+/*! \file kinect_frame_grabber.cpp
+ *  \brief Grabs and stores in binary files an RGB and a Depth Kinect frame.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -61,6 +61,7 @@ GLuint glRGBBuf, glDepthBuf;
 class MyFreenectDevice;
 Freenect::Freenect freenect;
 MyFreenectDevice *device;
+double freenectAngle = 0.0;
 
 
 /*! \brief A class hierarchy for manipulating a mutex. */
@@ -308,6 +309,23 @@ void keyPressed (unsigned char key, int x, int y)
         case  'q':
             glutDestroyWindow (glWinId);
             break;
+        case  'W':
+        case  'w':
+            if (++freenectAngle > 30)
+                freenectAngle = 30;
+            device->setTiltDegrees (freenectAngle);
+            break;
+        case  'S':
+        case  's':
+            if (--freenectAngle < -30)
+                freenectAngle = -30;
+            device->setTiltDegrees (freenectAngle);
+            break;
+        case  'R':
+        case  'r':
+            freenectAngle = 0;
+            device->setTiltDegrees (freenectAngle);
+            break;
     }
 }
 
@@ -361,7 +379,7 @@ void initGL (int argc, char **argv)
     glutInitWindowSize (gl_win_width, gl_win_height);
     glutInitWindowPosition ((glutGet (GLUT_SCREEN_WIDTH) - gl_win_width) / 2,
                             (glutGet (GLUT_SCREEN_HEIGHT) - gl_win_height) / 2 - 70);
-    glWinId = glutCreateWindow ("Kinect Grubber");
+    glWinId = glutCreateWindow ("Kinect Frame Grabber");
 
     glutDisplayFunc (&drawGLScene);
     glutIdleFunc (&idleGLScene);
@@ -385,11 +403,12 @@ void initGL (int argc, char **argv)
 // Displays the available controls 
 void printInfo ()
 {
-    std::cout << "\nAvailable Controls:"              << std::endl;
-    std::cout << "==================="                << std::endl;
-    std::cout << "Rotate       :   Mouse Left Button" << std::endl;
-    std::cout << "Zoom         :   Mouse Wheel"       << std::endl;
-    std::cout << "Quit         :   Q or Esc\n"        << std::endl;
+    std::cout << "\nAvailable Controls:\n";
+    std::cout << "===================\n";
+    std::cout << " Rotate                     :  Mouse Left Button\n";
+    std::cout << " Zoom                       :  Mouse Wheel\n";
+    std::cout << " Kinect Tilt Angle  [-/r/+] :  S/R/W\n";
+    std::cout << " Quit                       :  Q or Esc\n\n";
 }
 
 

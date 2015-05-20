@@ -6,7 +6,7 @@
  *        of the associated algorithms. They are used only for testing purposes, 
  *        and not for examining the performance of their GPU alternatives.
  *  \author Nick Lamprianidis
- *  \version 1.0
+ *  \version 1.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -90,7 +90,6 @@ unsigned int clean_data (
     std::vector<cl_float4>::iterator dBegin, std::vector<cl_float4>::iterator dEnd, 
     std::vector<cl_float4>::iterator cBegin, std::vector<cl_float4>::iterator cEnd)
 {
-    // uint32_t n = std::distance (dBegin, dEnd);
     std::vector<cl_float4>::iterator di = dBegin;
     std::vector<cl_float4>::iterator ci = cBegin;
     std::vector<cl_float4>::iterator dlast = dEnd;
@@ -175,9 +174,11 @@ TEST (RBC, rbcRGBD)
         const unsigned int nx = 16384;
         const unsigned int nr =   256;
         const unsigned int nq = 16384;
-        const unsigned int bufferXSize = nx * 8 * sizeof (cl_float);
-        const unsigned int bufferRSize = nr * 8 * sizeof (cl_float);
-        const unsigned int bufferQSize = nq * 8 * sizeof (cl_float);
+        const unsigned int d = 8;
+        const float a = 4.f;
+        const unsigned int bufferXSize = nx * d * sizeof (cl_float);
+        const unsigned int bufferRSize = nr * d * sizeof (cl_float);
+        const unsigned int bufferQSize = nq * d * sizeof (cl_float);
         const unsigned int bufferOSize = nr * sizeof (cl_uint);
         const unsigned int bufferNSize = nr * sizeof (cl_uint);
         const unsigned int bufferRIDSize = nq * sizeof (rbc_dist_id);
@@ -223,10 +224,10 @@ TEST (RBC, rbcRGBD)
 
         // Configure kernel execution parameters
         clutils::CLEnvInfo<1> info (0, 0, 0, { 0 }, 0);
-        const cl_algo::RBC::KernelTypeC K = cl_algo::RBC::KernelTypeC::SHARED_NONE;
+        const cl_algo::RBC::KernelTypeC K = cl_algo::RBC::KernelTypeC::KINECT_R;
         const cl_algo::RBC::RBCPermuteConfig P = cl_algo::RBC::RBCPermuteConfig::GENERIC;
         cl_algo::RBC::RBCConstruct<K, P> rbcCon (clEnv, info);
-        rbcCon.init (nx, nr, 8);
+        rbcCon.init (nx, nr, d, a);
 
         // Initialize data (writes on staging buffer directly)
         idx = 0;
@@ -249,14 +250,14 @@ TEST (RBC, rbcRGBD)
                 return *((cl_float8 *) p);
             }
         );
-        // RBC::printBufferF ("Original X:", rbcCon.hPtrInX, 8, nx, 3);
-        // RBC::printBufferF ("Original R:", rbcCon.hPtrInR, 8, nr, 3);
+        // RBC::printBufferF ("Original X:", rbcCon.hPtrInX, d, nx, 3);
+        // RBC::printBufferF ("Original R:", rbcCon.hPtrInR, d, nr, 3);
 
         // Copy data to device
         rbcCon.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_X);
         rbcCon.write (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_IN_R);
         
-        rbcCon.run ();  // Execute kernels
+        rbcCon.run ();  // Execute kernels (~ 344 us)
         
         // Copy results to host
         cl_uint *O = (cl_uint *) rbcCon.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_O, CL_FALSE);
@@ -264,7 +265,7 @@ TEST (RBC, rbcRGBD)
         cl_float *Xp = (cl_float *) rbcCon.read (cl_algo::RBC::RBCConstruct<K, P>::Memory::H_OUT_X_P);
         // RBC::printBuffer ("Received O:", O, 1, nr);
         // RBC::printBuffer ("Received N:", N, 1, nr);
-        // RBC::printBufferF ("Received Xp:", Xp, 8, nx, 3);
+        // RBC::printBufferF ("Received Xp:", Xp, d, nx, 3);
 
         // cl_uint max_n = std::accumulate (N, N + nr, 0, 
         //     [](cl_uint a, cl_uint b) -> cl_uint { return std::max (a, b); });
@@ -272,7 +273,7 @@ TEST (RBC, rbcRGBD)
 
         // Search ==============================================================
 
-        const cl_algo::RBC::KernelTypeC K2 = cl_algo::RBC::KernelTypeC::SHARED_NONE;
+        const cl_algo::RBC::KernelTypeC K2 = cl_algo::RBC::KernelTypeC::KINECT_R;
         const cl_algo::RBC::RBCPermuteConfig P2 = cl_algo::RBC::RBCPermuteConfig::GENERIC;
         const cl_algo::RBC::KernelTypeS S2 = cl_algo::RBC::KernelTypeS::KINECT;
         cl_algo::RBC::RBCSearch<K2, P2, S2> rbcSearch (clEnv, info);
@@ -286,7 +287,7 @@ TEST (RBC, rbcRGBD)
             rbcCon.get (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_OUT_O);
         rbcSearch.get (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_N) = 
             rbcCon.get (cl_algo::RBC::RBCConstruct<K, P>::Memory::D_OUT_N);
-        rbcSearch.init (nq, nr, nx, 8);
+        rbcSearch.init (nq, nr, nx, a);
 
         // Initialize data (writes on staging buffer directly)
         idx = 0;
@@ -299,12 +300,12 @@ TEST (RBC, rbcRGBD)
                 return *((cl_float8 *) p);
             }
         );
-        // RBC::printBufferF ("Original Q:", rbcSearch.hPtrInQ, 8, nq, 3);
+        // RBC::printBufferF ("Original Q:", rbcSearch.hPtrInQ, d, nq, 3);
 
         // Copy data to device
         rbcSearch.write (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_Q);
 
-        rbcSearch.run ();  // Execute kernels (675 - 750 us)
+        rbcSearch.run ();  // Execute kernels (~ 714 us)
 
         // Copy results to host
         cl_float *Qp = (cl_float *) rbcSearch.read (
@@ -315,33 +316,33 @@ TEST (RBC, rbcRGBD)
             cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::H_OUT_NN_ID, CL_FALSE);
         cl_float *NN = (cl_float *) rbcSearch.read (
             cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::H_OUT_NN);
-        // RBC::printBufferF ("Received Qp:", Qp, 8, nq, 3);
+        // RBC::printBufferF ("Received Qp:", Qp, d, nq, 3);
         // RBC::printBuffer ("Received RID:", (unsigned int *) RID, 2, nq);
         // RBC::printBuffer ("Received NNID:", (unsigned int *) NNID, 2, nq);
-        // RBC::printBufferF ("Received NN:", NN, 8, nq, 3);
+        // RBC::printBufferF ("Received NN:", NN, d, nq, 3);
 
         // Testing =============================================================
 
         // Produce reference permuted database
         rbc_dist_id *refNNID = new rbc_dist_id[nq];
-        cl_float *refNN = new cl_float[nq * 8];
-        RBC::cpuRBCSearch (Qp, RID, Xp, O, N, refNNID, refNN, nq, nr, nx, 8);
+        cl_float *refNN = new cl_float[nq * d];
+        RBC::cpuRBCSearch8 (Qp, RID, Xp, O, N, refNNID, refNN, nq, nr, nx, a);
         // RBC::printBuffer ("Expected NNID:", (unsigned int *) refNNID, 2, nq);
-        // RBC::printBufferF ("Expected NN:", refNN, 8, nq, 3);
+        // RBC::printBufferF ("Expected NN:", refNN, d, nq, 3);
 
         // Verify blurred output
         // RBCSearch seems to return a few different NNs. This will have to be investigated
         // Nonetheless, the correctness of the algorithm is not affected
-        float eps = 42 * std::numeric_limits<float>::epsilon ();  // 5.00679e-06
+        float eps = 420 * std::numeric_limits<float>::epsilon ();  // 5.00679e-05
         for (uint q = 0; q < nq; ++q)
         {
             // ASSERT_EQ (refNNID[q].id, NNID[q].id);
 
-            for (uint j = 0; j < 8; ++j)
+            for (uint j = 0; j < d; ++j)
             {
-                // ASSERT_EQ (refNN[q * 8 + j], NN[q * 8 + j]);
-                float da = RBC::euclideanMetric (&Qp[q * 8], &refNN[q * 8], 8);
-                float db = RBC::euclideanMetric (&Qp[q * 8], &NN[q * 8], 8);
+                // ASSERT_EQ (refNN[q * d + j], NN[q * d + j]);
+                float da = RBC::euclideanMetric8Squared (&Qp[q * d], &refNN[q * d], a);
+                float db = RBC::euclideanMetric8Squared (&Qp[q * d], &NN[q * d], a);
                 ASSERT_LT (std::abs (da-db), eps);
             }
         }
@@ -371,7 +372,7 @@ TEST (RBC, rbcRGBD)
             for (int i = 0; i < nRepeat; ++i)
             {
                 cTimer.start ();
-                RBC::cpuRBCSearch (Qp, RID, Xp, O, N, refNNID, refNN, nq, nr, nx, 8);
+                RBC::cpuRBCSearch8 (Qp, RID, Xp, O, N, refNNID, refNN, nq, nr, nx, a);
                 pCPU[i] = cTimer.stop ();
             }
             
@@ -385,8 +386,8 @@ TEST (RBC, rbcRGBD)
             pGPU.print (pCPU, "RBC_RGBD<Search>");
 
             // Compute true NNs ================================================
-            cl_float *tNN = new cl_float[nq * 8];
-            RBC::cpuNNSearch (Qp, Xp, tNN, nq, nx, 8);
+            cl_float *tNN = new cl_float[nq * d];
+            RBC::cpuNNSearch (Qp, Xp, tNN, nq, nx, d);
 
             // Calculate Error (~ 1.05) ========================================
             // Mean distance from the computed NNs, 
@@ -394,7 +395,7 @@ TEST (RBC, rbcRGBD)
             // 1 (optimal) - infinity (bad)
             std::cout << " Mean Error\n ----------" << std::endl << "   Value  : ";
             std::cout << std::fixed << std::setprecision (3);
-            std::cout << RBC::meanError (Qp, NN, nq, 8) / RBC::meanError (Qp, tNN, nq, 8);
+            std::cout << RBC::meanError (Qp, NN, nq, d) / RBC::meanError (Qp, tNN, nq, d);
             std::cout << std::endl << std::endl;
         }
 
