@@ -4,7 +4,7 @@
  *           initialize the necessary buffers, set up the workspaces, 
  *           and run the kernels.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -29,8 +29,8 @@
  *  THE SOFTWARE.
  */
 
-#ifndef ALGORITHMS_HPP
-#define ALGORITHMS_HPP
+#ifndef RBC_ALGORITHMS_HPP
+#define RBC_ALGORITHMS_HPP
 
 #include <CLUtils.hpp>
 #include <RBC/data_types.hpp>
@@ -42,20 +42,23 @@
  */
 namespace cl_algo
 {
+/*! \brief Offers classes associated with the Random Ball Cover data structure.
+ */
 namespace RBC
 {
 
     /*! \brief Enumerates the kernels available for computing 
      *         the array of distances in the construction step.
-     *  
-     *  \param SHARED_NONE refers to the `rbcComputeDists_SharedNone` kernel.
-     *  \param SHARED_R refers to the `rbcComputeDists_SharedR` kernel.
-     *  \param SHARED_X_R refers to the `rbcComputeDists_SharedXR` kernel.
-     *  \param KINECT refers to the `rbcComputeDists_Kinect` kernel.
-     *  \param KINECT_R refers to the `rbcComputeDists_Kinect_R` kernel.
-     *  \param KINECT_XR refers to the `rbcComputeDists_Kinect_XR` kernel.
      */
-    enum class KernelTypeC : uint8_t { SHARED_NONE, SHARED_R, SHARED_X_R, KINECT, KINECT_R, KINECT_X_R };
+    enum class KernelTypeC : uint8_t
+    {
+        SHARED_NONE,  /*!< Refers to the `rbcComputeDists_SharedNone` kernel. */
+        SHARED_R,     /*!< Refers to the `rbcComputeDists_SharedR` kernel.    */
+        SHARED_X_R,   /*!< Refers to the `rbcComputeDists_SharedXR` kernel.   */
+        KINECT,       /*!< Refers to the `rbcComputeDists_Kinect` kernel.     */
+        KINECT_R,     /*!< Refers to the `rbcComputeDists_Kinect_R` kernel.   */
+        KINECT_X_R    /*!< Refers to the `rbcComputeDists_Kinect_XR` kernel.  */
+    };
 
 
     /*! \brief Interface class for the `rbcComputeDists` kernels.
@@ -92,15 +95,16 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_X input staging buffer.
-         *  \param H_IN_R input staging buffer.
-         *  \param H_OUT_D output staging buffer for channel R.
-         *  \param D_IN_X input buffer.
-         *  \param D_IN_R input buffer.
-         *  \param D_OUT_D output buffer for channel R.
          */
-        enum class Memory : uint8_t { H_IN_X, H_IN_R, H_OUT_D, D_IN_X, D_IN_R, D_OUT_D };
+        enum class Memory : uint8_t
+        {
+            H_IN_X,   /*!< Input staging buffer. */
+            H_IN_R,   /*!< Input staging buffer. */
+            H_OUT_D,  /*!< Output staging buffer for channel R. */
+            D_IN_X,   /*!< Input buffer. */
+            D_IN_R,   /*!< Input buffer. */
+            D_OUT_D   /*!< Output buffer for channel R. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCComputeDists (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -159,18 +163,18 @@ namespace RBC
     };
 
 
-    /*! \brief Enumerates configurations for the `Reduce` class.
-     * 
-     *  \param MIN identifies the case of `min` reduce.
-     *  \param MAX identifies the case of `max` reduce.
-     */
-    enum class ReduceConfig : uint8_t { MIN, MAX };
+    /*! \brief Enumerates configurations for the `Reduce` class. */
+    enum class ReduceConfig : uint8_t
+    {
+        MIN,  /*!< Identifies the case of `min` reduce. */
+        MAX   /*!< Identifies the case of `max` reduce. */
+    };
 
 
     /*! \brief Interface class for the `reduce` kernels.
      *  \details The `reduce` kernels reduce each row of an array to a single element. 
      *           For more details, look at the kernels' documentation.
-     *  \note The `reduce` kernela are available in `kernels/reduce_kernels.cl`.
+     *  \note The `reduce` kernels are available in `kernels/reduce_kernels.cl`.
      *  \note The class creates its own buffers. If you would like to provide 
      *        your own buffers, call `get` to get references to the placeholders 
      *        within the class and assign them to your buffers. You will have to 
@@ -197,14 +201,15 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN input staging buffer.
-         *  \param H_OUT output staging buffer.
-         *  \param D_IN input buffer.
-         *  \param D_REC buffer of reduced elements per work-group.
-         *  \param D_OUT output buffer.
          */
-        enum class Memory : uint8_t { H_IN, H_OUT, D_IN, D_REC, D_OUT };
+        enum class Memory : uint8_t
+        {
+            H_IN,   /*!< Input staging buffer. */
+            H_OUT,  /*!< Output staging buffer. */
+            D_IN,   /*!< Input buffer. */
+            D_RED,  /*!< Buffer of reduced elements per work-group. */
+            D_OUT   /*!< Output buffer. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         Reduce (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -236,7 +241,7 @@ namespace RBC
         unsigned int cols, rows;
         unsigned int bufferInSize, bufferGRSize, bufferOutSize;
         cl::Buffer hBufferIn, hBufferOut;
-        cl::Buffer dBufferIn, dBufferRec, dBufferOut;
+        cl::Buffer dBufferIn, dBufferR, dBufferOut;
 
     public:
         /*! \brief Executes the necessary kernels.
@@ -309,19 +314,19 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_D input staging buffer for the array of distances.
-         *  \param H_OUT_ID output staging buffer with the minimum elements and id values.
-         *  \param H_OUT_RNK output staging buffer with the indices of each database point within the associated list.
-         *  \param H_OUT_N output staging buffer with the cardinalities of the representative lists.
-         *  \param D_IN_D input buffer for the array of distances.
-         *  \param D_MINS buffer of minimum elements and id values per work-group.
-         *  \param D_OUT_ID output buffer with the minimum elements and id values.
-         *  \param D_OUT_RNK output buffer with the indices of each database point within the associated list.
-         *  \param D_OUT_N output buffer with the cardinalities of the representative lists.
          */
-        enum class Memory : uint8_t { H_IN_D, H_OUT_ID, H_OUT_RNK, H_OUT_N, 
-                                      D_IN_D, D_MINS, D_OUT_ID, D_OUT_RNK, D_OUT_N };
+        enum class Memory : uint8_t
+        {
+            H_IN_D,     /*!< Input staging buffer for the array of distances. */
+            H_OUT_ID,   /*!< Output staging buffer with the minimum elements and id values. */
+            H_OUT_RNK,  /*!< Output staging buffer with the indices of each database point within the associated list. */
+            H_OUT_N,    /*!< Output staging buffer with the cardinalities of the representative lists. */
+            D_IN_D,     /*!< Input buffer for the array of distances. */
+            D_MINS,     /*!< Buffer of minimum elements and id values per work-group. */
+            D_OUT_ID,   /*!< Output buffer with the minimum elements and id values. */
+            D_OUT_RNK,  /*!< Output buffer with the indices of each database point within the associated list. */
+            D_OUT_N     /*!< Output buffer with the cardinalities of the representative lists. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCMin (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -401,12 +406,12 @@ namespace RBC
     };
 
 
-    /*! \brief Enumerates configurations for the `Scan` class.
-     * 
-     *  \param INCLUSIVE identifies the case of `inclusive` scan.
-     *  \param EXCLUSIVE identifies the case of `exclusive` scan.
-     */
-    enum class ScanConfig : uint8_t { INCLUSIVE, EXCLUSIVE };
+    /*! \brief Enumerates configurations for the `Scan` class. */
+    enum class ScanConfig : uint8_t
+    {
+        INCLUSIVE,  /*!< Identifies the case of `inclusive` scan. */
+        EXCLUSIVE   /*!< Identifies the case of `exclusive` scan. */
+    };
 
 
     /*! \brief Interface class for the `scan` kernel.
@@ -439,14 +444,15 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN input staging buffer.
-         *  \param H_OUT output staging buffer.
-         *  \param D_IN input buffer.
-         *  \param D_SUMS buffer of partial group sums.
-         *  \param D_OUT output buffer.
          */
-        enum class Memory : uint8_t { H_IN, H_OUT, D_IN, D_SUMS, D_OUT };
+        enum class Memory : uint8_t
+        {
+            H_IN,    /*!< Input staging buffer. */
+            H_OUT,   /*!< Output staging buffer. */
+            D_IN,    /*!< Input buffer. */
+            D_SUMS,  /*!< Buffer of partial group sums. */
+            D_OUT    /*!< Output buffer. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         Scan (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -524,12 +530,12 @@ namespace RBC
     };
 
 
-    /*! \brief Enumerates configurations for the `RBCPermute` class.
-     * 
-     *  \param GENERIC identifies the case of data of arbitrary dimensionality.
-     *  \param KINECT identifies the case of Kinect point clouds in \f$ \mathbb{R}^8 \f$.
-     */
-    enum class RBCPermuteConfig : uint8_t { GENERIC, KINECT };
+    /*! \brief Enumerates configurations for the `RBCPermute` class. */
+    enum class RBCPermuteConfig : uint8_t
+    {
+        GENERIC,  /*!< Identifies the case of data of arbitrary dimensionality. */
+        KINECT    /*!< Identifies the case of Kinect point clouds in \f$ \mathbb{R}^8 \f$. */
+    };
 
 
     /*! \brief Interface class for the `rbcPermute` kernel.
@@ -561,7 +567,7 @@ namespace RBC
      *        | D_OUT_X_P | Buffer | Device | O | Processing  | CL_MEM_WRITE_ONLY | \f$n_x*d  *sizeof\ (cl\_float)\f$ |
      *        | D_OUT_ID_P| Buffer | Device | O | Processing  | CL_MEM_WRITE_ONLY | \f$n_x*sizeof\ (rbc\_dist\_id)\f$ |
      *        
-     *  \tparam C configures the class either for `generic` or `Kinect` data.
+     *  \tparam C configures the class either for `Generic` or `Kinect` data.
      */
     template <RBCPermuteConfig C = RBCPermuteConfig::GENERIC>
     class RBCPermute
@@ -570,22 +576,22 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_X input staging buffer for the database.
-         *  \param H_IN_ID input staging buffer with the representative ids for each point.
-         *  \param H_IN_RNK input staging buffer with the indices of the points within each rep. list.
-         *  \param H_IN_O input staging buffer with the offsets of the representative lists within the db.
-         *  \param H_OUT_X_P output staging buffer for the permuted database.
-         *  \param H_OUT_ID_P output staging buffer with the representative ids for each point in the permuted db.
-         *  \param D_IN_X input buffer for the database.
-         *  \param D_IN_ID input buffer with the representative ids for each point.
-         *  \param D_IN_RNK input buffer with the indices of the points within each rep. list.
-         *  \param D_IN_O input buffer with the offsets of the representative lists within the db.
-         *  \param D_OUT_X_P output buffer for the permuted database.
-         *  \param D_OUT_ID_P output buffer with the representative ids for each point in the permuted db.
          */
-        enum class Memory : uint8_t { H_IN_X, H_IN_ID, H_IN_RNK, H_IN_O, H_OUT_X_P, H_OUT_ID_P,  
-                                      D_IN_X, D_IN_ID, D_IN_RNK, D_IN_O, D_OUT_X_P, D_OUT_ID_P };
+        enum class Memory : uint8_t
+        {
+            H_IN_X,      /*!< Input staging buffer for the database. */
+            H_IN_ID,     /*!< Input staging buffer with the representative ids for each point. */
+            H_IN_RNK,    /*!< Input staging buffer with the indices of the points within each rep. list. */
+            H_IN_O,      /*!< Input staging buffer with the offsets of the representative lists within the db. */
+            H_OUT_X_P,   /*!< Output staging buffer for the permuted database. */
+            H_OUT_ID_P,  /*!< Output staging buffer with the representative ids for each point in the permuted db. */
+            D_IN_X,      /*!< Input buffer for the database. */
+            D_IN_ID,     /*!< Input buffer with the representative ids for each point. */
+            D_IN_RNK,    /*!< Input buffer with the indices of the points within each rep. list. */
+            D_IN_O,      /*!< Input buffer with the offsets of the representative lists within the db. */
+            D_OUT_X_P,   /*!< Output buffer for the permuted database. */
+            D_OUT_ID_P   /*!< Output buffer with the representative ids for each point in the permuted db. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCPermute (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -689,27 +695,27 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_X input staging buffer for the database.
-         *  \param H_IN_R input staging buffer for the representatives.
-         *  \param H_OUT_ID output staging buffer with the representative ids for each db point.
-         *  \param H_OUT_RNK output staging buffer with the indices of the points within each rep. list.
-         *  \param H_OUT_N outut staging buffer with the cardinalities of the representative lists.
-         *  \param H_OUT_O outut staging buffer with the offsets of the representative lists within the db.
-         *  \param H_OUT_X_P output staging buffer for the permuted database.
-         *  \param H_OUT_ID_P output staging buffer with the representative ids for each point in the permuted db.
-         *  \param D_IN_X input buffer for the database.
-         *  \param D_IN_R input buffer for the representatives.
-         *  \param D_OUT_D output buffer for the array of distances.
-         *  \param D_OUT_ID output buffer with the representative ids for each db point.
-         *  \param D_OUT_RNK output buffer with the indices of the points within each rep. list.
-         *  \param D_OUT_N outut buffer with the cardinalities of the representative lists.
-         *  \param D_OUT_O outut buffer with the offsets of the representative lists within the db.
-         *  \param D_OUT_X_P output buffer for the permuted database.
-         *  \param D_OUT_ID_P output buffer with the representative ids for each point in the permuted db.
          */
-        enum class Memory : uint8_t { H_IN_X, H_IN_R, H_OUT_ID, H_OUT_RNK, H_OUT_N, H_OUT_O, H_OUT_X_P, H_OUT_ID_P, 
-                                      D_IN_X, D_IN_R, D_OUT_D, D_OUT_ID, D_OUT_RNK, D_OUT_N, D_OUT_O, D_OUT_X_P, D_OUT_ID_P };
+        enum class Memory : uint8_t
+        {
+            H_IN_X,      /*!< Input staging buffer for the database. */
+            H_IN_R,      /*!< Input staging buffer for the representatives. */
+            H_OUT_ID,    /*!< Output staging buffer with the representative ids for each db point. */
+            H_OUT_RNK,   /*!< Output staging buffer with the indices of the points within each rep. list. */
+            H_OUT_N,     /*!< Output staging buffer with the cardinalities of the representative lists. */
+            H_OUT_O,     /*!< Output staging buffer with the offsets of the representative lists within the db. */
+            H_OUT_X_P,   /*!< Output staging buffer for the permuted database. */
+            H_OUT_ID_P,  /*!< Output staging buffer with the representative ids for each point in the permuted db. */
+            D_IN_X,      /*!< Input buffer for the database. */
+            D_IN_R,      /*!< Input buffer for the representatives. */
+            D_OUT_D,     /*!< Output buffer for the array of distances. */
+            D_OUT_ID,    /*!< Output buffer with the representative ids for each db point. */
+            D_OUT_RNK,   /*!< Output buffer with the indices of the points within each rep. list. */
+            D_OUT_N,     /*!< Output buffer with the cardinalities of the representative lists. */
+            D_OUT_O,     /*!< Output buffer with the offsets of the representative lists within the db. */
+            D_OUT_X_P,   /*!< Output buffer for the permuted database. */
+            D_OUT_ID_P   /*!< Output buffer with the representative ids for each point in the permuted db. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCConstruct (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -781,12 +787,12 @@ namespace RBC
 
 
     /*! \brief Enumerates the kernels available for computing 
-     *         the array of distances (`Q-X[L]`) during search.
-     *  
-     *  \param GENERIC refers to the `rbcComputeQXDists` kernel.
-     *  \param KINECT refers to the `rbcComputeQXDists_Kinect` kernel.
-     */
-    enum class KernelTypeS : uint8_t { GENERIC, KINECT };
+     *         the array of distances (`Q-X[L]`) during search. */
+    enum class KernelTypeS : uint8_t
+    {
+        GENERIC,  /*!< Refers to the `rbcComputeQXDists` kernel. */
+        KINECT    /*!< Refers to the `rbcComputeQXDists_Kinect` kernel. */
+    };
 
 
     /*! \brief Interface class for searching for nearest neighbors, of a set of 
@@ -856,36 +862,30 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_Q input staging buffer for the queries.
-         *  \param H_IN_R input staging buffer for the representatives.
-         *  \param H_IN_X_P input staging buffer for the permuted database.
-         *  \param H_IN_O input staging buffer with the offsets of the representative lists within the db.
-         *  \param H_IN_N input staging buffer with the cardinalities of the representative lists.
-         *  \param H_OUT_R_ID output staging buffer with the representative ids for each query in Qp.
-         *  \param H_OUT_Q_P output staging buffer for the permuted queries.
-         *  \param H_OUT_NN_ID output staging buffer with the NN ids (relative to the NN's rep list) 
-         *                     for each query in Qp.
-         *  \param H_OUT_NN output staging buffer with the queries' nearest neighbors. The NNs correspond
-         *                  to the queries in the permuted array, Qp.
-         *  \param D_IN_Q input buffer for the queries.
-         *  \param D_IN_R input buffer for the representatives.
-         *  \param D_IN_X_P input buffer for the permuted database.
-         *  \param D_IN_O input buffer with the offsets of the representative lists within the db.
-         *  \param D_IN_N input buffer with the cardinalities of the representative lists.
-         *  \param D_OUT_R_ID output buffer with the representative ids for each query in Qp.
-         *  \param D_OUT_Q_P output buffer for the permuted queries.
-         *  \param D_OUT_NN_ID output buffer with the NN ids (relative to the NN's rep list) 
-         *                     for each query in Qp.
-         *  \param D_OUT_NN output buffer with the queries' nearest neighbors. The NNs correspond
-         *                  to the queries in the permuted array, Qp.
-         *  \param D_OUT_QR_D output buffer for the array of query distances from the representatives.
-         *  \param D_OUT_QX_D output buffer for the array of query distances from the points in their rep's list.
          */
-        enum class Memory : uint8_t { 
-            H_IN_Q, H_IN_R, H_IN_X_P, H_IN_O, H_IN_N, H_OUT_R_ID, H_OUT_Q_P, H_OUT_NN_ID, H_OUT_NN, 
-            D_IN_Q, D_IN_R, D_IN_X_P, D_IN_O, D_IN_N, D_OUT_R_ID, D_OUT_Q_P, D_OUT_NN_ID, D_OUT_NN, 
-            D_OUT_QR_D, D_OUT_QX_D };
+        enum class Memory : uint8_t
+        { 
+            H_IN_Q,       /*!< Input staging buffer for the queries. */
+            H_IN_R,       /*!< Input staging buffer for the representatives. */
+            H_IN_X_P,     /*!< Input staging buffer for the permuted database. */
+            H_IN_O,       /*!< Input staging buffer with the offsets of the representative lists within the db. */
+            H_IN_N,       /*!< Input staging buffer with the cardinalities of the representative lists. */
+            H_OUT_R_ID,   /*!< Output staging buffer with the representative ids for each query in Qp. */
+            H_OUT_Q_P,    /*!< Output staging buffer for the permuted queries. */
+            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
+            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            D_IN_Q,       /*!< Input buffer for the queries. */
+            D_IN_R,       /*!< Input buffer for the representatives. */
+            D_IN_X_P,     /*!< Input buffer for the permuted database. */
+            D_IN_O,       /*!< Input buffer with the offsets of the representative lists within the db. */
+            D_IN_N,       /*!< Input buffer with the cardinalities of the representative lists. */
+            D_OUT_R_ID,   /*!< Output buffer with the representative ids for each query in Qp. */
+            D_OUT_Q_P,    /*!< Output buffer for the permuted queries. */
+            D_OUT_NN_ID,  /*!< Output buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
+            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            D_OUT_QR_D,   /*!< Output buffer for the array of query distances from the representatives. */
+            D_OUT_QX_D    /*!< Output buffer for the array of query distances from the points in their rep's list. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCSearch (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -900,7 +900,7 @@ namespace RBC
         void* read (RBCSearch::Memory mem = RBCSearch::Memory::H_OUT_NN, bool block = CL_TRUE, 
                     const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
         /*! \brief Executes the necessary kernels. */
-        void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
+        void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr, bool config = false);
 
         cl_float *hPtrInQ;  /*!< Mapping of the input staging buffer for the queries. */
         cl_float *hPtrInR;  /*!< Mapping of the input staging buffer for the representatives. */
@@ -913,7 +913,7 @@ namespace RBC
         cl_float *hPtrOutNN;  /*!< Mapping of the output staging buffer for the query NNs. */
 
     private:
-        void setExecParams ();
+        void setExecParams (const std::vector<cl::Event> *events = nullptr);
 
         clutils::CLEnv &env;
         clutils::CLEnvInfo<1> info;
@@ -941,16 +941,19 @@ namespace RBC
          *  
          *  \param[in] timer `GPUTimer` that does the profiling of the kernel executions.
          *  \param[in] events a wait-list of events.
+         *  \param[in] config configuration flag. If true, it runs the necessary kernel, 
+         *                    and initializes the remaining parameters and objects.
          *  \return Τhe total execution time measured by the timer.
          */
         template <typename period>
-        double run (clutils::GPUTimer<period> &timer, const std::vector<cl::Event> *events = nullptr)
+        double run (clutils::GPUTimer<period> &timer, 
+            const std::vector<cl::Event> *events = nullptr, bool config = false)
         {
             double pTime;
 
             // compMaxN is not profiled. Its cost is incurred 
             // only once, and it's expected to be insignificant
-            if (wgXdim == 0) setExecParams ();
+            if (config) setExecParams (events);
 
             // Compute nearest representatives
             pTime = rbcCompRIDs.run (timer, events);
@@ -1035,36 +1038,30 @@ namespace RBC
         /*! \brief Enumerates the memory objects handled by the class.
          *  \note `H_*` names refer to staging buffers on the host.
          *  \note `D_*` names refer to buffers on the device.
-         *  
-         *  \param H_IN_Q input staging buffer for the queries.
-         *  \param H_IN_R input staging buffer for the representatives.
-         *  \param H_IN_X_P input staging buffer for the permuted database.
-         *  \param H_IN_O input staging buffer with the offsets of the representative lists within the db.
-         *  \param H_IN_N input staging buffer with the cardinalities of the representative lists.
-         *  \param H_OUT_R_ID output staging buffer with the representative ids for each query in Qp.
-         *  \param H_OUT_Q_P output staging buffer for the permuted queries.
-         *  \param H_OUT_NN_ID output staging buffer with the NN ids (relative to the NN's rep list) 
-         *                     for each query in Qp.
-         *  \param H_OUT_NN output staging buffer with the queries' nearest neighbors. The NNs correspond
-         *                  to the queries in the permuted array, Qp.
-         *  \param D_IN_Q input buffer for the queries.
-         *  \param D_IN_R input buffer for the representatives.
-         *  \param D_IN_X_P input buffer for the permuted database.
-         *  \param D_IN_O input buffer with the offsets of the representative lists within the db.
-         *  \param D_IN_N input buffer with the cardinalities of the representative lists.
-         *  \param D_OUT_R_ID output buffer with the representative ids for each query in Qp.
-         *  \param D_OUT_Q_P output buffer for the permuted queries.
-         *  \param D_OUT_NN_ID output buffer with the NN ids (relative to the NN's rep list) 
-         *                     for each query in Qp.
-         *  \param D_OUT_NN output buffer with the queries' nearest neighbors. The NNs correspond
-         *                  to the queries in the permuted array, Qp.
-         *  \param D_OUT_QR_D output buffer for the array of query distances from the representatives.
-         *  \param D_OUT_QX_D output buffer for the array of query distances from the points in their rep's list.
          */
-        enum class Memory : uint8_t { 
-            H_IN_Q, H_IN_R, H_IN_X_P, H_IN_O, H_IN_N, H_OUT_R_ID, H_OUT_Q_P, H_OUT_NN_ID, H_OUT_NN, 
-            D_IN_Q, D_IN_R, D_IN_X_P, D_IN_O, D_IN_N, D_OUT_R_ID, D_OUT_Q_P, D_OUT_NN_ID, D_OUT_NN, 
-            D_OUT_QR_D, D_OUT_QX_D };
+        enum class Memory : uint8_t
+        { 
+            H_IN_Q,       /*!< Input staging buffer for the queries. */
+            H_IN_R,       /*!< Input staging buffer for the representatives. */
+            H_IN_X_P,     /*!< Input staging buffer for the permuted database. */
+            H_IN_O,       /*!< Input staging buffer with the offsets of the representative lists within the db. */
+            H_IN_N,       /*!< Input staging buffer with the cardinalities of the representative lists. */
+            H_OUT_R_ID,   /*!< Output staging buffer with the representative ids for each query in Qp. */
+            H_OUT_Q_P,    /*!< Output staging buffer for the permuted queries. */
+            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
+            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            D_IN_Q,       /*!< Input buffer for the queries. */
+            D_IN_R,       /*!< Input buffer for the representatives. */
+            D_IN_X_P,     /*!< Input buffer for the permuted database. */
+            D_IN_O,       /*!< Input buffer with the offsets of the representative lists within the db. */
+            D_IN_N,       /*!< Input buffer with the cardinalities of the representative lists. */
+            D_OUT_R_ID,   /*!< Output buffer with the representative ids for each query in Qp. */
+            D_OUT_Q_P,    /*!< Output buffer for the permuted queries. */
+            D_OUT_NN_ID,  /*!< Output buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
+            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            D_OUT_QR_D,   /*!< Output buffer for the array of query distances from the representatives. */
+            D_OUT_QX_D    /*!< Output buffer for the array of query distances from the points in their rep's list. */
+        };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
         RBCSearch (clutils::CLEnv &_env, clutils::CLEnvInfo<1> _info);
@@ -1079,7 +1076,7 @@ namespace RBC
         void* read (RBCSearch::Memory mem = RBCSearch::Memory::H_OUT_NN, bool block = CL_TRUE, 
                     const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
         /*! \brief Executes the necessary kernels. */
-        void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
+        void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr, bool config = false);
         /*! \brief Gets the scaling factor \f$ \alpha \f$. */
         float getAlpha ();
         /*! \brief Sets the scaling factor \f$ \alpha \f$. */
@@ -1096,7 +1093,7 @@ namespace RBC
         cl_float *hPtrOutNN;  /*!< Mapping of the output staging buffer for the query NNs. */
 
     private:
-        void setExecParams ();
+        void setExecParams (const std::vector<cl::Event> *events = nullptr);
 
         clutils::CLEnv &env;
         clutils::CLEnvInfo<1> info;
@@ -1125,16 +1122,19 @@ namespace RBC
          *  
          *  \param[in] timer `GPUTimer` that does the profiling of the kernel executions.
          *  \param[in] events a wait-list of events.
+         *  \param[in] config configuration flag. If true, it runs the necessary kernel, 
+         *                    and initializes the remaining parameters and objects.
          *  \return Τhe total execution time measured by the timer.
          */
         template <typename period>
-        double run (clutils::GPUTimer<period> &timer, const std::vector<cl::Event> *events = nullptr)
+        double run (clutils::GPUTimer<period> &timer, 
+            const std::vector<cl::Event> *events = nullptr, bool config = false)
         {
             double pTime;
 
             // compMaxN is not profiled. Its cost is incurred 
             // only once, and it's expected to be insignificant
-            if (wgXdim == 0) setExecParams ();
+            if (config) setExecParams (events);
 
             // Compute nearest representatives
             pTime = rbcCompRIDs.run (timer, events);
@@ -1173,4 +1173,4 @@ namespace RBC
 }
 }
 
-#endif  // ALGORITHMS_HPP
+#endif  // RBC_ALGORITHMS_HPP

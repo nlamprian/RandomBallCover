@@ -12,3 +12,5 @@ foreach ( SRC ${KERNEL_SRCS} )
     )
 
 endforeach ( SRC )
+
+install ( DIRECTORY ${PROJECT_SOURCE_DIR}/kernels/ DESTINATION include/RBC/kernels/RBC FILES_MATCHING PATTERN "*.cl" )

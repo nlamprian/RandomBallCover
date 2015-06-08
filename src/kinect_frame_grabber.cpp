@@ -1,7 +1,7 @@
 /*! \file kinect_frame_grabber.cpp
  *  \brief Grabs and stores in binary files an RGB and a Depth Kinect frame.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

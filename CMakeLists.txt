@@ -2,7 +2,8 @@ cmake_minimum_required ( VERSION 2.8.12.2 )
 project ( RandomBallCover )
 set ( FNAME "rbc" )
 set ( PROJECT_VERSION_MAJOR 1 )
-set ( PROJECT_VERSION_MINOR 1 )
+set ( PROJECT_VERSION_MINOR 2 )
+set ( PROJECT_VERSION_PATCH 0 )
 
 option ( BUILD_TESTS "Build tests" OFF )
 

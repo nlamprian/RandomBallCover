@@ -4,7 +4,7 @@
  *           initialize the necessary buffers, set up the workspaces, and 
  *           run the kernels.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -117,12 +117,14 @@ namespace RBC
      *  \param[in] _nx number of database points.
      *  \param[in] _nr number of representative points.
      *  \param[in] _d dimensionality of the associated points.
-     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
-     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
-     *                points (`cl_float8` vectors). This parameter is applicable when involving 
-     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
-     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`. For more details, take a look 
-     *                at `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
+     *  \param[in] _a factor scaling the results of the distance calculations for the 
+     *                geometric \f$ x_g \f$ and photometric \f$ x_p \f$ dimensions of 
+     *                the \f$ x\epsilon\mathbb{R}^8 \f$ points. That is, \f$ \|x-x'\|_2^2= 
+     *                f_g(a)\|x_g-x'_g\|_2^2+f_p(a)\|x_p-x'_p\|_2^2 \f$. This parameter is 
+     *                applicable when involving the "Kinect" kernels. That is, when the 
+     *                template parameter, `K`, gets the value `KINECT`, `KINECT_R`, or 
+     *                `KINECT_X_R`. For more details, take a look at 
+     *                `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
     template <KernelTypeC K>
@@ -447,8 +449,8 @@ namespace RBC
         env (_env), info (_info), 
         context (env.getContext (info.pIdx)), 
         queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
-        recKernel (env.getProgram (info.pgIdx), "reduce_min"), 
-        groupRecKernel (env.getProgram (info.pgIdx), "reduce_min")
+        recKernel (env.getProgram (info.pgIdx), "reduce_min_f"), 
+        groupRecKernel (env.getProgram (info.pgIdx), "reduce_min_f")
     {
         wgMultiple = recKernel.getWorkGroupInfo
             <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
@@ -463,8 +465,8 @@ namespace RBC
         env (_env), info (_info), 
         context (env.getContext (info.pIdx)), 
         queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
-        recKernel (env.getProgram (info.pgIdx), "reduce_max"), 
-        groupRecKernel (env.getProgram (info.pgIdx), "reduce_max")
+        recKernel (env.getProgram (info.pgIdx), "reduce_max_ui"), 
+        groupRecKernel (env.getProgram (info.pgIdx), "reduce_max_ui")
     {
         wgMultiple = recKernel.getWorkGroupInfo
             <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
@@ -487,8 +489,8 @@ namespace RBC
                 return hBufferOut;
             case Reduce::Memory::D_IN:
                 return dBufferIn;
-            case Reduce::Memory::D_REC:
-                return dBufferRec;
+            case Reduce::Memory::D_RED:
+                return dBufferR;
             case Reduce::Memory::D_OUT:
                 return dBufferOut;
         }
@@ -591,8 +593,8 @@ namespace RBC
         // Create device buffers
         if (dBufferIn () == nullptr)
             dBufferIn = cl::Buffer (context, CL_MEM_READ_ONLY, bufferInSize);
-        if (dBufferRec () == nullptr && wgXdim != 1)
-            dBufferRec = cl::Buffer (context, CL_MEM_READ_WRITE, bufferGRSize);
+        if (dBufferR () == nullptr && wgXdim != 1)
+            dBufferR = cl::Buffer (context, CL_MEM_READ_WRITE, bufferGRSize);
         if (dBufferOut () == nullptr)
             dBufferOut = cl::Buffer (context, CL_MEM_WRITE_ONLY, bufferOutSize);
 
@@ -607,11 +609,11 @@ namespace RBC
         else
         {
             recKernel.setArg (0, dBufferIn);
-            recKernel.setArg (1, dBufferRec);
+            recKernel.setArg (1, dBufferR);
             recKernel.setArg (2, cl::Local (2 * local[0] * sizeof (T)));
             recKernel.setArg (3, cols / 4);
 
-            groupRecKernel.setArg (0, dBufferRec);
+            groupRecKernel.setArg (0, dBufferR);
             groupRecKernel.setArg (1, dBufferOut);
             groupRecKernel.setArg (2, cl::Local (2 * local[0] * sizeof (T)));
             groupRecKernel.setArg (3, (cl_uint) (wgXdim / 4));
@@ -1011,9 +1013,9 @@ namespace RBC
         env (_env), info (_info), 
         context (env.getContext (info.pIdx)), 
         queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
-        kernelScan (env.getProgram (info.pgIdx), "inclusiveScan"), 
-        kernelSumsScan (env.getProgram (info.pgIdx), "inclusiveScan"), 
-        kernelAddSums (env.getProgram (info.pgIdx), "addGroupSums")
+        kernelScan (env.getProgram (info.pgIdx), "inclusiveScan_i"), 
+        kernelSumsScan (env.getProgram (info.pgIdx), "inclusiveScan_i"), 
+        kernelAddSums (env.getProgram (info.pgIdx), "addGroupSums_i")
     {
         wgMultiple = kernelScan.getWorkGroupInfo
             <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
@@ -1028,9 +1030,9 @@ namespace RBC
         env (_env), info (_info), 
         context (env.getContext (info.pIdx)), 
         queue (env.getQueue (info.ctxIdx, info.qIdx[0])), 
-        kernelScan (env.getProgram (info.pgIdx), "exclusiveScan"), 
-        kernelSumsScan (env.getProgram (info.pgIdx), "inclusiveScan"), 
-        kernelAddSums (env.getProgram (info.pgIdx), "addGroupSums")
+        kernelScan (env.getProgram (info.pgIdx), "exclusiveScan_i"), 
+        kernelSumsScan (env.getProgram (info.pgIdx), "inclusiveScan_i"), 
+        kernelAddSums (env.getProgram (info.pgIdx), "addGroupSums_i")
     {
         wgMultiple = kernelScan.getWorkGroupInfo
             <CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE> (env.devices[info.pIdx][info.dIdx]);
@@ -1656,12 +1658,14 @@ namespace RBC
      *  \param[in] _nx number of database points.
      *  \param[in] _nr number of representative points.
      *  \param[in] _d dimensionality of the associated points.
-     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
-     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
-     *                points (`cl_float8` vectors). This parameter is applicable when involving 
-     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
-     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`. For more details, take a look 
-     *                at `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
+     *  \param[in] _a factor scaling the results of the distance calculations for the 
+     *                geometric \f$ x_g \f$ and photometric \f$ x_p \f$ dimensions of 
+     *                the \f$ x\epsilon\mathbb{R}^8 \f$ points. That is, \f$ \|x-x'\|_2^2= 
+     *                f_g(a)\|x_g-x'_g\|_2^2+f_p(a)\|x_p-x'_p\|_2^2 \f$. This parameter is 
+     *                applicable when involving the "Kinect" kernels. That is, when the 
+     *                template parameter, `K`, gets the value `KINECT`, `KINECT_R`, or 
+     *                `KINECT_X_R`. For more details, take a look at 
+     *                `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *  \param[in] _permID flag to indicate whether or not to also permute the ID array.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
@@ -2261,13 +2265,17 @@ namespace RBC
      *           workspaces and arguments for the execution of the associated kernels.
      */
     template <KernelTypeC K, RBCPermuteConfig P>
-    void RBCSearch<K, P, KernelTypeS::GENERIC>::setExecParams ()
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::setExecParams (const std::vector<cl::Event> *events)
     {
         // Get maximum representative list cardinality
         // It is assumed the data are already on the device
-        compMaxN.run ();
+        compMaxN.run (events);
         max_n = *((cl_uint *) compMaxN.read ());
-        if (max_n % 4) max_n += 4 - (max_n % 4);
+        max_n = std::max (max_n, 4u);
+        // if (max_n % 4) max_n += 4 - (max_n % 4);
+        // The x dimension of the global workspace for rbcComputeQXDists not only has to be a 
+        // multiple of 4, but it also has to be a multiple of the x dimension of the local workspace
+        if ((max_n / 4) % localQXD[0]) max_n += 4 * (localQXD[0] - ((max_n / 4) % localQXD[0]));
 
         // Establish the number of work-groups per row
         wgXdim = std::ceil (max_n / (float) (8 * wgMultiple));
@@ -2352,18 +2360,17 @@ namespace RBC
                         std::copy ((cl_float *) ptr, (cl_float *) ptr + nr * d, hPtrInR);
                     queue.enqueueWriteBuffer (dBufferInR, block, 0, bufferRSize, hPtrInR, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_X_P:
+                case RBCSearch::Memory::D_IN_X_P:
                     if (ptr != nullptr)
                         std::copy ((cl_float *) ptr, (cl_float *) ptr + nx * d, hPtrInXp);
                     queue.enqueueWriteBuffer (dBufferInXp, block, 0, bufferXSize, hPtrInXp, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_O:
+                case RBCSearch::Memory::D_IN_O:
                     if (ptr != nullptr)
                         std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInO);
                     queue.enqueueWriteBuffer (dBufferInO, block, 0, bufferOSize, hPtrInO, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_N:
-                    wgXdim = 0;  // Reconfigure execution parameters
+                case RBCSearch::Memory::D_IN_N:
                     if (ptr != nullptr)
                         std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInN);
                     queue.enqueueWriteBuffer (dBufferInN, block, 0, bufferNSize, hPtrInN, events, event);
@@ -2416,11 +2423,14 @@ namespace RBC
      *
      *  \param[in] events a wait-list of events.
      *  \param[out] event event associated with the last kernel execution.
+     *  \param[in] config configuration flag. If true, it runs the necessary kernel, 
+     *                    and initializes the remaining parameters and objects.
      */
     template <KernelTypeC K, RBCPermuteConfig P>
-    void RBCSearch<K, P, KernelTypeS::GENERIC>::run (const std::vector<cl::Event> *events, cl::Event *event)
+    void RBCSearch<K, P, KernelTypeS::GENERIC>::run (
+        const std::vector<cl::Event> *events, cl::Event *event, bool config)
     {
-        if (wgXdim == 0) setExecParams ();
+        if (config) setExecParams (events);
 
         // Compute nearest representatives
         rbcCompRIDs.run (events);
@@ -2543,12 +2553,14 @@ namespace RBC
      *  \param[in] _nq number of query points.
      *  \param[in] _nr number of representative points.
      *  \param[in] _nx number of database points.
-     *  \param[in] _a scaling factor multiplying the result of the distance calculations for the 
-     *                `high` part \f$ (p\ \epsilon \mathbb{R}^8: p_i, i=\{5,6,7,8\}) \f$ of the 
-     *                points (`cl_float8` vectors). This parameter is applicable when involving 
-     *                the "Kinect" kernels. That is when the template parameter, `K`, gets the 
-     *                value `KINECT`, `KINECT_R`, or `KINECT_X_R`, and the template parameter, 
-     *                `S`, gets the value `KINECT`. For more details, take a look at 
+     *  \param[in] _a factor scaling the results of the distance calculations for the 
+     *                geometric \f$ x_g \f$ and photometric \f$ x_p \f$ dimensions of 
+     *                the \f$ x\epsilon\mathbb{R}^8 \f$ points. That is, \f$ \|x-x'\|_2^2= 
+     *                f_g(a)\|x_g-x'_g\|_2^2+f_p(a)\|x_p-x'_p\|_2^2 \f$. This parameter is 
+     *                applicable when involving the "Kinect" kernels. That is, when the 
+     *                template parameter, `K`, gets the value `KINECT`, `KINECT_R`, or 
+     *                `KINECT_X_R`, and the template parameter, `S`, gets the value 
+     *                `KINECT`. For more details, take a look at 
      *                `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *  \param[in] _staging flag to indicate whether or not to instantiate the staging buffers.
      */
@@ -2740,13 +2752,17 @@ namespace RBC
      *           workspaces and arguments for the execution of the associated kernels.
      */
     template <KernelTypeC K, RBCPermuteConfig P>
-    void RBCSearch<K, P, KernelTypeS::KINECT>::setExecParams ()
+    void RBCSearch<K, P, KernelTypeS::KINECT>::setExecParams (const std::vector<cl::Event> *events)
     {
         // Get maximum representative list cardinality
         // It is assumed the data are already on the device
-        compMaxN.run ();
+        compMaxN.run (events);
         max_n = *((cl_uint *) compMaxN.read ());
-        if (max_n % 4) max_n += 4 - (max_n % 4);
+        max_n = std::max (max_n, 4u);
+        // if (max_n % 4) max_n += 4 - (max_n % 4);
+        // The x dimension of the global workspace for rbcComputeQXDists_Kinect not only has to be a 
+        // multiple of 4, but it also has to be a multiple of the x dimension of the local workspace
+        if ((max_n / 4) % localQXD[0]) max_n += 4 * (localQXD[0] - ((max_n / 4) % localQXD[0]));
 
         // Establish the number of work-groups per row
         wgXdim = std::ceil (max_n / (float) (8 * wgMultiple));
@@ -2831,18 +2847,17 @@ namespace RBC
                         std::copy ((cl_float *) ptr, (cl_float *) ptr + nr * d, hPtrInR);
                     queue.enqueueWriteBuffer (dBufferInR, block, 0, bufferRSize, hPtrInR, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_X_P:
+                case RBCSearch::Memory::D_IN_X_P:
                     if (ptr != nullptr)
                         std::copy ((cl_float *) ptr, (cl_float *) ptr + nx * d, hPtrInXp);
                     queue.enqueueWriteBuffer (dBufferInXp, block, 0, bufferXSize, hPtrInXp, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_O:
+                case RBCSearch::Memory::D_IN_O:
                     if (ptr != nullptr)
                         std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInO);
                     queue.enqueueWriteBuffer (dBufferInO, block, 0, bufferOSize, hPtrInO, events, event);
                     break;
-                case RBCSearch::Memory::H_IN_N:
-                    wgXdim = 0;  // Reconfigure execution parameters
+                case RBCSearch::Memory::D_IN_N:
                     if (ptr != nullptr)
                         std::copy ((cl_uint *) ptr, (cl_uint *) ptr + nr, hPtrInN);
                     queue.enqueueWriteBuffer (dBufferInN, block, 0, bufferNSize, hPtrInN, events, event);
@@ -2895,11 +2910,14 @@ namespace RBC
      *
      *  \param[in] events a wait-list of events.
      *  \param[out] event event associated with the last kernel execution.
+     *  \param[in] config configuration flag. If true, it runs the necessary kernel, 
+     *                    and initializes the remaining parameters and objects.
      */
     template <KernelTypeC K, RBCPermuteConfig P>
-    void RBCSearch<K, P, KernelTypeS::KINECT>::run (const std::vector<cl::Event> *events, cl::Event *event)
+    void RBCSearch<K, P, KernelTypeS::KINECT>::run (
+        const std::vector<cl::Event> *events, cl::Event *event, bool config)
     {
-        if (wgXdim == 0) setExecParams ();
+        if (config) setExecParams (events);
 
         // Compute nearest representatives
         rbcCompRIDs.run (events);

@@ -74,7 +74,7 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
 
 
 /*! \brief Computes \f$ \ell_1 \f$-norm based distances, 
- *         \f$ d(x,y)=\sum_{i=0}^{3}|x_i-y_i| + \alpha*\sum_{i=4}^{7}|x_i-y_i| \f$.
+ *         \f$ d(x,y)=\frac{1}{1+\alpha}\sum_{i=0}^{3}|x_i-y_i| + \alpha\sum_{i=4}^{7}|x_i-y_i| \f$.
  *  \details Computes a `nx4` block of distances between the two input sets
  *           in \f$ \mathbb{R}^8 \f$.
  * 
@@ -90,20 +90,20 @@ void l1NormMetric8 (float8 *x, float8 *r, float4 *dists, float a, uint n)
 {
     for (uint i = 0; i < n; ++i)
     {
-        dists[i].x = dot (fabs (x[i].lo - r[0].lo), (float4) (1.f)) + a * 
-                     dot (fabs (x[i].hi - r[0].hi), (float4) (1.f));
-        dists[i].y = dot (fabs (x[i].lo - r[1].lo), (float4) (1.f)) + a * 
-                     dot (fabs (x[i].hi - r[1].hi), (float4) (1.f));
-        dists[i].z = dot (fabs (x[i].lo - r[2].lo), (float4) (1.f)) + a * 
-                     dot (fabs (x[i].hi - r[2].hi), (float4) (1.f));
-        dists[i].w = dot (fabs (x[i].lo - r[3].lo), (float4) (1.f)) + a * 
-                     dot (fabs (x[i].hi - r[3].hi), (float4) (1.f));
+        dists[i].x = 1.f / (1.f + a) * dot (fabs (x[i].lo - r[0].lo), (float4) (1.f)) + 
+                                  a  * dot (fabs (x[i].hi - r[0].hi), (float4) (1.f));
+        dists[i].y = 1.f / (1.f + a) * dot (fabs (x[i].lo - r[1].lo), (float4) (1.f)) + 
+                                  a  * dot (fabs (x[i].hi - r[1].hi), (float4) (1.f));
+        dists[i].z = 1.f / (1.f + a) * dot (fabs (x[i].lo - r[2].lo), (float4) (1.f)) + 
+                                  a  * dot (fabs (x[i].hi - r[2].hi), (float4) (1.f));
+        dists[i].w = 1.f / (1.f + a) * dot (fabs (x[i].lo - r[3].lo), (float4) (1.f)) + 
+                                  a  * dot (fabs (x[i].hi - r[3].hi), (float4) (1.f));
     }
 }
 
 
 /*! \brief Computes \f$ \ell_2 \f$-norm based squared distances, 
- *         \f$ d(x,y)=\sum_{i=0}^{3}(x_i-y_i)^{2} + \alpha*\sum_{i=4}^{7}(x_i-y_i)^{2} \f$.
+ *         \f$ d(x,y)=\frac{1}{1+\alpha}\sum_{i=0}^{3}(x_i-y_i)^{2} + \alpha\sum_{i=4}^{7}(x_i-y_i)^{2} \f$.
  *  \details Computes a `nx4` block of distances between the two input sets 
  *           in \f$ \mathbb{R}^8 \f$.
  * 
@@ -119,14 +119,14 @@ void euclideanSquaredMetric8 (float8 *x, float8 *r, float4 *dists, float a, uint
 {
     for (uint i = 0; i < n; ++i)
     {
-        dists[i].x = dot (pown (x[i].lo - r[0].lo, 2), (float4) (1.f)) + a * 
-                     dot (pown (x[i].hi - r[0].hi, 2), (float4) (1.f));
-        dists[i].y = dot (pown (x[i].lo - r[1].lo, 2), (float4) (1.f)) + a * 
-                     dot (pown (x[i].hi - r[1].hi, 2), (float4) (1.f));
-        dists[i].z = dot (pown (x[i].lo - r[2].lo, 2), (float4) (1.f)) + a * 
-                     dot (pown (x[i].hi - r[2].hi, 2), (float4) (1.f));
-        dists[i].w = dot (pown (x[i].lo - r[3].lo, 2), (float4) (1.f)) + a * 
-                     dot (pown (x[i].hi - r[3].hi, 2), (float4) (1.f));
+        dists[i].x = 1.f / (1.f + a) * dot (pown (x[i].lo - r[0].lo, 2), (float4) (1.f)) + 
+                                  a  * dot (pown (x[i].hi - r[0].hi, 2), (float4) (1.f));
+        dists[i].y = 1.f / (1.f + a) * dot (pown (x[i].lo - r[1].lo, 2), (float4) (1.f)) + 
+                                  a  * dot (pown (x[i].hi - r[1].hi, 2), (float4) (1.f));
+        dists[i].z = 1.f / (1.f + a) * dot (pown (x[i].lo - r[2].lo, 2), (float4) (1.f)) + 
+                                  a  * dot (pown (x[i].hi - r[2].hi, 2), (float4) (1.f));
+        dists[i].w = 1.f / (1.f + a) * dot (pown (x[i].lo - r[3].lo, 2), (float4) (1.f)) + 
+                                  a  * dot (pown (x[i].hi - r[3].hi, 2), (float4) (1.f));
     }
 }
 

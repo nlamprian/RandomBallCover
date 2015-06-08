@@ -7,7 +7,7 @@
  *        the representative radii. This feature is not offered by 
  *        the `RBCConstruct` class and is implemented on the CPU.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -247,7 +247,7 @@ public:
         // Copy data to device
         rbcS.write (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_Q);
 
-        rbcS.run ();  // Execute kernels
+        rbcS.run (nullptr, nullptr, true);  // Execute kernels
 
         // Copy results to host
         cl_float *Qp = (cl_float *) rbcS.read (

@@ -6,7 +6,7 @@
  *        of the associated algorithms. They are used only for testing purposes, 
  *        and not for examining the performance of their GPU alternatives.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -305,7 +305,7 @@ TEST (RBC, rbcRGBD)
         // Copy data to device
         rbcSearch.write (cl_algo::RBC::RBCSearch<K2, P2, S2>::Memory::D_IN_Q);
 
-        rbcSearch.run ();  // Execute kernels (~ 714 us)
+        rbcSearch.run (nullptr, nullptr, true);  // Execute kernels (~ 714 us)
 
         // Copy results to host
         cl_float *Qp = (cl_float *) rbcSearch.read (

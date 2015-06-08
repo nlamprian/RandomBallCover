@@ -6,7 +6,7 @@
  *        of the associated algorithms. They are used only for testing purposes, 
  *        and not for examining the performance of their GPU alternatives.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -168,6 +168,7 @@ TEST (RBC, rbcComputeDists_Kinect)
         const unsigned int nx = 1 << 14;  // 16384
         const unsigned int nr = 1 << 7;   //   128
         const unsigned int d = 8;
+        const float a = 1.f;
         const unsigned int bufferSizeX = nx * d * sizeof (cl_float);
         const unsigned int bufferSizeR = nr * d * sizeof (cl_float);
 
@@ -204,7 +205,7 @@ TEST (RBC, rbcComputeDists_Kinect)
 
         // Produce reference array of distances
         cl_float *refCD = new cl_float[nr * nx];
-        RBC::cpuRBCComputeDists (cd.hPtrInX, cd.hPtrInR, refCD, nx, nr, d);
+        RBC::cpuRBCComputeDists8 (cd.hPtrInX, cd.hPtrInR, refCD, nx, nr, d, a);
         // RBC::printBufferF ("Expected:", refCD, nr, nx, 3);
 
         // Verify blurred output
@@ -224,7 +225,7 @@ TEST (RBC, rbcComputeDists_Kinect)
             for (int i = 0; i < nRepeat; ++i)
             {
                 cTimer.start ();
-                RBC::cpuRBCComputeDists (cd.hPtrInX, cd.hPtrInR, refCD, nx, nr, d);
+                RBC::cpuRBCComputeDists8 (cd.hPtrInX, cd.hPtrInR, refCD, nx, nr, d, a);
                 pCPU[i] = cTimer.stop ();
             }
             
@@ -942,7 +943,7 @@ TEST (RBC, rbcSearch)
         //~ KernelTypeC::KINECT_R,    RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 623 us
         //~ KernelTypeC::KINECT_X_R,  RBCPermuteConfig::GENERIC, KernelTypeS::KINECT  : 638 us
         //~ KernelTypeC::KINECT_X_R,  RBCPermuteConfig::KINECT,  KernelTypeS::KINECT  : 644 us
-        rbcSearch.run ();
+        rbcSearch.run (nullptr, nullptr, true);
 
         // Copy results to host
         cl_float *Qp = (cl_float *) rbcSearch.read (

@@ -65,7 +65,7 @@
  *  \param[in] n number of elements in a row of the array divided by 4.
  */
 kernel
-void reduce_min (global float4 *in, global float *out, local float *data, uint n)
+void reduce_min_f (global float4 *in, global float *out, local float *data, uint n)
 {
     // Workspace dimensions
     uint lXdim = get_local_size (0);
@@ -145,7 +145,7 @@ void reduce_min (global float4 *in, global float *out, local float *data, uint n
  *  \param[in] n number of elements in a row of the array divided by 4.
  */
 kernel
-void reduce_max (global uint4 *in, global uint *out, local uint *data, uint n)
+void reduce_max_ui (global uint4 *in, global uint *out, local uint *data, uint n)
 {
     // Workspace dimensions
     uint lXdim = get_local_size (0);

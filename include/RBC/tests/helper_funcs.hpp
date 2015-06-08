@@ -1,7 +1,7 @@
 /*! \file helper_funcs.hpp
  *  \brief Declarations of helper functions for testing.
  *  \author Nick Lamprianidis
- *  \version 1.1
+ *  \version 1.2.0
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
@@ -26,8 +26,8 @@
  *  THE SOFTWARE.
  */
 
-#ifndef HELPERFUNCS_HPP
-#define HELPERFUNCS_HPP
+#ifndef RBC_HELPERFUNCS_HPP
+#define RBC_HELPERFUNCS_HPP
 
 #include <cassert>
 #include <algorithm>
@@ -128,6 +128,7 @@ namespace RBC
      *  \param[out] out output (reduced) data.
      *  \param[in] cols number of columns in the input array.
      *  \param[in] rows number of rows in the input array.
+     *  \param[in] func function supporting the requested operation.
      */
     template <typename T>
     void cpuReduce (T *in, T *out, uint32_t cols, uint32_t rows, std::function<bool (T, T)> func)
@@ -208,9 +209,41 @@ namespace RBC
         {
             for (uint r = 0; r < nr; ++r)
             {
-                float dist = 0.f;
+                T dist = 0.f;
                 for (uint j = 0; j < d; ++j)
                     dist += std::pow (X[x * d + j] - R[r * d + j], 2);
+
+                D[x * nr + r] = dist;
+            }
+        }
+    }
+
+
+    /*! \brief Computes the distances between two sets of points in a brute force way.
+     *  \details It is just a naive serial implementation.
+     *
+     *  \param[in] X array of the database points (each row contains a point).
+     *  \param[in] R array of the representative points (each row contains a point).
+     *  \param[out] D array of distances of the database points from the representative
+     *                points (each row contains the distances of a database point from 
+     *                all the representative points)
+     *  \param[in] nx number of database points.
+     *  \param[in] nr number of representative points.
+     *  \param[in] d dimensionality of the associated points.
+     *  \param[in] a scaling factor for the geometric and photometric parts.
+     */
+    template <typename T>
+    void cpuRBCComputeDists8 (T *X, T *R, T *D, uint32_t nx, uint32_t nr, uint32_t d, T a)
+    {
+        for (uint x = 0; x < nx; ++x)
+        {
+            for (uint r = 0; r < nr; ++r)
+            {
+                T dist = 0.f;
+                for (uint j = 0; j < 4; ++j)
+                    dist += 1.f / (1.f + a) * std::pow (X[x * d + j] - R[r * d + j], 2);
+                for (uint j = 4; j < 8; ++j)
+                    dist += a * std::pow (X[x * d + j] - R[r * d + j], 2);
 
                 D[x * nr + r] = dist;
             }
@@ -321,6 +354,7 @@ namespace RBC
 
         return std::sqrt (dist);
     }
+    
 
     /*! \brief Calculates the euclidean distance betweeen two points in \f$ \mathbb{R}^8 \f$..
      *  \details It is just a naive serial implementation.
@@ -337,7 +371,7 @@ namespace RBC
         T dist = 0.f;
 
         for (int i = 0; i < 4; ++i)
-            dist += std::pow (p1[i] - p2[i], 2);
+            dist += 1.f / (1.f + a) * std::pow (p1[i] - p2[i], 2);
         for (int i = 4; i < 8; ++i)
             dist += a * std::pow (p1[i] - p2[i], 2);
 
@@ -448,7 +482,7 @@ namespace RBC
                 if (x < n)
                 {
                     for (uint j = 0; j < 4; ++j)
-                        dist += std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
+                        dist += 1.f / (1.f + a) * std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
                     for (uint j = 4; j < d; ++j)
                         dist += a * std::pow (Qp[q * d + j] - Xp[(o + x) * d + j], 2);
                 }
@@ -547,4 +581,4 @@ namespace RBC
 
 }
 
-#endif  // HELPERFUNCS_HPP
+#endif  // RBC_HELPERFUNCS_HPP
