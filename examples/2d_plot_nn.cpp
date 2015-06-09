@@ -2,7 +2,7 @@
  *  \brief An application examining the resulting arrangement and operation 
  *         of the `Random Ball Cover` data structure on 2-D data.
  *  \details Plots the `RBC` data structure and the queries, and draws lines to 
- *           associate the queries with their representatves and NNs.
+ *           associate the queries with their representatives and NNs.
  *  \note The application requires further processing to extract 
  *        the representative radii. This feature is not offered by 
  *        the `RBCConstruct` class and is implemented on the CPU.

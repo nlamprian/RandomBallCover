@@ -182,7 +182,7 @@ TEST (RBC, rbcComputeDists_Kinect)
         clutils::CLEnvInfo<1> info (0, 0, 0, { 0 }, 0);
         const cl_algo::RBC::KernelTypeC K = cl_algo::RBC::KernelTypeC::KINECT_R;
         cl_algo::RBC::RBCComputeDists<K> cd (clEnv, info);
-        cd.init (nx, nr);
+        cd.init (nx, nr, d, a);
 
         // Initialize data (writes on staging buffers directly)
         std::generate (cd.hPtrInX, cd.hPtrInX + bufferSizeX / sizeof (cl_float), RBC::rNum_R_0_1);
@@ -759,6 +759,7 @@ TEST (RBC, rbcConstruct)
         const unsigned int nx = 1 << 14;  // 16384
         const unsigned int nr = 1 <<  8;  //   256
         const unsigned int d = 8;
+        // const float a = 0.f;
         const unsigned int bufferXSize = nx * d * sizeof (cl_float);
         const unsigned int bufferRSize = nr * d * sizeof (cl_float);
         const unsigned int bufferDSize = nr * nx * sizeof (cl_float);
@@ -778,6 +779,7 @@ TEST (RBC, rbcConstruct)
         const cl_algo::RBC::RBCPermuteConfig P = cl_algo::RBC::RBCPermuteConfig::GENERIC;
         cl_algo::RBC::RBCConstruct<K, P> rbcCon (clEnv, info);
         rbcCon.init (nx, nr, d);
+        // rbcCon.init (nx, nr, d, a);
 
         // Initialize data (writes on staging buffer directly)
         std::generate (rbcCon.hPtrInX, rbcCon.hPtrInX + bufferXSize / sizeof (cl_float), RBC::rNum_R_0_1);

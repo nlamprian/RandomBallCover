@@ -77,6 +77,9 @@ void euclideanSquaredMetric (float4 *x, float4 *r, float4 *dists, uint n)
  *         \f$ d(x,y)=\frac{1}{1+\alpha}\sum_{i=0}^{3}|x_i-y_i| + \alpha\sum_{i=4}^{7}|x_i-y_i| \f$.
  *  \details Computes a `nx4` block of distances between the two input sets
  *           in \f$ \mathbb{R}^8 \f$.
+ *  \attention Additional control flow is necessary to cover the case of \f$ \alpha = 0 \f$.
+ *             When \f$ \alpha = 0 \f$ and the result of the second dot product is `INFINITY`, 
+ *             `NAN` values will be produced that will cause problems in later steps.
  * 
  *  \param[in] x array of database points.
  *  \param[in] r array of 4 representative points.
@@ -106,6 +109,9 @@ void l1NormMetric8 (float8 *x, float8 *r, float4 *dists, float a, uint n)
  *         \f$ d(x,y)=\frac{1}{1+\alpha}\sum_{i=0}^{3}(x_i-y_i)^{2} + \alpha\sum_{i=4}^{7}(x_i-y_i)^{2} \f$.
  *  \details Computes a `nx4` block of distances between the two input sets 
  *           in \f$ \mathbb{R}^8 \f$.
+ *  \attention Additional control flow is necessary to cover the case of \f$ \alpha = 0 \f$.
+ *             When \f$ \alpha = 0 \f$ and the result of the second dot product is `INFINITY`, 
+ *             `NAN` values will be produced that will cause problems in later steps.
  * 
  *  \param[in] x array of database points.
  *  \param[in] r array of 4 representative points.

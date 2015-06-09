@@ -343,10 +343,13 @@ namespace RBC
         /*! \brief Executes the necessary kernels. */
         void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
 
-        cl_float *hPtrInD;  /*!< Mapping of the input staging buffer. */
-        rbc_dist_id *hPtrOutID;  /*!< Mapping of the output staging buffer with the minimum elements and id values. */
-        cl_uint *hPtrOutRnk;  /*!< Mapping of the output staging buffer with the indices of each database point within the associated list. */
-        cl_uint *hPtrOutN;  /*!< Mapping of the output staging buffer with the number of elements per representative list. */
+        cl_float *hPtrInD;       /*!< Mapping of the input staging buffer. */
+        rbc_dist_id *hPtrOutID;  /*!< Mapping of the output staging buffer with 
+                                  *   the minimum elements and id values. */
+        cl_uint *hPtrOutRnk;     /*!< Mapping of the output staging buffer with 
+                                  *   the indices of each database point within the associated list. */
+        cl_uint *hPtrOutN;       /*!< Mapping of the output staging buffer with 
+                                  *   the number of elements per representative list. */
 
     private:
         clutils::CLEnv &env;
@@ -608,12 +611,16 @@ namespace RBC
         /*! \brief Executes the necessary kernels. */
         void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr);
 
-        cl_float *hPtrInX;  /*!< Mapping of the input staging buffer for the database. */
-        rbc_dist_id *hPtrInID;  /*!< Mapping of the input staging buffer with the representative ids for each point. */
-        cl_uint *hPtrInRnk;  /*!< Mapping of the input staging buffer with the indices of the points within each rep. list. */
-        cl_uint *hPtrInO;  /*!< Mapping of the input staging buffer with the offsets of the representative lists within the db. */
-        cl_float *hPtrOutXp;  /*!< Mapping of the output staging buffer for the permuted database. */
-        rbc_dist_id *hPtrOutIDp;  /*!< Mapping of the output staging buffer with the representative ids for each point in the permuted db. */
+        cl_float *hPtrInX;        /*!< Mapping of the input staging buffer for the database. */
+        rbc_dist_id *hPtrInID;    /*!< Mapping of the input staging buffer with 
+                                   *   the representative ids for each point. */
+        cl_uint *hPtrInRnk;       /*!< Mapping of the input staging buffer with 
+                                   *   the indices of the points within each rep. list. */
+        cl_uint *hPtrInO;         /*!< Mapping of the input staging buffer with 
+                                   *   the offsets of the representative lists within the db. */
+        cl_float *hPtrOutXp;      /*!< Mapping of the output staging buffer for the permuted database. */
+        rbc_dist_id *hPtrOutIDp;  /*!< Mapping of the output staging buffer with 
+                                   *   the representative ids for each point in the permuted db. */
 
     private:
         clutils::CLEnv &env;
@@ -736,14 +743,19 @@ namespace RBC
         /*! \brief Sets the scaling factor \f$ \alpha \f$. */
         void setAlpha (float _a);
 
-        cl_float *hPtrInX;  /*!< Mapping of the input staging buffer for the database. */
-        cl_float *hPtrInR;  /*!< Mapping of the input staging buffer for the representatives. */
-        rbc_dist_id *hPtrOutID;  /*!< Mapping of the output staging buffer with the representative ids for each point. */
-        cl_uint *hPtrOutRnk;  /*!< Mapping of the output staging buffer with the indices of the points within each rep. list. */
-        cl_uint *hPtrOutN;  /*!< Mapping of the output staging buffer with the cardinalities of the representative lists. */
-        cl_uint *hPtrOutO;  /*!< Mapping of the output staging buffer with the offsets of the representative lists within the db. */
-        cl_float *hPtrOutXp;  /*!< Mapping of the output staging buffer for the permuted database. */
-        rbc_dist_id *hPtrOutIDp;  /*!< Mapping of the output staging buffer with the representative ids for each point in the permuted db. */
+        cl_float *hPtrInX;        /*!< Mapping of the input staging buffer for the database. */
+        cl_float *hPtrInR;        /*!< Mapping of the input staging buffer for the representatives. */
+        rbc_dist_id *hPtrOutID;   /*!< Mapping of the output staging buffer with 
+                                   *   the representative ids for each point. */
+        cl_uint *hPtrOutRnk;      /*!< Mapping of the output staging buffer with 
+                                   *   the indices of the points within each rep. list. */
+        cl_uint *hPtrOutN;        /*!< Mapping of the output staging buffer with 
+                                   *   the cardinalities of the representative lists. */
+        cl_uint *hPtrOutO;        /*!< Mapping of the output staging buffer with 
+                                   *   the offsets of the representative lists within the db. */
+        cl_float *hPtrOutXp;      /*!< Mapping of the output staging buffer for the permuted database. */
+        rbc_dist_id *hPtrOutIDp;  /*!< Mapping of the output staging buffer with 
+                                   *   the representative ids for each point in the permuted db. */
 
     private:
         clutils::CLEnv &env;
@@ -872,8 +884,10 @@ namespace RBC
             H_IN_N,       /*!< Input staging buffer with the cardinalities of the representative lists. */
             H_OUT_R_ID,   /*!< Output staging buffer with the representative ids for each query in Qp. */
             H_OUT_Q_P,    /*!< Output staging buffer for the permuted queries. */
-            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
-            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative 
+                           *   to the NN's rep list) for each query in Qp. */
+            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. 
+                           *   The NNs correspond to the queries in the permuted array, Qp. */
             D_IN_Q,       /*!< Input buffer for the queries. */
             D_IN_R,       /*!< Input buffer for the representatives. */
             D_IN_X_P,     /*!< Input buffer for the permuted database. */
@@ -882,9 +896,10 @@ namespace RBC
             D_OUT_R_ID,   /*!< Output buffer with the representative ids for each query in Qp. */
             D_OUT_Q_P,    /*!< Output buffer for the permuted queries. */
             D_OUT_NN_ID,  /*!< Output buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
-            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
-            D_OUT_QR_D,   /*!< Output buffer for the array of query distances from the representatives. */
-            D_OUT_QX_D    /*!< Output buffer for the array of query distances from the points in their rep's list. */
+            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. 
+                           *   The NNs correspond to the queries in the permuted array, Qp. */
+            D_QR_D,       /*!< Buffer for the array of query distances from the representatives. */
+            D_QX_D        /*!< Buffer for the array of query distances from the points in their rep's list. */
         };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
@@ -902,15 +917,20 @@ namespace RBC
         /*! \brief Executes the necessary kernels. */
         void run (const std::vector<cl::Event> *events = nullptr, cl::Event *event = nullptr, bool config = false);
 
-        cl_float *hPtrInQ;  /*!< Mapping of the input staging buffer for the queries. */
-        cl_float *hPtrInR;  /*!< Mapping of the input staging buffer for the representatives. */
-        cl_float *hPtrInXp;  /*!< Mapping of the input staging buffer for the permuted database. */
-        cl_uint *hPtrInO;  /*!< Mapping of the input staging buffer with the offsets of the representative lists within the db. */
-        cl_uint *hPtrInN;  /*!< Mapping of the input staging buffer with the cardinalities of the representative lists. */
-        rbc_dist_id *hPtrOutRID;  /*!< Mapping of the output staging buffer with the representative ids for each query. */
-        cl_float *hPtrOutQp;  /*!< Mapping of the output staging buffer for the permuted queries. */
+        cl_float *hPtrInQ;         /*!< Mapping of the input staging buffer for the queries. */
+        cl_float *hPtrInR;         /*!< Mapping of the input staging buffer for the representatives. */
+        cl_float *hPtrInXp;        /*!< Mapping of the input staging buffer for the permuted database. */
+        cl_uint *hPtrInO;          /*!< Mapping of the input staging buffer with 
+                                    *   the offsets of the representative lists within the db. */
+        cl_uint *hPtrInN;          /*!< Mapping of the input staging buffer with 
+                                    *   the cardinalities of the representative lists. */
+        rbc_dist_id *hPtrOutRID;   /*!< Mapping of the output staging buffer with 
+                                    *   the representative ids for each query. */
+        cl_float *hPtrOutQp;       /*!< Mapping of the output staging buffer for the permuted queries. */
         rbc_dist_id *hPtrOutNNID;  /*!< Mapping of the output staging buffer with the NN ids for each query. */
-        cl_float *hPtrOutNN;  /*!< Mapping of the output staging buffer for the query NNs. */
+        cl_float *hPtrOutNN;       /*!< Mapping of the output staging buffer for the query NNs. */
+
+        unsigned int max_n;  /*!< Maximum representative list cardinality. */
 
     private:
         void setExecParams (const std::vector<cl::Event> *events = nullptr);
@@ -925,7 +945,7 @@ namespace RBC
         Reduce<ReduceConfig::MAX, cl_uint> compMaxN;
         Staging staging;
         size_t wgMultiple, wgXdim;
-        unsigned int nq, nr, nx, d, max_n;
+        unsigned int nq, nr, nx, d;
         unsigned int bufferQSize, bufferRSize, bufferXSize, bufferOSize, bufferNSize;
         unsigned int bufferQXDSize, bufferRIDSize;
         unsigned int bufferNNIDSize, bufferGNNIDSize, bufferNNSize;
@@ -933,7 +953,7 @@ namespace RBC
         cl::Buffer dBufferInQ, dBufferInR, dBufferInXp, dBufferInO, dBufferInN;
         cl::Buffer hBufferOutRID, hBufferOutQp, hBufferOutNNID, hBufferOutNN;
         cl::Buffer dBufferOutRID, dBufferOutQp, dBufferOutNNID, dBufferOutNN;
-        cl::Buffer dBufferOutQXD, dBufferOutGNNID;
+        cl::Buffer dBufferQXD, dBufferOutGNNID;
 
     public:
         /*! \brief Executes the necessary kernels.
@@ -1048,8 +1068,10 @@ namespace RBC
             H_IN_N,       /*!< Input staging buffer with the cardinalities of the representative lists. */
             H_OUT_R_ID,   /*!< Output staging buffer with the representative ids for each query in Qp. */
             H_OUT_Q_P,    /*!< Output staging buffer for the permuted queries. */
-            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
-            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
+            H_OUT_NN_ID,  /*!< Output staging buffer with the NN ids (relative 
+                           *   to the NN's rep list) for each query in Qp. */
+            H_OUT_NN,     /*!< Output staging buffer with the queries' nearest neighbors. 
+                           *   The NNs correspond to the queries in the permuted array, Qp. */
             D_IN_Q,       /*!< Input buffer for the queries. */
             D_IN_R,       /*!< Input buffer for the representatives. */
             D_IN_X_P,     /*!< Input buffer for the permuted database. */
@@ -1058,9 +1080,10 @@ namespace RBC
             D_OUT_R_ID,   /*!< Output buffer with the representative ids for each query in Qp. */
             D_OUT_Q_P,    /*!< Output buffer for the permuted queries. */
             D_OUT_NN_ID,  /*!< Output buffer with the NN ids (relative to the NN's rep list) for each query in Qp. */
-            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. The NNs correspond to the queries in the permuted array, Qp. */
-            D_OUT_QR_D,   /*!< Output buffer for the array of query distances from the representatives. */
-            D_OUT_QX_D    /*!< Output buffer for the array of query distances from the points in their rep's list. */
+            D_OUT_NN,     /*!< Output buffer with the queries' nearest neighbors. 
+                           *   The NNs correspond to the queries in the permuted array, Qp. */
+            D_QR_D,       /*!< Buffer for the array of query distances from the representatives. */
+            D_QX_D        /*!< Buffer for the array of query distances from the points in their rep's list. */
         };
 
         /*! \brief Configures an OpenCL environment as specified by `_info`. */
@@ -1082,15 +1105,20 @@ namespace RBC
         /*! \brief Sets the scaling factor \f$ \alpha \f$. */
         void setAlpha (float _a);
 
-        cl_float *hPtrInQ;  /*!< Mapping of the input staging buffer for the queries. */
-        cl_float *hPtrInR;  /*!< Mapping of the input staging buffer for the representatives. */
-        cl_float *hPtrInXp;  /*!< Mapping of the input staging buffer for the permuted database. */
-        cl_uint *hPtrInO;  /*!< Mapping of the input staging buffer with the offsets of the representative lists within the db. */
-        cl_uint *hPtrInN;  /*!< Mapping of the input staging buffer with the cardinalities of the representative lists. */
-        rbc_dist_id *hPtrOutRID;  /*!< Mapping of the output staging buffer with the representative ids for each query. */
-        cl_float *hPtrOutQp;  /*!< Mapping of the output staging buffer for the permuted queries. */
+        cl_float *hPtrInQ;         /*!< Mapping of the input staging buffer for the queries. */
+        cl_float *hPtrInR;         /*!< Mapping of the input staging buffer for the representatives. */
+        cl_float *hPtrInXp;        /*!< Mapping of the input staging buffer for the permuted database. */
+        cl_uint *hPtrInO;          /*!< Mapping of the input staging buffer with the offsets 
+                                    *   of the representative lists within the db. */
+        cl_uint *hPtrInN;          /*!< Mapping of the input staging buffer with 
+                                    *   the cardinalities of the representative lists. */
+        rbc_dist_id *hPtrOutRID;   /*!< Mapping of the output staging buffer with 
+                                    *   the representative ids for each query. */
+        cl_float *hPtrOutQp;       /*!< Mapping of the output staging buffer for the permuted queries. */
         rbc_dist_id *hPtrOutNNID;  /*!< Mapping of the output staging buffer with the NN ids for each query. */
-        cl_float *hPtrOutNN;  /*!< Mapping of the output staging buffer for the query NNs. */
+        cl_float *hPtrOutNN;       /*!< Mapping of the output staging buffer for the query NNs. */
+
+        unsigned int max_n;  /*!< Maximum representative list cardinality. */
 
     private:
         void setExecParams (const std::vector<cl::Event> *events = nullptr);
@@ -1106,7 +1134,7 @@ namespace RBC
         Staging staging;
         float a;
         size_t wgMultiple, wgXdim;
-        unsigned int nq, nr, nx, d, max_n;
+        unsigned int nq, nr, nx, d;
         unsigned int bufferQSize, bufferRSize, bufferXSize, bufferOSize, bufferNSize;
         unsigned int bufferQXDSize, bufferRIDSize;
         unsigned int bufferNNIDSize, bufferGNNIDSize, bufferNNSize;
@@ -1114,7 +1142,7 @@ namespace RBC
         cl::Buffer dBufferInQ, dBufferInR, dBufferInXp, dBufferInO, dBufferInN;
         cl::Buffer hBufferOutRID, hBufferOutQp, hBufferOutNNID, hBufferOutNN;
         cl::Buffer dBufferOutRID, dBufferOutQp, dBufferOutNNID, dBufferOutNN;
-        cl::Buffer dBufferOutQXD, dBufferOutGNNID;
+        cl::Buffer dBufferQXD, dBufferOutGNNID;
 
     public:
         /*! \brief Executes the necessary kernels.

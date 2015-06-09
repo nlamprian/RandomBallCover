@@ -2058,10 +2058,10 @@ namespace RBC
                 return dBufferOutNNID;
             case RBCSearch::Memory::D_OUT_NN:
                 return dBufferOutNN;
-            case RBCSearch::Memory::D_OUT_QR_D:
+            case RBCSearch::Memory::D_QR_D:
                 return rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_D);
-            case RBCSearch::Memory::D_OUT_QX_D:
-                return dBufferOutQXD;
+            case RBCSearch::Memory::D_QX_D:
+                return dBufferQXD;
         }
     }
 
@@ -2286,7 +2286,7 @@ namespace RBC
         try
         {
             if (max_n == 0)
-                throw "The array, QXD, cannot have zero columns";
+                throw "The array QXD cannot have zero columns";
 
             // (8 * wgMultiple) elements per work-group
             // (2 * wgMultiple) work-groups maximum
@@ -2309,16 +2309,16 @@ namespace RBC
         globalNNID = cl::NDRange (wgXdim * wgMultiple, nq);
 
         // Create device buffers
-        dBufferOutQXD = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQXDSize);
+        dBufferQXD = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQXDSize);
         if (wgXdim == 1)
             dBufferOutGNNID = cl::Buffer ();
         else
             dBufferOutGNNID = cl::Buffer (context, CL_MEM_READ_WRITE, bufferGNNIDSize);
 
         // Set kernel arguments
-        rbcCompQXDistsKernel.setArg (2, dBufferOutQXD);
+        rbcCompQXDistsKernel.setArg (2, dBufferQXD);
 
-        nnidMinsKernel.setArg (0, dBufferOutQXD);
+        nnidMinsKernel.setArg (0, dBufferQXD);
         nnidMinsKernel.setArg (5, max_n / 4);
 
         if (wgXdim == 1)
@@ -2537,10 +2537,10 @@ namespace RBC
                 return dBufferOutNNID;
             case RBCSearch::Memory::D_OUT_NN:
                 return dBufferOutNN;
-            case RBCSearch::Memory::D_OUT_QR_D:
+            case RBCSearch::Memory::D_QR_D:
                 return rbcCompRIDs.get (RBCConstruct<K, P>::Memory::D_OUT_D);
-            case RBCSearch::Memory::D_OUT_QX_D:
-                return dBufferOutQXD;
+            case RBCSearch::Memory::D_QX_D:
+                return dBufferQXD;
         }
     }
 
@@ -2549,6 +2549,8 @@ namespace RBC
      *  \note If you have assigned a memory object to one member variable of the class 
      *        before the call to `init`, then that memory will be maintained. Otherwise, 
      *        a new memory object will be created.
+     *  \attention The \f$ \alpha \f$ parameter **cannot** be \f$0\f$. To overcome this restriction, 
+     *             take a look at `euclideanSquaredMetric8` in `kernels/rbc_kernels.cl`.
      *        
      *  \param[in] _nq number of query points.
      *  \param[in] _nr number of representative points.
@@ -2773,7 +2775,7 @@ namespace RBC
         try
         {
             if (max_n == 0)
-                throw "The array, QXD, cannot have zero columns";
+                throw "The array QXD cannot have zero columns";
 
             // (8 * wgMultiple) elements per work-group
             // (2 * wgMultiple) work-groups maximum
@@ -2796,16 +2798,16 @@ namespace RBC
         globalNNID = cl::NDRange (wgXdim * wgMultiple, nq);
 
         // Create device buffers
-        dBufferOutQXD = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQXDSize);
+        dBufferQXD = cl::Buffer (context, CL_MEM_READ_WRITE, bufferQXDSize);
         if (wgXdim == 1)
             dBufferOutGNNID = cl::Buffer ();
         else
             dBufferOutGNNID = cl::Buffer (context, CL_MEM_READ_WRITE, bufferGNNIDSize);
 
         // Set kernel arguments
-        rbcCompQXDistsKernel.setArg (2, dBufferOutQXD);
+        rbcCompQXDistsKernel.setArg (2, dBufferQXD);
 
-        nnidMinsKernel.setArg (0, dBufferOutQXD);
+        nnidMinsKernel.setArg (0, dBufferQXD);
         nnidMinsKernel.setArg (5, max_n / 4);
 
         if (wgXdim == 1)
