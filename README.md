@@ -31,9 +31,9 @@ cd RandomBallCover
 mkdir build
 cd build
 
-cmake ..
+cmake -DBUILD_EXAMPLES=ON ..
 # or to build the tests too
-cmake -DBUILD_TESTS=ON ..
+cmake -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON ..
 
 make
 

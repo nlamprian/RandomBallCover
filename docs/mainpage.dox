@@ -34,9 +34,9 @@ Currently, there are 4 example applications. For `rbc_2d_plot` and `rbc_2d_plot_
 > mkdir build <br>
 > cd build
 > 
-> cmake .. <br>
+> cmake -DBUILD_EXAMPLES=ON .. <br>
 > \# or to build the tests too <br>
-> cmake -DBUILD_TESTS=ON ..
+> cmake -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON ..
 > 
 > make
 > 

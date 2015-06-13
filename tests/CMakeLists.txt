@@ -1,19 +1,22 @@
 if ( BUILD_TESTS )
 
     find_package ( Threads REQUIRED )
-    find_package ( OpenCV REQUIRED )
+    # find_package ( OpenCV REQUIRED )
 
     include_directories ( ${CLUtils_INCLUDE_DIR} 
                           ${GTEST_INCLUDE_DIRS}
+                          # ${OpenCV2_INCLUDE_DIRS}
                           ${OPENGL_INCLUDE_DIRS} )
 
     add_executable ( ${FNAME}_tests_reduce testsReduce.cpp )
     add_executable ( ${FNAME}_tests_scan testsScan.cpp )
     add_executable ( ${FNAME}_tests_rbc testsRBC.cpp )
+    add_executable ( ${FNAME}_tests_rbc_8d testsRBC_RGBD.cpp )
 
     add_dependencies ( ${FNAME}_tests_reduce CLUtils googletest )
     add_dependencies ( ${FNAME}_tests_scan CLUtils googletest )
     add_dependencies ( ${FNAME}_tests_rbc CLUtils googletest )
+    add_dependencies ( ${FNAME}_tests_rbc_8d CLUtils googletest )
 
     target_link_libraries ( ${FNAME}_tests_reduce LINK_PUBLIC ${CLUtils_LIBRARIES} 
                                                               RBCHelperFuncs 
@@ -39,6 +42,15 @@ if ( BUILD_TESTS )
                                                            ${GTEST_BOTH_LIBRARIES}
                                                            ${CMAKE_THREAD_LIBS_INIT} )
 
+    target_link_libraries ( ${FNAME}_tests_rbc_8d LINK_PUBLIC ${CLUtils_LIBRARIES} 
+                                                              RBCHelperFuncs 
+                                                              RBCAlgorithms
+                                                              ${OPENGL_LIBRARIES}
+                                                              ${OPENCL_LIBRARIES}
+                                                              # ${OpenCV2_LIBRARIES}
+                                                              ${GTEST_BOTH_LIBRARIES}
+                                                              ${CMAKE_THREAD_LIBS_INIT} )
+
     add_test ( NAME ${FNAME}_tests_reduce 
                COMMAND ${EXECUTABLE_OUTPUT_PATH}/${FNAME}_tests_reduce 
                WORKING_DIRECTORY ${CMAKE_BINARY_DIR} )
@@ -51,30 +63,9 @@ if ( BUILD_TESTS )
                COMMAND ${EXECUTABLE_OUTPUT_PATH}/${FNAME}_tests_rbc 
                WORKING_DIRECTORY ${CMAKE_BINARY_DIR} )
 
-
-    # if ( OpenCV_FOUND )
-
-        # include_directories ( ${OpenCV_INCLUDE_DIR} )
-
-        add_executable ( ${FNAME}_tests_rbc_8d testsRBC_RGBD.cpp )
-
-        add_dependencies ( ${FNAME}_tests_rbc_8d CLUtils googletest )
-
-        target_link_libraries ( ${FNAME}_tests_rbc_8d LINK_PUBLIC ${CLUtils_LIBRARIES} 
-                                                                  RBCHelperFuncs 
-                                                                  RBCAlgorithms
-                                                                  ${OPENGL_LIBRARIES}
-                                                                  ${OPENCL_LIBRARIES}
-                                                                  # ${OpenCV_LIBRARIES}
-                                                                  ${GTEST_BOTH_LIBRARIES}
-                                                                  ${CMAKE_THREAD_LIBS_INIT} )
-
-        add_test ( NAME ${FNAME}_tests_rbc_8d 
-                   COMMAND ${EXECUTABLE_OUTPUT_PATH}/${FNAME}_tests_rbc_8d 
-                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR} )
-
-    # endif ( OpenCV_FOUND )
-
+    add_test ( NAME ${FNAME}_tests_rbc_8d 
+               COMMAND ${EXECUTABLE_OUTPUT_PATH}/${FNAME}_tests_rbc_8d 
+               WORKING_DIRECTORY ${CMAKE_BINARY_DIR} )
 
     add_custom_target ( check COMMAND ${CMAKE_CTEST_COMMAND} --verbose )
 

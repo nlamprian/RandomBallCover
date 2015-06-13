@@ -1,7 +1,9 @@
 # Try to find RBC
-# Once done this will define:
 #
-#   RBC_ROOT         - if set, it will try to find in this folder
+# The following variables are optionally searched for defaults:
+#   RBC_ROOT         - Root directory of RBC source tree
+#
+# Once done, this will define:
 #   RBC_FOUND        - system has RBC
 #   RBC_INCLUDE_DIR  - the RBC include directory
 #   RBC_LIBRARIES    - link these to use RBC
@@ -27,7 +29,8 @@ find_library (
 find_library ( 
     RBC_LIB_HELPERFUNCS 
     NAMES RBCHelperFuncs 
-    PATHS ${RBC_ROOT}/build/lib 
+    PATHS ${RBC_ROOT}/build/lib
+          ${RBC_ROOT}/../RBC-build/lib 
           /usr/lib/RBC 
           /usr/local/lib/RBC 
     DOC "The RBC helper functions library"
@@ -43,6 +46,9 @@ find_package_handle_standard_args (
 
 if ( RBC_FOUND )
     set ( RBC_LIBRARIES ${RBC_LIB_ALGORITHMS} ${RBC_LIB_HELPERFUNCS} )
+    message ( STATUS "Found RBC:" )
+    message ( STATUS " - Includes: ${RBC_INCLUDE_DIR}" )
+    message ( STATUS " - Libraries: ${RBC_LIBRARIES}" )
 else ( RBC_FOUND )
     set ( RBC_LIBRARIES )
 endif ( RBC_FOUND )
