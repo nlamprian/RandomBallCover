@@ -1,4 +1,4 @@
-find_package ( OpenCV QUIET )
+find_package ( OpenCV2 QUIET )
 find_package ( PLplot QUIET )
 
 include_directories ( ${CLUtils_INCLUDE_DIR} )
