@@ -3,7 +3,7 @@ find_package ( PLplot QUIET )
 
 include_directories ( ${CLUtils_INCLUDE_DIR} )
 
-if ( OpenCV_FOUND )
+if ( OpenCV2_FOUND )
 
     include_directories ( ${OpenCV2_INCLUDE_DIRS} )
 
@@ -25,7 +25,7 @@ if ( OpenCV_FOUND )
                                                           ${OPENCL_LIBRARIES}
                                                           ${OpenCV2_LIBRARIES} )
 
-endif ( OpenCV_FOUND )
+endif ( OpenCV2_FOUND )
 
 if ( PLplot_FOUND )
 

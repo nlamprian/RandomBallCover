@@ -243,9 +243,11 @@ ENDIF(WIN32)
 
 # display help message
 IF(OpenCV2_FOUND)
-    MESSAGE(STATUS "Found OpenCV:")
-    MESSAGE(STATUS " - Includes: ${OpenCV2_INCLUDE_DIRS}")
-    MESSAGE(STATUS " - Libraries: ${OpenCV2_LIBRARIES}")
+    if(NOT OpenCV_FIND_QUIETLY)
+        MESSAGE(STATUS "Found OpenCV:")
+        MESSAGE(STATUS " - Includes: ${OpenCV2_INCLUDE_DIRS}")
+        MESSAGE(STATUS " - Libraries: ${OpenCV2_LIBRARIES}")
+    ENDIF(NOT OpenCV_FIND_QUIETLY)
 ELSE(OpenCV2_FOUND)
     # make FIND_PACKAGE friendly
     IF(OpenCV2_FIND_REQUIRED)
