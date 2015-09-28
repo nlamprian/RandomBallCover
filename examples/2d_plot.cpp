@@ -5,7 +5,7 @@
  *        the representative radii. This feature is not offered by 
  *        the `RBCConstruct` class and is implemented on the CPU.
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

@@ -34,7 +34,7 @@
  *        performed per row, in parallel.
  *  \note The number of elements, `N`, in a row of the array should be a **multiple 
  *        of 4** (the data are handled as `int4`). The **x** dimension of the 
- *        global workspace, \f$ gXdim \f$, should be greater or equal to the number of 
+ *        global workspace, \f$ gXdim \f$, should be greater than or equal to the number of 
  *        elements in a row of the array divided by 8. That is, \f$ \ gXdim \geq N/8 \f$. 
  *        Each work-item handles `8 float` (= `2 float4`) elements in a row of the array. 
  *        The **y** dimension of the global workspace, \f$ gYdim \f$, should be equal 
@@ -155,7 +155,7 @@ void inclusiveScan_i (global int4 *in, global int4 *out, local int *data,
  *        performed per row, in parallel.
  *  \note The number of elements, `N`, in a row of the array should be a **multiple 
  *        of 4** (the data are handled as `int4`). The **x** dimension of the 
- *        global workspace, \f$ gXdim \f$, should be greater or equal to the number of 
+ *        global workspace, \f$ gXdim \f$, should be greater than or equal to the number of 
  *        elements in a row of the array divided by 8. That is, \f$ \ gXdim \geq N/8 \f$. 
  *        Each work-item handles `8 float` (= `2 float4`) elements in a row of the array. 
  *        The **y** dimension of the global workspace, \f$ gYdim \f$, should be equal 

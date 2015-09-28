@@ -1,7 +1,7 @@
 /*! \file helper_funcs.hpp
  *  \brief Declarations of helper functions for testing.
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

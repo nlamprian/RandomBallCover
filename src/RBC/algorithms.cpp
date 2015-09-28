@@ -4,7 +4,7 @@
  *           initialize the necessary buffers, set up the workspaces, and 
  *           run the kernels.
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

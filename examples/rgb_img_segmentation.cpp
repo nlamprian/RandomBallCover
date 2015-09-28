@@ -11,7 +11,7 @@
  *        uncommenting the commented sections, and comment out the relevant lines 
  *        (marked with `//` at the end).
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

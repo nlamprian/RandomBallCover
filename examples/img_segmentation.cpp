@@ -8,7 +8,7 @@
  *           By creating a graph with the representatives, and adjusting the edge weights, 
  *           connected components could be created that would define areas of interest.
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par

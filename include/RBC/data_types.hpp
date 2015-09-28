@@ -1,7 +1,7 @@
 /*! \file data_types.hpp
  *  \brief Declarations of data types used by the Random Ball Cover data structure.
  *  \author Nick Lamprianidis
- *  \version 1.2.0
+ *  \version 1.2.1
  *  \date 2015
  *  \copyright The MIT License (MIT)
  *  \par
