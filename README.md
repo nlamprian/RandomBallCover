@@ -1,4 +1,4 @@
-random-ball-cover.paign10.me
-============================
+random-ball-cover.nlamprian.me
+==============================
 
 This is the doxygen documentation for `RandomBallCover`.

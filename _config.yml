@@ -1,11 +1,14 @@
 title: Documentation
 doc_version: 1.2.1
-url: "http://random-ball-cover.paign10.me"
+url: https://random-ball-cover.nlamprian.me
 
 permalink: /:categories/:title
 markdown: kramdown
-highlighter: pygments
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
 gems:
   - jekyll-sitemap
   - jemoji
+  - rouge

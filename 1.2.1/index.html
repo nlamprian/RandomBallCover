@@ -45,8 +45,8 @@
    &#160;<span id="projectnumber">1.2.1</span>
    </div>
   </td>
-  <td><a id="repo" href="https://github.com/pAIgn10/RandomBallCover"><i class="fa fa-github"></i><span id="repo-text">&nbsp;Hosted by GitHub</span></a></td>
-  <td id="projectlogo"><a href="http://paign10.me"><img alt="Logo" src="logo.png"/></a></td>
+  <td><a id="repo" href="https://github.com/nlamprian/RandomBallCover"><i class="fa fa-github"></i><span id="repo-text">&nbsp;Hosted by GitHub</span></a></td>
+  <td id="projectlogo"><a href="https://nlamprian.me"><img alt="Logo" src="logo.png"/></a></td>
  </tr>
  </tbody>
 </table>
@@ -103,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p><br />
  <code>RandomBallCover</code> is an implementation of a <b>Nearest Neighbor (NN)</b> data structure in OpenCL. <b>Random Ball Cover (RBC)</b> takes up where <b>Brute Force (BF)</b> leaves off. BF search on the GPU outperforms state-of-the-art NN search algorithms on the CPU. With RBC, it's possible to get even more performance gains than BF. RBC is a two-tier BF search that explores a heavily pruned search space. The data structure was proposed by Lawrence Cayton, and it's described in depth in two of his <a href="http://www.lcayton.com/papers.html">papers</a>.</p>
 <div class="image">
-<img src="http://i76.photobucket.com/albums/j16/paign10/rbc_cover_zpscejuigei.png"  border="0" width="800" alt=" photo rbc_cover_zpscejuigei.png"/>
+<img src="https://github.com/nlamprian/RandomBallCover/wiki/assets/rbc.png"  border="0" width="800" alt=" photo rbc_cover_zpscejuigei.png"/>
 </div>
 <p>Currently, a variation of the proposed algorithms is implemented that does <b>approximate NN search</b>. For the <code>RBC construction</code>, the data structure in the <b>exact search algorithm</b> is built where each database point is assigned to its nearest representative. The <code>RBC search</code> is done according to the <b>one-shot search algorithm</b>. The main application of the project is the handling of 6-D (3-D geometric and 3-D photometric information) <b>point clouds</b>. For that purpose, the algorithm is able to perform on an input of <code>|X|=|Q|=16384</code> and <code>|R|=256</code> with the following results:</p><ol type="1">
 <li>RBC construction in 344 microseconds.</li>
@@ -116,19 +116,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>Note</h1>
 <hr/>
 <p> The code was developed and tested on <code>Ubuntu 14.04.2</code>, on a system with an <code>AMD R9 270X</code> GPU.</p>
-<p>For more details on the implemented algorithms, take a look at the project's <a href="https://github.com/pAIgn10/RandomBallCover/wiki/Algorithms">wiki</a>. <br />
+<p>For more details on the implemented algorithms, take a look at the project's <a href="https://github.com/nlamprian/RandomBallCover/wiki/Algorithms">wiki</a>. <br />
 <br />
 </p>
 <h1>Dependencies</h1>
 <hr/>
-<p> The project has a dependency on <a href="https://github.com/pAIgn10/CLUtils">CLUtils</a> (which is automatically downloaded by cmake). If you'd like to remove this dependency, you should be able to modify the kernel interface classes with minimal effort.</p>
+<p> The project has a dependency on <a href="https://github.com/nlamprian/CLUtils">CLUtils</a> (which is automatically downloaded by cmake). If you'd like to remove this dependency, you should be able to modify the kernel interface classes with minimal effort.</p>
 <p>Currently, there are 4 example applications. For <code>rbc_2d_plot</code> and <code>rbc_2d_plot_nn</code>, you'll need <a href="http://plplot.sourceforge.net/">PLplot</a>. For <code>rbc_img_segmentation</code> and <code>rbc_rgb_img_segmentation</code>, you'll need <a href="https://github.com/jayrambhia/Install-OpenCV">OpenCV</a>. <br />
 <br />
 </p>
 <h1>Compilation</h1>
 <hr/>
  <blockquote class="doxtable">
-<p>git clone <a href="https://github.com/pAIgn10/RandomBallCover.git">https://github.com/pAIgn10/RandomBallCover.git</a> <br />
+<p>git clone <a href="https://github.com/nlamprian/RandomBallCover.git">https://github.com/nlamprian/RandomBallCover.git</a> <br />
  cd RandomBallCover <br />
 </p>
 <p>mkdir build <br />
